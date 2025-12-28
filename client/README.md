@@ -100,10 +100,26 @@ npx shadcn@latest add dialog
 
 ### Adding Components via Cursor MCP
 
-If you're using Cursor IDE with shadcn MCP support:
-1. Open the command palette (Cmd/Ctrl + Shift + P)
-2. Search for "shadcn: Add Component"
-3. Select the component you want to add
+This project supports the [shadcn MCP server](https://github.com/AshMartian/shadcn-mcp-server) for Cursor IDE integration. To enable:
+
+1. Add the shadcn MCP server to your Cursor settings (`.cursor/mcp.json`):
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["-y", "shadcn-mcp-server@latest"]
+    }
+  }
+}
+```
+
+2. Restart Cursor to activate the MCP server
+
+3. Now you can ask Cursor's AI to add shadcn components directly:
+   - "Add a dialog component"
+   - "Install the dropdown-menu component"
+   - "Add button, card, and input components"
 
 Components will be automatically added to `src/components/ui/` with proper TypeScript types and Tailwind styling.
 

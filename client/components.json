@@ -17,12 +17,5 @@
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
-  },
-  "registries": [
-    {
-      "name": "shadcn",
-      "url": "https://ui.shadcn.com",
-      "baseUrl": "https://ui.shadcn.com"
-    }
-  ]
+  }
 }
