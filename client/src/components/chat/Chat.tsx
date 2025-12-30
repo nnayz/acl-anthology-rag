@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Sidebar, type ChatHistory } from "../Sidebar"
 import { ChatInput } from "./ChatInput"
 import { ChatMessage, type Message } from "./ChatMessage"
+import { Navbar } from "./Navbar"
 
 // Demo responses for showcase
 const demoResponses = [
@@ -134,6 +135,10 @@ export function Chat() {
 
       {/* Main content */}
       <div className="flex flex-1 flex-col">
+        <Navbar
+          sidebarOpen={sidebarOpen}
+          onSidebarToggle={() => setSidebarOpen(!sidebarOpen)}
+        />
         <div className={cn(
           "flex flex-1 flex-col",
           !hasMessages && "items-center justify-center"
