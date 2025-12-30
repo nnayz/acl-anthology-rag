@@ -134,19 +134,7 @@ export function Sidebar({
         <SidebarContent />
       </aside>
 
-      {/* Toggle when closed */}
-      {!isOpen && (
-        <div className="fixed left-3 top-3 z-40 hidden md:block">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggle}
-            className="h-9 w-9 rounded-md text-muted-foreground hover:text-foreground"
-          >
-            <PanelLeft className="h-[18px] w-[18px]" />
-          </Button>
-        </div>
-      )}
+      {/* Toggle when closed - removed, now handled by Navbar */}
 
       {/* Mobile */}
       <Sheet>
