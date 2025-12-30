@@ -133,6 +133,42 @@ flowchart TD
 
 ⸻
 
+Project Structure
+
+The backend API follows a modular architecture aligned with the system's workflow stages.
+
+api/src/
+├── main.py              # Application entry point
+├── api/                 # HTTP interface (FastAPI)
+│   ├── app.py           # FastAPI application setup
+│   └── routes.py        # API endpoint definitions
+├── core/                # Shared components
+│   ├── config.py        # Configuration management
+│   └── schemas.py       # Pydantic data models
+├── ingestion/           # Offline data preparation
+│   ├── download.py      # ACL Anthology data fetching
+│   ├── preprocess.py    # Text cleaning and normalization
+│   ├── embed.py         # Embedding generation
+│   └── ingest.py        # Pipeline orchestration
+├── retrieval/           # Query-time processing
+│   ├── query_processor.py   # Query interpretation
+│   ├── aggregator.py        # Result merging and ranking
+│   └── pipeline.py          # Retrieval orchestration
+├── llm/                 # LLM integration
+│   ├── reformulator.py  # Query expansion
+│   └── prompts.py       # Prompt templates
+└── vectorstore/         # Vector database interface
+    └── client.py        # Qdrant client wrapper
+
+Naming Conventions
+	•	Modules: lowercase with underscores (e.g., query_processor.py)
+	•	Classes: PascalCase (e.g., QueryProcessor)
+	•	Functions: lowercase with underscores (e.g., process_query)
+	•	Constants: UPPERCASE with underscores (e.g., DEFAULT_TOP_K)
+	•	Config files: lowercase (e.g., config.py, .env)
+
+⸻
+
 Scope and Limitations
 	•	The system operates only on abstracts, not full texts.
 	•	It is intended for academic use and demonstration.
