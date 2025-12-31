@@ -52,10 +52,12 @@ def process_data():
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.abspath(os.path.join(base_dir, "..", "..", ".."))
+    api_dir = os.path.abspath(os.path.join(base_dir, "..", ".."))
 
     candidate_raw_paths = [
-        os.path.join(base_dir, "data", "raw", "acl_metadata.json"),
-        os.path.join(repo_root, "data", "raw", "acl_metadata.json"),
+        os.path.join(api_dir, "data", "raw", "acl_metadata.json"),  # api/data/raw/acl_metadata.json
+        os.path.join(base_dir, "data", "raw", "acl_metadata.json"),  # api/src/ingestion/data/raw/acl_metadata.json
+        os.path.join(repo_root, "data", "raw", "acl_metadata.json"),  # data/raw/acl_metadata.json (project root)
     ]
     raw_data_path = next((p for p in candidate_raw_paths if os.path.exists(p)), None)
 
