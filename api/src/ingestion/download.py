@@ -26,8 +26,12 @@ def main():
     print("Fetching ACL Anthology data...")
     anthology = Anthology.from_repo()  # Automatically fetch repo
 
-    # Output folder
-    RAW_DATA_DIR = os.path.join("data", "raw")
+    # Determine correct output directory
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    api_dir = os.path.abspath(os.path.join(base_dir, "..", ".."))
+    
+    # Use api/data/raw as the output directory
+    RAW_DATA_DIR = os.path.join(api_dir, "data", "raw")
     os.makedirs(RAW_DATA_DIR, exist_ok=True)
     OUTPUT_FILE = os.path.join(RAW_DATA_DIR, "acl_metadata.json")
 
