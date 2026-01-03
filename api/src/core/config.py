@@ -28,6 +28,10 @@ class Config:
 
     Attributes:
         GROQ_API_KEY: API key for Groq LLM service.
+        QDRANT_API_KEY: API key for Qdrant vector database.
+        QDRANT_CLUSTER_ENDPOINT: Endpoint for Qdrant vector database.
     """
 
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY")
+    QDRANT_API_KEY: str = os.getenv("QDRANT_API_KEY")
+    QDRANT_ENDPOINT: str = os.getenv("QDRANT_ENDPOINT")

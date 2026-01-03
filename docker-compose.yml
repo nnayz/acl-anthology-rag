@@ -4,10 +4,19 @@ services:
     container_name: ollama
     ports:
       - "11434:11434"
-    
-    command: ["ollama", "serve"]
-
     volumes:
       - ./models:/root/.ollama/models
-      
+    command: ["ollama", "serve"]
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333" # Rest API
+      - "6334:6334" # Grpc API
+    volumes:
+      - ./qdrant_data:/qdrant/data
+    restart: unless-stopped
+
   
