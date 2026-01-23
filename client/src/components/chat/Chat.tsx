@@ -1,18 +1,11 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { search, type SearchResponse } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Sidebar, type ChatHistory } from "../Sidebar"
 import { ChatInput } from "./ChatInput"
 import { ChatMessage, type Message } from "./ChatMessage"
 import { Navbar } from "./Navbar"
-
-// Demo responses for showcase
-const demoResponses = [
-  "I'm an AI assistant here to help you with questions about research papers from the ACL Anthology. I can help you find papers, summarize content, explain concepts, and more!",
-  "That's a great question! Let me search through the ACL Anthology database to find relevant papers on that topic.",
-  "Based on the research papers I've analyzed, here are some key insights that might be helpful for your research...",
-  "Would you like me to dive deeper into any particular aspect of this research area?",
-]
 
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -47,7 +40,6 @@ export function Chat() {
   ])
   const [currentChatId, setCurrentChatId] = useState<string | undefined>()
   const scrollRef = useRef<HTMLDivElement>(null)
-  const responseIndexRef = useRef(0)
 
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
@@ -81,18 +73,34 @@ export function Chat() {
       setCurrentChatId(newChatId)
     }
 
-    // Simulate API response with typing delay
-    await new Promise((resolve) => setTimeout(resolve, 800 + Math.random() * 800))
+    try {
+      const response: SearchResponse = await search(content)
 
-    const assistantMessage: Message = {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      content: demoResponses[responseIndexRef.current % demoResponses.length],
+      let assistantContent: string
+      if (response.query_type === "paper_id") {
+        assistantContent = `I detected that "${response.paper_id}" is an ACL paper ID. Retrieval functionality is not yet implemented.`
+      } else {
+        assistantContent = `I detected a natural language query. Semantic search functionality is not yet implemented.`
+      }
+
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: assistantContent,
+      }
+
+      setMessages((prev) => [...prev, assistantMessage])
+    } catch (error) {
+      console.error("API error:", error)
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "Sorry, I couldn't connect to the server. Please try again later.",
+      }
+      setMessages((prev) => [...prev, assistantMessage])
+    } finally {
+      setIsLoading(false)
     }
-
-    responseIndexRef.current++
-    setMessages((prev) => [...prev, assistantMessage])
-    setIsLoading(false)
   }
 
   const handleStop = () => {
