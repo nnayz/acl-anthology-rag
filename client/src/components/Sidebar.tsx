@@ -134,8 +134,6 @@ export function Sidebar({
         <SidebarContent />
       </aside>
 
-      {/* Toggle when closed - removed, now handled by Navbar */}
-
       {/* Mobile */}
       <Sheet>
         <SheetTrigger asChild>
