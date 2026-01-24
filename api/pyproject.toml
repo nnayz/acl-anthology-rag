@@ -5,9 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "acl-anthology>=0.5.4",
     "fastapi>=0.127.0",
-    "ijson>=3.2.0",
     "langchain>=0.3.0",
     "langchain-core>=0.3.0",
     "langchain-groq>=0.2.0",
@@ -15,11 +13,15 @@ dependencies = [
     "langchain-qdrant>=0.2.0",
     "python-dotenv>=1.2.1",
     "qdrant-client>=1.16.2",
-    "tqdm>=4.67.1",
     "uvicorn>=0.40.0",
 ]
 
 [project.optional-dependencies]
+ingestion = [
+    "acl-anthology>=0.5.4",
+    "ijson>=3.2.0",
+    "tqdm>=4.67.1",
+]
 local = [
     "accelerate>=1.12.0",
     "einops>=0.8.1",
