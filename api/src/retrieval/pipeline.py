@@ -17,9 +17,6 @@ The pipeline is designed as a composable chain that:
 import logging
 from typing import List, Optional, Tuple
 
-from langchain_core.runnables import RunnableLambda
-from qdrant_client.models import FieldCondition, Filter, MatchValue
-
 from src.core.config import settings
 from src.core.schemas import (
     PaperMetadata,
@@ -27,9 +24,9 @@ from src.core.schemas import (
     SearchRequest,
     SearchResponse,
 )
-from src.llm.reformulator import get_reformulator
+from src.llm.reformulator import get_reformulator, get_synthesizer
 from src.retrieval.aggregator import get_aggregator
-from src.retrieval.query_processor import detect_query_type
+from src.retrieval.query_processor import detect_query_type, QueryType as ProcessorQueryType
 from src.vectorstore.client import get_langchain_components
 
 logger = logging.getLogger(__name__)
@@ -73,48 +70,15 @@ class RetrievalPipeline:
         # Use centralized LangChain components
         self._components = get_langchain_components()
 
-        # Use singleton instances for reformulator and aggregator
+        # Use singleton instances for reformulator, aggregator, and synthesizer
         self.reformulator = get_reformulator()
         self.aggregator = get_aggregator()
-
-        # Build LangChain runnable for document parsing
-        self._parse_result = RunnableLambda(self._parse_search_result)
-
-    @property
-    def vectorstore(self):
-        """Get the vector store from centralized components."""
-        return self._components.get_vectorstore(self.collection_name)
+        self.synthesizer = get_synthesizer()
 
     @property
     def qdrant_client(self):
         """Get the Qdrant client from centralized components."""
         return self._components.qdrant_client
-
-    @staticmethod
-    def _parse_search_result(doc_score_tuple) -> Tuple[PaperMetadata, float]:
-        """
-        Parse a LangChain document into PaperMetadata.
-
-        Args:
-            doc_score_tuple: Tuple of (Document, score) from vector search
-
-        Returns:
-            Tuple of (PaperMetadata, similarity_score)
-        """
-        doc, score = doc_score_tuple
-        metadata = doc.metadata
-        paper = PaperMetadata(
-            paper_id=metadata.get("paper_id", ""),
-            title=metadata.get("title", ""),
-            abstract=metadata.get("abstract"),
-            year=metadata.get("year"),
-            authors=metadata.get("authors"),
-            pdf_url=metadata.get("pdf_url"),
-        )
-        # Qdrant cosine distance: lower = more similar
-        # Convert to similarity: 1 - distance
-        similarity = max(0.0, min(1.0, 1.0 - score))
-        return (paper, similarity)
 
     async def _search_single_query(
         self,
@@ -122,7 +86,12 @@ class RetrievalPipeline:
         top_k: int,
     ) -> List[Tuple[PaperMetadata, float]]:
         """
-        Execute a single vector search query.
+        Execute a single vector search query using direct Qdrant API.
+
+        Uses direct Qdrant client calls to properly retrieve payload fields
+        since LangChain's QdrantVectorStore has specific expectations about
+        payload structure (nested under 'metadata' key) that don't match
+        our flat payload structure.
 
         Args:
             query: Search query string
@@ -131,11 +100,34 @@ class RetrievalPipeline:
         Returns:
             List of (PaperMetadata, score) tuples
         """
-        results = await self.vectorstore.asimilarity_search_with_score(
-            query=query,
-            k=top_k,
+        # Get embedding for query using centralized embeddings
+        query_vector = self._components.embeddings.embed_query(query)
+        
+        # Search directly via Qdrant client
+        search_results = self.qdrant_client.query_points(
+            collection_name=self.collection_name,
+            query=query_vector,
+            limit=top_k,
+            with_payload=True,
         )
-        return [self._parse_search_result(r) for r in results]
+        
+        results = []
+        for point in search_results.points:
+            payload = point.payload or {}
+            paper = PaperMetadata(
+                paper_id=payload.get("paper_id", ""),
+                title=payload.get("title", ""),
+                abstract=payload.get("abstract"),
+                year=payload.get("year"),
+                authors=payload.get("authors"),
+                pdf_url=payload.get("pdf_url"),
+            )
+            # Qdrant returns cosine similarity score (higher = more similar)
+            # Score is already in [0, 1] range for cosine similarity
+            similarity = max(0.0, min(1.0, point.score))
+            results.append((paper, similarity))
+        
+        return results
 
     async def _search_multiple_queries(
         self,
@@ -169,6 +161,12 @@ class RetrievalPipeline:
         """
         Fetch a paper's metadata by its ACL ID.
 
+        Uses a scroll through all points to find exact match by paper_id.
+        This is slower than indexed search but works without a payload index.
+
+        Note: For production, create a keyword index on paper_id for better performance:
+        client.create_payload_index(collection_name, "paper_id", PayloadSchemaType.KEYWORD)
+
         Args:
             paper_id: Normalized ACL paper identifier
 
@@ -176,34 +174,42 @@ class RetrievalPipeline:
             PaperMetadata if found, None otherwise
         """
         try:
-            results = self.qdrant_client.scroll(
-                collection_name=self.collection_name,
-                scroll_filter=Filter(
-                    must=[
-                        FieldCondition(
-                            key="paper_id",
-                            match=MatchValue(value=paper_id)
-                        )
-                    ]
-                ),
-                limit=1,
-                with_payload=True,
-                with_vectors=False,
-            )
-
-            points, _ = results
-            if points:
-                payload = points[0].payload
-                return PaperMetadata(
-                    paper_id=payload.get("paper_id", paper_id),
-                    title=payload.get("title", ""),
-                    abstract=payload.get("abstract"),
-                    year=payload.get("year"),
-                    authors=payload.get("authors"),
-                    pdf_url=payload.get("pdf_url"),
+            logger.debug(f"Looking up paper with ID: {paper_id}")
+            
+            # Scroll through points to find exact match
+            # This is slow but works without a payload index
+            offset = None
+            while True:
+                results = self.qdrant_client.scroll(
+                    collection_name=self.collection_name,
+                    limit=100,
+                    offset=offset,
+                    with_payload=True,
+                    with_vectors=False,
                 )
+                
+                points, next_offset = results
+                
+                for point in points:
+                    payload = point.payload or {}
+                    if payload.get("paper_id") == paper_id:
+                        logger.debug(f"Found exact match for paper_id={paper_id}")
+                        return PaperMetadata(
+                            paper_id=payload.get("paper_id", paper_id),
+                            title=payload.get("title", ""),
+                            abstract=payload.get("abstract"),
+                            year=payload.get("year"),
+                            authors=payload.get("authors"),
+                            pdf_url=payload.get("pdf_url"),
+                        )
+                
+                if next_offset is None:
+                    break
+                offset = next_offset
+            
+            logger.warning(f"No exact match found for paper_id={paper_id}")
         except Exception as e:
-            logger.error(f"Failed to fetch paper {paper_id}: {e}")
+            logger.error(f"Failed to fetch paper {paper_id}: {e}", exc_info=True)
 
         return None
 
@@ -217,27 +223,33 @@ class RetrievalPipeline:
         Returns:
             SearchResponse with ranked results
         """
-        # Step 1: Classify query type
-        query_type, paper_id = detect_query_type(request.query)
+        # Step 1: Classify query type (use regex first, then LLM if needed)
+        processor_query_type, paper_id = detect_query_type(request.query)
+        source_paper: Optional[PaperMetadata] = None
+        
+        # Convert processor QueryType to schema QueryType
+        is_paper_id_query = processor_query_type == ProcessorQueryType.PAPER_ID
 
         # Step 2: Get search queries (reformulation or paper-based)
-        if query_type == QueryType.PAPER_ID and paper_id is not None:
-            paper = await self._get_paper_by_id(paper_id)
-            if paper and paper.abstract:
+        if is_paper_id_query and paper_id is not None:
+            source_paper = await self._get_paper_by_id(paper_id)
+            if source_paper and source_paper.abstract:
                 queries = await self.reformulator.reformulate_from_paper(
-                    title=paper.title,
-                    abstract=paper.abstract,
+                    title=source_paper.title,
+                    abstract=source_paper.abstract,
                 )
             else:
+                # Paper not found in database
                 return SearchResponse(
-                    query_type=QueryType(query_type.value),
+                    query_type=QueryType.PAPER_ID,
                     original_query=request.query,
                     paper_id=paper_id,
+                    source_paper=None,
                     results=[],
+                    response=f"I couldn't find paper **{paper_id}** in the ACL Anthology database. Please check the paper ID and try again.",
                 )
         else:
             queries = await self.reformulator.reformulate(request.query)
-            print(f"[DEBUG] Reformulated queries: {queries}")
 
         logger.debug(f"Reformulated into {len(queries)} queries: {queries}")
 
@@ -259,11 +271,27 @@ class RetrievalPipeline:
         else:
             final_results = []
 
-        return SearchResponse(
-            query_type=QueryType(query_type.value),
-            original_query=request.query,
-            paper_id=paper_id if query_type == QueryType.PAPER_ID else None,
+        # Remove source paper from results if present (don't show it as similar to itself)
+        if source_paper:
+            final_results = [
+                r for r in final_results 
+                if r.paper.paper_id != source_paper.paper_id
+            ]
+
+        # Step 6: Synthesize natural language response
+        response = await self.synthesizer.synthesize(
+            query=request.query,
             results=final_results,
+            source_paper=source_paper,
+        )
+
+        return SearchResponse(
+            query_type=QueryType.PAPER_ID if is_paper_id_query else QueryType.NATURAL_LANGUAGE,
+            original_query=request.query,
+            paper_id=paper_id if is_paper_id_query else None,
+            source_paper=source_paper,
+            results=final_results,
+            response=response,
         )
 
 

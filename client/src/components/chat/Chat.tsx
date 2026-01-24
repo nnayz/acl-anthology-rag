@@ -1,6 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { search, type SearchResponse } from "@/lib/api"
-import { cn } from "@/lib/utils"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Sidebar, type ChatHistory } from "../Sidebar"
 import { ChatInput } from "./ChatInput"
@@ -76,17 +75,20 @@ export function Chat() {
     try {
       const response: SearchResponse = await search(content)
 
-      let assistantContent: string
-      if (response.query_type === "paper_id") {
-        assistantContent = `I detected that "${response.paper_id}" is an ACL paper ID. Retrieval functionality is not yet implemented.`
-      } else {
-        assistantContent = `I detected a natural language query. Semantic search functionality is not yet implemented.`
-      }
+      // Use the LLM-generated response, or fall back to a simple message
+      const assistantContent = response.response 
+        || (response.results.length === 0 
+          ? "No papers found matching your query. Try a different search term."
+          : `Found ${response.results.length} relevant papers.`)
 
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",
         content: assistantContent,
+        // Include source paper for paper ID queries
+        sourcePaper: response.source_paper,
+        // Include search results for inline citations
+        searchResults: response.results,
       }
 
       setMessages((prev) => [...prev, assistantMessage])
@@ -147,37 +149,36 @@ export function Chat() {
           sidebarOpen={sidebarOpen}
           onSidebarToggle={() => setSidebarOpen(!sidebarOpen)}
         />
-        <div className={cn(
-          "flex flex-1 flex-col",
-          !hasMessages && "items-center justify-center"
-        )}>
+        <div className="relative flex flex-1 flex-col overflow-hidden">
           {hasMessages ? (
             <>
-              {/* Messages */}
-              <ScrollArea className="flex-1" ref={scrollRef}>
-                <div className="mx-auto max-w-2xl px-4 py-8">
-                  {messages.map((message) => (
-                    <ChatMessage key={message.id} message={message} />
-                  ))}
-                  {isLoading && (
-                    <div className="py-6">
-                      <div className="flex items-start gap-4">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background">
-                          <div className="h-4 w-4 rounded-sm bg-foreground" />
-                        </div>
-                        <div className="flex items-center gap-1 pt-1">
-                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground/40" />
-                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground/40 [animation-delay:150ms]" />
-                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground/40 [animation-delay:300ms]" />
+              {/* Messages - scrollable area that takes remaining space above fixed input */}
+              <div className="flex-1 overflow-hidden">
+                <ScrollArea className="h-full" ref={scrollRef}>
+                  <div className="mx-auto max-w-2xl px-4 py-8 pb-4">
+                    {messages.map((message) => (
+                      <ChatMessage key={message.id} message={message} />
+                    ))}
+                    {isLoading && (
+                      <div className="py-6">
+                        <div className="flex items-start gap-4">
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background">
+                            <div className="h-4 w-4 rounded-sm bg-foreground" />
+                          </div>
+                          <div className="flex items-center gap-1 pt-1">
+                            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground/40" />
+                            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground/40 [animation-delay:150ms]" />
+                            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-foreground/40 [animation-delay:300ms]" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
 
-              {/* Input when messages exist */}
-              <div className="border-t border-border/50 bg-background">
+              {/* Fixed input at bottom */}
+              <div className="shrink-0 border-t border-border/50 bg-background">
                 <div className="mx-auto max-w-2xl px-4 py-4">
                   <ChatInput
                     onSend={handleSend}
@@ -193,35 +194,37 @@ export function Chat() {
             </>
           ) : (
             /* Empty state - centered */
-            <div className="flex w-full max-w-2xl flex-col items-center px-4">
-              <h1 className="mb-8 text-2xl font-medium text-foreground">
-                What can I help with?
-              </h1>
-              
-              <div className="w-full">
-                <ChatInput
-                  onSend={handleSend}
-                  onStop={handleStop}
-                  isLoading={isLoading}
-                  placeholder="Message ACL Anthology..."
-                />
-              </div>
+            <div className="flex flex-1 flex-col items-center justify-center px-4">
+              <div className="flex w-full max-w-2xl flex-col items-center">
+                <h1 className="mb-8 text-2xl font-medium text-foreground">
+                  What can I help with?
+                </h1>
+                
+                <div className="w-full">
+                  <ChatInput
+                    onSend={handleSend}
+                    onStop={handleStop}
+                    isLoading={isLoading}
+                    placeholder="Message ACL Anthology..."
+                  />
+                </div>
 
-              <div className="mt-6 flex flex-wrap justify-center gap-2">
-                {[
-                  "Latest transformer papers",
-                  "Summarize NLP advances",
-                  "Explain attention",
-                  "Multilingual models",
-                ].map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    onClick={() => handleSend(suggestion)}
-                    className="rounded-full border border-border bg-background px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
+                <div className="mt-6 flex flex-wrap justify-center gap-2">
+                  {[
+                    "Latest transformer papers",
+                    "Summarize NLP advances",
+                    "Explain attention",
+                    "Multilingual models",
+                  ].map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      onClick={() => handleSend(suggestion)}
+                      className="rounded-full border border-border bg-background px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}
