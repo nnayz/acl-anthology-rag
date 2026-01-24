@@ -1,4 +1,5 @@
 import { useState } from "react"
+import type React from "react"
 import type { ChatStatus } from "ai"
 import {
   PromptInput,
@@ -48,7 +49,7 @@ export function ChatInput({
     <PromptInput onSubmit={handleSubmit} className="w-full">
       <PromptInputTextarea
         value={input}
-        onChange={(e) => setInput(e.currentTarget.value)}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.currentTarget.value)}
         placeholder={placeholder}
         disabled={disabled || isLoading}
       />

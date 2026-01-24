@@ -72,7 +72,7 @@ function processCitations(
       const citationNumbers = parseCitationNumbers(citationText)
 
       // Add citation components
-      citationNumbers.forEach((num, idx) => {
+      citationNumbers.forEach((num) => {
         const result = results[num - 1] // Citations are 1-indexed
         parts.push(
           <InlineCitation
