@@ -27,6 +27,10 @@ export function ChatInput({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    submitMessage()
+  }
+
+  const submitMessage = () => {
     if (isLoading && onStop) {
       onStop()
       return
@@ -35,6 +39,14 @@ export function ChatInput({
     if (trimmed && !isLoading && !disabled) {
       onSend(trimmed)
       setInput("")
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Submit on Enter, new line on Shift+Enter
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      submitMessage()
     }
   }
 
@@ -50,13 +62,13 @@ export function ChatInput({
       <PromptInputTextarea
         value={input}
         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.currentTarget.value)}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        disabled={disabled || isLoading}
+        disabled={disabled}
       />
       <PromptInputToolbar>
-        <div className="flex-1" />
         <PromptInputSubmit
-          disabled={disabled}
+          disabled={disabled || !input.trim()}
           status={getStatus()}
         />
       </PromptInputToolbar>

@@ -1,9 +1,8 @@
-import { forwardRef, type ReactNode } from "react"
+import { forwardRef, type ReactNode, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import type { ChatStatus } from "ai"
-import { Send, Loader2 } from "lucide-react"
+import { ArrowUp, Square } from "lucide-react"
 
 export interface PromptInputProps {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
@@ -17,7 +16,10 @@ export const PromptInput = forwardRef<HTMLFormElement, PromptInputProps>(
       <form
         ref={ref}
         onSubmit={onSubmit}
-        className={cn("flex flex-col gap-2", className)}
+        className={cn(
+          "relative flex w-full items-end gap-2 rounded-3xl border border-border bg-secondary/50 px-4 py-3 shadow-sm transition-colors",
+          className
+        )}
       >
         {children}
       </form>
@@ -32,21 +34,44 @@ export interface PromptInputTextareaProps {
   placeholder?: string
   disabled?: boolean
   className?: string
+  onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
 }
 
 export const PromptInputTextarea = forwardRef<
   HTMLTextAreaElement,
   PromptInputTextareaProps
->(({ value, onChange, placeholder, disabled, className }, ref) => {
+>(({ value, onChange, placeholder, disabled, className, onKeyDown }, ref) => {
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = "auto"
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`
+    }
+  }, [value])
+
   return (
-    <Textarea
-      ref={ref}
+    <textarea
+      ref={(node) => {
+        textareaRef.current = node
+        if (typeof ref === "function") {
+          ref(node)
+        } else if (ref) {
+          ref.current = node
+        }
+      }}
       value={value}
       onChange={onChange}
+      onKeyDown={onKeyDown}
       placeholder={placeholder}
       disabled={disabled}
-      className={cn("min-h-[60px] resize-none", className)}
       rows={1}
+      className={cn(
+        "max-h-[200px] min-h-[24px] flex-1 resize-none bg-transparent text-sm leading-6 text-foreground placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
     />
   )
 })
@@ -62,7 +87,9 @@ export function PromptInputToolbar({
   className,
 }: PromptInputToolbarProps) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>{children}</div>
+    <div className={cn("flex shrink-0 items-center gap-1", className)}>
+      {children}
+    </div>
   )
 }
 
@@ -82,14 +109,22 @@ export function PromptInputSubmit({
   return (
     <Button
       type="submit"
-      disabled={disabled || isStreaming}
       size="icon"
-      className={className}
+      className={cn(
+        "h-8 w-8 shrink-0 rounded-full transition-all",
+        isStreaming
+          ? "bg-foreground text-background hover:bg-foreground/90"
+          : disabled
+            ? "bg-muted text-muted-foreground"
+            : "bg-foreground text-background hover:bg-foreground/90",
+        className
+      )}
+      disabled={disabled && !isStreaming}
     >
       {isStreaming ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Square className="h-3 w-3 fill-current" />
       ) : (
-        <Send className="h-4 w-4" />
+        <ArrowUp className="h-4 w-4" />
       )}
     </Button>
   )

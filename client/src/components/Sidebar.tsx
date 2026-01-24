@@ -40,9 +40,9 @@ export function Sidebar({
   const [hoveredChatId, setHoveredChatId] = useState<string | null>(null)
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full w-full flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex h-14 items-center justify-between px-3">
+      <div className="flex h-14 shrink-0 items-center justify-between px-3">
         <Button
           variant="ghost"
           size="icon"
@@ -81,18 +81,18 @@ export function Sidebar({
                   <button
                     onClick={() => onSelectChat(chat.id)}
                     className={cn(
-                      "w-full rounded-md px-3 py-2 text-left text-sm transition-colors",
+                      "w-full rounded-md px-3 py-2 text-left text-sm transition-colors focus:outline-none",
                       currentChatId === chat.id
                         ? "bg-accent text-accent-foreground"
                         : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
                     )}
                   >
-                    <span className="block truncate pr-7">{chat.title}</span>
+                    <span className="block overflow-hidden text-ellipsis whitespace-nowrap pr-6">{chat.title}</span>
                   </button>
 
                   <div
                     className={cn(
-                      "absolute right-2 top-1/2 -translate-y-1/2 transition-opacity",
+                      "absolute right-1 top-1/2 -translate-y-1/2 transition-opacity",
                       hoveredChatId === chat.id ? "opacity-100" : "opacity-0"
                     )}
                   >
@@ -127,8 +127,8 @@ export function Sidebar({
       {/* Desktop Sidebar */}
       <aside
         className={cn(
-          "hidden h-screen border-r border-border/50 bg-muted/30 transition-[width] duration-200 md:block",
-          isOpen ? "w-56" : "w-0 overflow-hidden border-0"
+          "hidden h-screen shrink-0 overflow-hidden border-r border-border/50 bg-muted/30 transition-[width] duration-200 md:block",
+          isOpen ? "w-62" : "w-0 border-0"
         )}
       >
         <SidebarContent />

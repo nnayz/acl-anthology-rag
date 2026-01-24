@@ -9,7 +9,7 @@ import { Navbar } from "./Navbar"
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([
     {
       id: "1",
