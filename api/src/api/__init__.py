@@ -9,4 +9,3 @@ Endpoints:
 - Natural language search
 - Paper ID similarity search
 """
-

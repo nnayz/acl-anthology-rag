@@ -22,6 +22,7 @@ from acl_anthology import Anthology
 import json
 import os
 
+
 def main():
     print("Fetching ACL Anthology data...")
     anthology = Anthology.from_repo()  # Automatically fetch repo
@@ -29,7 +30,7 @@ def main():
     # Determine correct output directory
     base_dir = os.path.dirname(os.path.abspath(__file__))
     api_dir = os.path.abspath(os.path.join(base_dir, "..", ".."))
-    
+
     # Use api/data/raw as the output directory
     RAW_DATA_DIR = os.path.join(api_dir, "data", "raw")
     os.makedirs(RAW_DATA_DIR, exist_ok=True)
@@ -58,7 +59,11 @@ def main():
         language = paper.language
 
         # Authors
-        authors = [f"{a.name.first} {a.name.last}".strip() for a in paper.authors] if paper.authors else []
+        authors = (
+            [f"{a.name.first} {a.name.last}".strip() for a in paper.authors]
+            if paper.authors
+            else []
+        )
 
         # Awards
         awards = paper.awards if paper.awards else []
@@ -77,7 +82,7 @@ def main():
             "language": language,
             "authors": authors,
             "awards": awards,
-            "pdf_url": pdf_url
+            "pdf_url": pdf_url,
         }
         records.append(record)
 
@@ -90,6 +95,7 @@ def main():
         json.dump(records, f, ensure_ascii=False, indent=2)
 
     print(f"\nSaved {len(records)} papers to {OUTPUT_FILE}")
+
 
 if __name__ == "__main__":
     main()

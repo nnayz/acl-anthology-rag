@@ -42,18 +42,18 @@ def is_valid_acl_id(query: str) -> bool:
     """
     query = query.strip()
     return bool(
-        re.fullmatch(MODERN_ID_PATTERN.pattern, query, re.IGNORECASE) or 
-        re.fullmatch(LEGACY_ID_PATTERN.pattern, query, re.IGNORECASE)
+        re.fullmatch(MODERN_ID_PATTERN.pattern, query, re.IGNORECASE)
+        or re.fullmatch(LEGACY_ID_PATTERN.pattern, query, re.IGNORECASE)
     )
 
 
 def normalize_paper_id(paper_id: str) -> str:
     """
     Normalize a paper ID to a consistent format.
-    
+
     Args:
         paper_id: Raw paper ID string
-        
+
     Returns:
         Normalized paper ID
     """
@@ -69,10 +69,10 @@ def normalize_paper_id(paper_id: str) -> str:
 def extract_paper_id_regex(query: str) -> Optional[str]:
     """
     Try to extract a paper ID from query using regex.
-    
+
     Args:
         query: User query string
-        
+
     Returns:
         Extracted paper ID or None
     """
@@ -80,12 +80,12 @@ def extract_paper_id_regex(query: str) -> Optional[str]:
     modern_match = MODERN_ID_PATTERN.search(query)
     if modern_match:
         return normalize_paper_id(modern_match.group())
-    
+
     # Try legacy format
     legacy_match = LEGACY_ID_PATTERN.search(query)
     if legacy_match:
         return normalize_paper_id(legacy_match.group())
-    
+
     return None
 
 

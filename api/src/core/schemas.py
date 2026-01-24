@@ -40,7 +40,9 @@ class QueryClassification(BaseModel):
     paper_id: Optional[str] = Field(
         None, description="Normalized paper ID if query_type is PAPER_ID"
     )
-    is_valid: bool = Field(True, description="Whether the query is valid for processing")
+    is_valid: bool = Field(
+        True, description="Whether the query is valid for processing"
+    )
 
 
 class PaperMetadata(BaseModel):

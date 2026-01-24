@@ -67,7 +67,9 @@ class QueryReformulator:
         """
         self.num_queries = num_queries or settings.NUM_REFORMULATED_QUERIES
         self._model_name = model_name or settings.GROQ_MODEL
-        self._temperature = temperature if temperature is not None else settings.LLM_TEMPERATURE
+        self._temperature = (
+            temperature if temperature is not None else settings.LLM_TEMPERATURE
+        )
 
         # Initialize Groq LLM (reads GROQ_API_KEY from environment)
         self.llm = ChatGroq(
@@ -85,29 +87,25 @@ class QueryReformulator:
     def _build_chains(self):
         """Build the LCEL chains with fallback handling."""
         # Base chain for natural language query reformulation
-        base_reformulation_chain = (
-            get_reformulation_prompt()
-            | self.llm
-            | self.parser
-        )
+        base_reformulation_chain = get_reformulation_prompt() | self.llm | self.parser
 
         # Wrap with fallback that returns empty list (caller adds original query)
-        self.reformulation_chain: RunnableWithFallbacks = base_reformulation_chain.with_fallbacks(
-            [_create_fallback_runnable([])],
-            exceptions_to_handle=(Exception,),
+        self.reformulation_chain: RunnableWithFallbacks = (
+            base_reformulation_chain.with_fallbacks(
+                [_create_fallback_runnable([])],
+                exceptions_to_handle=(Exception,),
+            )
         )
 
         # Base chain for paper-based query generation
-        base_paper_context_chain = (
-            get_paper_context_prompt()
-            | self.llm
-            | self.parser
-        )
+        base_paper_context_chain = get_paper_context_prompt() | self.llm | self.parser
 
         # Wrap with fallback - caller will use title as backup
-        self.paper_context_chain: RunnableWithFallbacks = base_paper_context_chain.with_fallbacks(
-            [_create_fallback_runnable(None)],
-            exceptions_to_handle=(Exception,),
+        self.paper_context_chain: RunnableWithFallbacks = (
+            base_paper_context_chain.with_fallbacks(
+                [_create_fallback_runnable(None)],
+                exceptions_to_handle=(Exception,),
+            )
         )
 
     async def reformulate(self, query: str) -> List[str]:
@@ -120,14 +118,16 @@ class QueryReformulator:
         Returns:
             List of reformulated queries (includes original query as first item)
         """
-        reformulated = await self.reformulation_chain.ainvoke({
-            "query": query,
-            "num_queries": self.num_queries,
-        })
+        reformulated = await self.reformulation_chain.ainvoke(
+            {
+                "query": query,
+                "num_queries": self.num_queries,
+            }
+        )
 
         # Validate output and prepend original query
         if isinstance(reformulated, list) and reformulated:
-            return [query] + reformulated[:self.num_queries]
+            return [query] + reformulated[: self.num_queries]
 
         if reformulated is None or reformulated == []:
             logger.warning("Reformulation returned empty, using original query only")
@@ -153,15 +153,17 @@ class QueryReformulator:
         Returns:
             List of generated search queries
         """
-        queries = await self.paper_context_chain.ainvoke({
-            "title": title,
-            "abstract": abstract,
-            "num_queries": self.num_queries,
-        })
+        queries = await self.paper_context_chain.ainvoke(
+            {
+                "title": title,
+                "abstract": abstract,
+                "num_queries": self.num_queries,
+            }
+        )
 
         # Validate output
         if isinstance(queries, list) and queries:
-            return queries[:self.num_queries]
+            return queries[: self.num_queries]
 
         if queries is None:
             logger.warning("Paper context generation returned None, using title")
@@ -205,7 +207,9 @@ class ResponseSynthesizer:
             temperature: LLM temperature (default: from settings)
         """
         self._model_name = model_name or settings.GROQ_MODEL
-        self._temperature = temperature if temperature is not None else settings.LLM_TEMPERATURE
+        self._temperature = (
+            temperature if temperature is not None else settings.LLM_TEMPERATURE
+        )
 
         # Initialize Groq LLM
         self.llm = ChatGroq(
@@ -222,11 +226,7 @@ class ResponseSynthesizer:
         from langchain_core.output_parsers import StrOutputParser
 
         # Chain for general search queries
-        base_chain = (
-            get_response_synthesis_prompt()
-            | self.llm
-            | StrOutputParser()
-        )
+        base_chain = get_response_synthesis_prompt() | self.llm | StrOutputParser()
 
         # Wrap with fallback that returns a simple formatted response
         self.synthesis_chain: RunnableWithFallbacks = base_chain.with_fallbacks(
@@ -236,14 +236,14 @@ class ResponseSynthesizer:
 
         # Chain for similar papers queries (paper ID based)
         similar_papers_chain = (
-            get_similar_papers_synthesis_prompt()
-            | self.llm
-            | StrOutputParser()
+            get_similar_papers_synthesis_prompt() | self.llm | StrOutputParser()
         )
 
-        self.similar_papers_chain: RunnableWithFallbacks = similar_papers_chain.with_fallbacks(
-            [_create_fallback_runnable(None)],
-            exceptions_to_handle=(Exception,),
+        self.similar_papers_chain: RunnableWithFallbacks = (
+            similar_papers_chain.with_fallbacks(
+                [_create_fallback_runnable(None)],
+                exceptions_to_handle=(Exception,),
+            )
         )
 
     def _format_results_for_prompt(self, results: List[SearchResult]) -> str:
@@ -254,7 +254,9 @@ class ResponseSynthesizer:
         formatted_parts = []
         for i, result in enumerate(results, 1):
             paper = result.paper
-            authors = ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            authors = (
+                ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            )
             if paper.authors and len(paper.authors) > 3:
                 authors += " et al."
 
@@ -284,7 +286,9 @@ class ResponseSynthesizer:
 
         for i, result in enumerate(results, 1):
             paper = result.paper
-            authors = ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            authors = (
+                ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            )
             if paper.authors and len(paper.authors) > 3:
                 authors += " et al."
 
@@ -309,7 +313,9 @@ class ResponseSynthesizer:
 
         for i, result in enumerate(results, 1):
             paper = result.paper
-            authors = ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            authors = (
+                ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            )
             if paper.authors and len(paper.authors) > 3:
                 authors += " et al."
 
@@ -348,17 +354,23 @@ class ResponseSynthesizer:
 
         # Use different chain for paper ID queries
         if source_paper:
-            source_authors = ", ".join(source_paper.authors[:3]) if source_paper.authors else "Unknown authors"
+            source_authors = (
+                ", ".join(source_paper.authors[:3])
+                if source_paper.authors
+                else "Unknown authors"
+            )
             if source_paper.authors and len(source_paper.authors) > 3:
                 source_authors += " et al."
 
-            response = await self.similar_papers_chain.ainvoke({
-                "source_title": source_paper.title,
-                "source_authors": source_authors,
-                "source_year": source_paper.year or "N/A",
-                "source_abstract": source_paper.abstract or "No abstract available",
-                "results_text": results_text,
-            })
+            response = await self.similar_papers_chain.ainvoke(
+                {
+                    "source_title": source_paper.title,
+                    "source_authors": source_authors,
+                    "source_year": source_paper.year or "N/A",
+                    "source_abstract": source_paper.abstract or "No abstract available",
+                    "results_text": results_text,
+                }
+            )
 
             if response is None:
                 logger.warning("Similar papers synthesis failed, using fallback")
@@ -367,10 +379,12 @@ class ResponseSynthesizer:
             return response
 
         # Standard synthesis for natural language queries
-        response = await self.synthesis_chain.ainvoke({
-            "query": query,
-            "results_text": results_text,
-        })
+        response = await self.synthesis_chain.ainvoke(
+            {
+                "query": query,
+                "results_text": results_text,
+            }
+        )
 
         # If LLM failed, use fallback
         if response is None:

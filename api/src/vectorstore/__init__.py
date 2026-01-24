@@ -9,4 +9,3 @@ Key operations:
 - Similarity search over stored embeddings
 - Collection management
 """
-

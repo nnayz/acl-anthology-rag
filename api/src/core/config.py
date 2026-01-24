@@ -91,8 +91,12 @@ class Settings:
     # ===================
     # Result Aggregation Settings (RRF)
     # ===================
-    RRF_K = int(os.getenv("RRF_K", "60"))  # RRF constant (higher = more weight to lower ranks)
-    RRF_SCORE_WEIGHT = float(os.getenv("RRF_SCORE_WEIGHT", "0.3"))  # Weight for score vs rank fusion
+    RRF_K = int(
+        os.getenv("RRF_K", "60")
+    )  # RRF constant (higher = more weight to lower ranks)
+    RRF_SCORE_WEIGHT = float(
+        os.getenv("RRF_SCORE_WEIGHT", "0.3")
+    )  # Weight for score vs rank fusion
 
     # ===================
     # Ingestion Settings

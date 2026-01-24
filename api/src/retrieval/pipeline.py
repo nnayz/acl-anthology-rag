@@ -26,7 +26,10 @@ from src.core.schemas import (
 )
 from src.llm.reformulator import get_reformulator, get_synthesizer
 from src.retrieval.aggregator import get_aggregator
-from src.retrieval.query_processor import detect_query_type, QueryType as ProcessorQueryType
+from src.retrieval.query_processor import (
+    detect_query_type,
+    QueryType as ProcessorQueryType,
+)
 from src.vectorstore.client import get_langchain_components
 
 logger = logging.getLogger(__name__)
@@ -102,7 +105,7 @@ class RetrievalPipeline:
         """
         # Get embedding for query using centralized embeddings
         query_vector = self._components.embeddings.embed_query(query)
-        
+
         # Search directly via Qdrant client
         search_results = self.qdrant_client.query_points(
             collection_name=self.collection_name,
@@ -110,7 +113,7 @@ class RetrievalPipeline:
             limit=top_k,
             with_payload=True,
         )
-        
+
         results = []
         for point in search_results.points:
             payload = point.payload or {}
@@ -126,7 +129,7 @@ class RetrievalPipeline:
             # Score is already in [0, 1] range for cosine similarity
             similarity = max(0.0, min(1.0, point.score))
             results.append((paper, similarity))
-        
+
         return results
 
     async def _search_multiple_queries(
@@ -175,7 +178,7 @@ class RetrievalPipeline:
         """
         try:
             logger.debug(f"Looking up paper with ID: {paper_id}")
-            
+
             # Scroll through points to find exact match
             # This is slow but works without a payload index
             offset = None
@@ -187,9 +190,9 @@ class RetrievalPipeline:
                     with_payload=True,
                     with_vectors=False,
                 )
-                
+
                 points, next_offset = results
-                
+
                 for point in points:
                     payload = point.payload or {}
                     if payload.get("paper_id") == paper_id:
@@ -202,11 +205,11 @@ class RetrievalPipeline:
                             authors=payload.get("authors"),
                             pdf_url=payload.get("pdf_url"),
                         )
-                
+
                 if next_offset is None:
                     break
                 offset = next_offset
-            
+
             logger.warning(f"No exact match found for paper_id={paper_id}")
         except Exception as e:
             logger.error(f"Failed to fetch paper {paper_id}: {e}", exc_info=True)
@@ -226,7 +229,7 @@ class RetrievalPipeline:
         # Step 1: Classify query type (use regex first, then LLM if needed)
         processor_query_type, paper_id = detect_query_type(request.query)
         source_paper: Optional[PaperMetadata] = None
-        
+
         # Convert processor QueryType to schema QueryType
         is_paper_id_query = processor_query_type == ProcessorQueryType.PAPER_ID
 
@@ -274,8 +277,7 @@ class RetrievalPipeline:
         # Remove source paper from results if present (don't show it as similar to itself)
         if source_paper:
             final_results = [
-                r for r in final_results 
-                if r.paper.paper_id != source_paper.paper_id
+                r for r in final_results if r.paper.paper_id != source_paper.paper_id
             ]
 
         # Step 6: Synthesize natural language response
@@ -286,7 +288,9 @@ class RetrievalPipeline:
         )
 
         return SearchResponse(
-            query_type=QueryType.PAPER_ID if is_paper_id_query else QueryType.NATURAL_LANGUAGE,
+            query_type=(
+                QueryType.PAPER_ID if is_paper_id_query else QueryType.NATURAL_LANGUAGE
+            ),
             original_query=request.query,
             paper_id=paper_id if is_paper_id_query else None,
             source_paper=source_paper,

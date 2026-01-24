@@ -172,7 +172,7 @@ class EmbeddingPipeline:
                     "year": doc.get("year"),
                     "authors": doc.get("authors"),
                     "pdf_url": doc.get("pdf_url"),
-                }
+                },
             )
             for doc in batch
         ]
@@ -188,12 +188,19 @@ class EmbeddingPipeline:
             try:
                 self.vectorstore.add_documents(documents, ids=ids)
                 break
-            except (ResponseHandlingException, httpx.ReadTimeout, httpx.TimeoutException, Exception) as e:
+            except (
+                ResponseHandlingException,
+                httpx.ReadTimeout,
+                httpx.TimeoutException,
+                Exception,
+            ) as e:
                 if attempt == max_retries - 1:
                     print(f"\nFailed to upload batch after {max_retries} attempts: {e}")
                     raise
-                wait_time = retry_delay * (2 ** attempt)
-                print(f"\nUpload timeout (attempt {attempt + 1}/{max_retries}), retrying in {wait_time}s...")
+                wait_time = retry_delay * (2**attempt)
+                print(
+                    f"\nUpload timeout (attempt {attempt + 1}/{max_retries}), retrying in {wait_time}s..."
+                )
                 time.sleep(wait_time)
 
         # Clear memory
@@ -289,10 +296,7 @@ class EmbeddingPipeline:
 
 def main():
     """Main entry point for running the embedding pipeline."""
-    pipeline = EmbeddingPipeline(
-        batch_size=4,
-        device="cpu"
-    )
+    pipeline = EmbeddingPipeline(batch_size=4, device="cpu")
     processed_file = EmbeddingPipeline.get_latest_processed_file()
     print(f"Using processed file: {processed_file}")
     print(f"Batch size: {pipeline.batch_size}, Device: {pipeline.device}")

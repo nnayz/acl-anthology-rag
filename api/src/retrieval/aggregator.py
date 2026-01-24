@@ -39,7 +39,9 @@ class ResultAggregator:
             score_weight: Weight for score-based fusion (0-1) (default: from settings)
         """
         self.k = k if k is not None else settings.RRF_K
-        self.score_weight = score_weight if score_weight is not None else settings.RRF_SCORE_WEIGHT
+        self.score_weight = (
+            score_weight if score_weight is not None else settings.RRF_SCORE_WEIGHT
+        )
 
     def aggregate(
         self,
@@ -84,7 +86,9 @@ class ResultAggregator:
 
         for paper_id in paper_rrf_scores:
             rrf_score = paper_rrf_scores[paper_id]
-            avg_raw_score = sum(paper_raw_scores[paper_id]) / len(paper_raw_scores[paper_id])
+            avg_raw_score = sum(paper_raw_scores[paper_id]) / len(
+                paper_raw_scores[paper_id]
+            )
 
             # Normalize RRF score to [0, 1] range (approximate)
             # Max possible RRF for a paper appearing at rank 1 in all queries
@@ -93,8 +97,8 @@ class ResultAggregator:
 
             # Hybrid score
             final_score = (
-                self.score_weight * avg_raw_score +
-                (1 - self.score_weight) * normalized_rrf
+                self.score_weight * avg_raw_score
+                + (1 - self.score_weight) * normalized_rrf
             )
 
             final_scores.append((paper_id, final_score))
@@ -105,10 +109,12 @@ class ResultAggregator:
         # Build final result list
         results = []
         for paper_id, score in final_scores[:top_k]:
-            results.append(SearchResult(
-                paper=paper_metadata[paper_id],
-                score=min(score, 1.0),  # Clamp to [0, 1]
-            ))
+            results.append(
+                SearchResult(
+                    paper=paper_metadata[paper_id],
+                    score=min(score, 1.0),  # Clamp to [0, 1]
+                )
+            )
 
         return results
 

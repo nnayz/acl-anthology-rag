@@ -32,10 +32,12 @@ def get_reformulation_prompt() -> ChatPromptTemplate:
     The prompt instructs the LLM to generate multiple semantically
     diverse queries from a single user query.
     """
-    return ChatPromptTemplate.from_messages([
-        ("system", REFORMULATION_SYSTEM_PROMPT),
-        ("human", REFORMULATION_HUMAN_PROMPT),
-    ])
+    return ChatPromptTemplate.from_messages(
+        [
+            ("system", REFORMULATION_SYSTEM_PROMPT),
+            ("human", REFORMULATION_HUMAN_PROMPT),
+        ]
+    )
 
 
 # Prompt for paper ID context expansion (when searching by paper ID)
@@ -62,10 +64,12 @@ def get_paper_context_prompt() -> ChatPromptTemplate:
     Used when the user provides a paper ID - generates queries based
     on the paper's content to find similar papers.
     """
-    return ChatPromptTemplate.from_messages([
-        ("system", PAPER_CONTEXT_SYSTEM_PROMPT),
-        ("human", PAPER_CONTEXT_HUMAN_PROMPT),
-    ])
+    return ChatPromptTemplate.from_messages(
+        [
+            ("system", PAPER_CONTEXT_SYSTEM_PROMPT),
+            ("human", PAPER_CONTEXT_HUMAN_PROMPT),
+        ]
+    )
 
 
 # Prompt for synthesizing a natural language response from search results
@@ -104,10 +108,12 @@ def get_response_synthesis_prompt() -> ChatPromptTemplate:
 
     Used to generate a natural language response from search results.
     """
-    return ChatPromptTemplate.from_messages([
-        ("system", RESPONSE_SYNTHESIS_SYSTEM_PROMPT),
-        ("human", RESPONSE_SYNTHESIS_HUMAN_PROMPT),
-    ])
+    return ChatPromptTemplate.from_messages(
+        [
+            ("system", RESPONSE_SYNTHESIS_SYSTEM_PROMPT),
+            ("human", RESPONSE_SYNTHESIS_HUMAN_PROMPT),
+        ]
+    )
 
 
 # Prompt for synthesizing responses for paper ID queries (similar papers)
@@ -149,7 +155,9 @@ def get_similar_papers_synthesis_prompt() -> ChatPromptTemplate:
 
     Used when the user provides a paper ID and wants similar papers.
     """
-    return ChatPromptTemplate.from_messages([
-        ("system", SIMILAR_PAPERS_SYNTHESIS_SYSTEM_PROMPT),
-        ("human", SIMILAR_PAPERS_SYNTHESIS_HUMAN_PROMPT),
-    ])
+    return ChatPromptTemplate.from_messages(
+        [
+            ("system", SIMILAR_PAPERS_SYNTHESIS_SYSTEM_PROMPT),
+            ("human", SIMILAR_PAPERS_SYNTHESIS_HUMAN_PROMPT),
+        ]
+    )

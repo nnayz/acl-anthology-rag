@@ -9,4 +9,3 @@ This module handles the query-time retrieval workflow:
 The retrieval pipeline provides a unified interface for both
 query modalities described in the system design.
 """
-

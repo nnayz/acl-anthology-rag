@@ -10,4 +10,3 @@ Key responsibilities:
 - Subtopic-focused query generation
 - Keyword-style expansions
 """
-
