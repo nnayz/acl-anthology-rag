@@ -5,10 +5,18 @@ This module creates and configures the FastAPI application instance,
 including middleware, exception handlers, and router registration.
 """
 
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.routes import router
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
 
 app = FastAPI(
     title="ACL Anthology RAG API",

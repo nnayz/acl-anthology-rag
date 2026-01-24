@@ -6,6 +6,8 @@ This module defines the HTTP endpoints for the retrieval system:
 - GET /paper/{acl_id} - Fetch paper metadata by ACL ID
 """
 
+import logging
+
 from fastapi import APIRouter, HTTPException, status
 
 from src.core.schemas import (
@@ -16,7 +18,10 @@ from src.core.schemas import (
     SearchRequest,
     SearchResponse,
 )
+from src.retrieval.pipeline import get_pipeline
 from src.retrieval.query_processor import detect_query_type, is_valid_acl_id
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["search"])
 
@@ -46,15 +51,20 @@ async def search(request: SearchRequest) -> SearchResponse:
     For natural language queries: performs vector similarity search.
     For paper ID queries: looks up the paper and returns similar papers.
     """
-    query_type, paper_id = detect_query_type(request.query)
+    pipeline = get_pipeline()
 
-    # Stub response - actual retrieval logic to be implemented later
-    return SearchResponse(
-        query_type=QueryType(query_type.value),
-        original_query=request.query,
-        paper_id=paper_id,
-        results=[],
-    )
+    try:
+        return await pipeline.search(request)
+    except Exception as e:
+        logger.error(f"Search failed: {e}")
+        # Return graceful empty response on error
+        query_type, paper_id = detect_query_type(request.query)
+        return SearchResponse(
+            query_type=QueryType(query_type.value),
+            original_query=request.query,
+            paper_id=paper_id,
+            results=[],
+        )
 
 
 @router.get("/paper/{paper_id}", response_model=PaperMetadata)
@@ -78,8 +88,13 @@ async def get_paper(paper_id: str) -> PaperMetadata:
             detail=f"Invalid ACL paper ID format: {paper_id}",
         )
 
-    # Stub - actual lookup to be implemented
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Paper not found: {paper_id}",
-    )
+    pipeline = get_pipeline()
+    paper = await pipeline._get_paper_by_id(paper_id)
+
+    if paper is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Paper not found: {paper_id}",
+        )
+
+    return paper
