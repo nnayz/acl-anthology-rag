@@ -59,8 +59,8 @@ class Settings:
     # ===================
     # API Keys & Endpoints
     # ===================
+    FIREWORKS_API_KEY = os.getenv("FIREWORKS_API_KEY")
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-    NOMIC_API_KEY = os.getenv("NOMIC_API_KEY")
     QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
     QDRANT_ENDPOINT = os.getenv("QDRANT_ENDPOINT")
 

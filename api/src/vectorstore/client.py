@@ -4,7 +4,7 @@ Vector database client and LangChain component management.
 This module provides centralized singleton management for all LangChain
 components used in the ACL Anthology RAG system:
 - QdrantClient for vector database operations
-- NomicEmbeddings for text embedding (via Nomic API)
+- FireworksEmbeddings for text embedding (via Fireworks API)
 - QdrantVectorStore for LangChain-integrated vector search
 
 Using singletons ensures:
@@ -16,7 +16,7 @@ Using singletons ensures:
 from threading import Lock
 from typing import Optional
 
-from langchain_nomic import NomicEmbeddings
+from langchain_fireworks import FireworksEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 
@@ -29,7 +29,7 @@ class LangChainComponents:
 
     Provides thread-safe lazy initialization of:
     - Qdrant client
-    - Nomic embeddings model (via API)
+    - Fireworks embeddings model (via API)
     - Qdrant vector store
 
     Usage:
@@ -54,7 +54,7 @@ class LangChainComponents:
             return
 
         self._qdrant_client: Optional[QdrantClient] = None
-        self._embeddings: Optional[NomicEmbeddings] = None
+        self._embeddings: Optional[FireworksEmbeddings] = None
         self._vectorstore: Optional[QdrantVectorStore] = None
         self._timeout: int = settings.QDRANT_TIMEOUT
         self._initialized = True
@@ -90,12 +90,11 @@ class LangChainComponents:
         return self._qdrant_client
 
     @property
-    def embeddings(self) -> NomicEmbeddings:
+    def embeddings(self) -> FireworksEmbeddings:
         """Lazy-load and return the embeddings model singleton."""
         if self._embeddings is None:
-            self._embeddings = NomicEmbeddings(
+            self._embeddings = FireworksEmbeddings(
                 model=settings.EMBEDDING_MODEL,
-                nomic_api_key=settings.NOMIC_API_KEY,
             )
         return self._embeddings
 
@@ -156,7 +155,7 @@ def get_qdrant_client(timeout: Optional[int] = None) -> QdrantClient:
     return get_langchain_components().configure(timeout=timeout).qdrant_client
 
 
-def get_embeddings(**kwargs) -> NomicEmbeddings:
+def get_embeddings(**kwargs) -> FireworksEmbeddings:
     """
     Returns the embeddings model singleton.
 
