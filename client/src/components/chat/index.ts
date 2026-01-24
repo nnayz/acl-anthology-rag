@@ -1,4 +1,5 @@
 export { Chat } from "./Chat"
 export { ChatInput } from "./ChatInput"
 export { ChatMessage, type Message } from "./ChatMessage"
-
+export { PaperCard } from "./PaperCard"
+export { InlineCitation } from "./InlineCitation"

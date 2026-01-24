@@ -90,3 +90,11 @@ class SearchResponse(BaseModel):
     paper_id: Optional[str] = Field(
         None, description="If query was a paper ID, the normalized ID"
     )
+    source_paper: Optional[PaperMetadata] = Field(
+        None,
+        description="The paper referenced in the query (for paper ID queries)",
+    )
+    response: Optional[str] = Field(
+        None,
+        description="LLM-generated natural language response summarizing results (markdown format)",
+    )

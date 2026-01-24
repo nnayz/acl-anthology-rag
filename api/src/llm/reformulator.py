@@ -17,7 +17,13 @@ from langchain_core.runnables import RunnableLambda, RunnableWithFallbacks
 from langchain_groq import ChatGroq
 
 from src.core.config import settings
-from src.llm.prompts import get_reformulation_prompt, get_paper_context_prompt
+from src.core.schemas import PaperMetadata, SearchResult
+from src.llm.prompts import (
+    get_reformulation_prompt,
+    get_paper_context_prompt,
+    get_response_synthesis_prompt,
+    get_similar_papers_synthesis_prompt,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -176,3 +182,211 @@ def get_reformulator() -> QueryReformulator:
     if _reformulator is None:
         _reformulator = QueryReformulator()
     return _reformulator
+
+
+class ResponseSynthesizer:
+    """
+    Synthesizes natural language responses from search results using an LLM.
+
+    Takes search results and the original query, then generates a helpful,
+    markdown-formatted response that summarizes the findings.
+    """
+
+    def __init__(
+        self,
+        model_name: Optional[str] = None,
+        temperature: Optional[float] = None,
+    ):
+        """
+        Initialize the response synthesizer.
+
+        Args:
+            model_name: Groq model to use (default: from settings)
+            temperature: LLM temperature (default: from settings)
+        """
+        self._model_name = model_name or settings.GROQ_MODEL
+        self._temperature = temperature if temperature is not None else settings.LLM_TEMPERATURE
+
+        # Initialize Groq LLM
+        self.llm = ChatGroq(
+            model=self._model_name,
+            temperature=self._temperature,
+            max_tokens=1024,  # Allow longer responses for synthesis
+        )
+
+        # Build the synthesis chain
+        self._build_chain()
+
+    def _build_chain(self):
+        """Build the LCEL chains for response synthesis."""
+        from langchain_core.output_parsers import StrOutputParser
+
+        # Chain for general search queries
+        base_chain = (
+            get_response_synthesis_prompt()
+            | self.llm
+            | StrOutputParser()
+        )
+
+        # Wrap with fallback that returns a simple formatted response
+        self.synthesis_chain: RunnableWithFallbacks = base_chain.with_fallbacks(
+            [_create_fallback_runnable(None)],
+            exceptions_to_handle=(Exception,),
+        )
+
+        # Chain for similar papers queries (paper ID based)
+        similar_papers_chain = (
+            get_similar_papers_synthesis_prompt()
+            | self.llm
+            | StrOutputParser()
+        )
+
+        self.similar_papers_chain: RunnableWithFallbacks = similar_papers_chain.with_fallbacks(
+            [_create_fallback_runnable(None)],
+            exceptions_to_handle=(Exception,),
+        )
+
+    def _format_results_for_prompt(self, results: List[SearchResult]) -> str:
+        """Format search results into a text representation for the LLM prompt."""
+        if not results:
+            return "No results found."
+
+        formatted_parts = []
+        for i, result in enumerate(results, 1):
+            paper = result.paper
+            authors = ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            if paper.authors and len(paper.authors) > 3:
+                authors += " et al."
+
+            part = f"""Paper {i}:
+- Title: {paper.title}
+- Authors: {authors}
+- Year: {paper.year or 'N/A'}
+- Paper ID: {paper.paper_id}
+- PDF: {paper.pdf_url or 'Not available'}
+- Relevance Score: {result.score:.0%}
+- Abstract: {paper.abstract or 'No abstract available'}
+"""
+            formatted_parts.append(part)
+
+        return "\n".join(formatted_parts)
+
+    def _generate_fallback_response(
+        self,
+        query: str,
+        results: List[SearchResult],
+    ) -> str:
+        """Generate a simple fallback response if LLM fails."""
+        if not results:
+            return "No papers found matching your query. Try a different search term."
+
+        lines = [f"Found {len(results)} relevant papers for your query:\n"]
+
+        for i, result in enumerate(results, 1):
+            paper = result.paper
+            authors = ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            if paper.authors and len(paper.authors) > 3:
+                authors += " et al."
+
+            lines.append(f"**{i}. {paper.title}**")
+            lines.append(f"   - {authors} ({paper.year or 'N/A'})")
+            if paper.pdf_url:
+                lines.append(f"   - [PDF]({paper.pdf_url})")
+            lines.append("")
+
+        return "\n".join(lines)
+
+    def _generate_similar_papers_fallback(
+        self,
+        source_paper: PaperMetadata,
+        results: List[SearchResult],
+    ) -> str:
+        """Generate a fallback response for similar papers query."""
+        if not results:
+            return f"I couldn't find papers similar to **{source_paper.title}**. The paper may be too specialized or not well represented in the database."
+
+        lines = [f"Found {len(results)} papers similar to **{source_paper.title}**:\n"]
+
+        for i, result in enumerate(results, 1):
+            paper = result.paper
+            authors = ", ".join(paper.authors[:3]) if paper.authors else "Unknown authors"
+            if paper.authors and len(paper.authors) > 3:
+                authors += " et al."
+
+            lines.append(f"**{i}. {paper.title}**")
+            lines.append(f"   - {authors} ({paper.year or 'N/A'})")
+            lines.append(f"   - Similarity: {result.score:.0%}")
+            if paper.pdf_url:
+                lines.append(f"   - [PDF]({paper.pdf_url})")
+            lines.append("")
+
+        return "\n".join(lines)
+
+    async def synthesize(
+        self,
+        query: str,
+        results: List[SearchResult],
+        source_paper: Optional[PaperMetadata] = None,
+    ) -> str:
+        """
+        Synthesize a natural language response from search results.
+
+        Args:
+            query: The original user query
+            results: List of search results
+            source_paper: Optional source paper for paper ID queries
+
+        Returns:
+            Markdown-formatted response string
+        """
+        if not results:
+            if source_paper:
+                return f"I couldn't find papers similar to **{source_paper.title}**. Try a different paper ID or a text-based search."
+            return "I couldn't find any papers matching your query. Try rephrasing or using different keywords."
+
+        results_text = self._format_results_for_prompt(results)
+
+        # Use different chain for paper ID queries
+        if source_paper:
+            source_authors = ", ".join(source_paper.authors[:3]) if source_paper.authors else "Unknown authors"
+            if source_paper.authors and len(source_paper.authors) > 3:
+                source_authors += " et al."
+
+            response = await self.similar_papers_chain.ainvoke({
+                "source_title": source_paper.title,
+                "source_authors": source_authors,
+                "source_year": source_paper.year or "N/A",
+                "source_abstract": source_paper.abstract or "No abstract available",
+                "results_text": results_text,
+            })
+
+            if response is None:
+                logger.warning("Similar papers synthesis failed, using fallback")
+                return self._generate_similar_papers_fallback(source_paper, results)
+
+            return response
+
+        # Standard synthesis for natural language queries
+        response = await self.synthesis_chain.ainvoke({
+            "query": query,
+            "results_text": results_text,
+        })
+
+        # If LLM failed, use fallback
+        if response is None:
+            logger.warning("Response synthesis failed, using fallback")
+            return self._generate_fallback_response(query, results)
+
+        return response
+
+
+# Module-level singleton for response synthesizer
+_synthesizer: Optional[ResponseSynthesizer] = None
+
+
+def get_synthesizer() -> ResponseSynthesizer:
+    """Get or create the singleton ResponseSynthesizer instance."""
+    global _synthesizer
+    if _synthesizer is None:
+        _synthesizer = ResponseSynthesizer()
+    return _synthesizer
