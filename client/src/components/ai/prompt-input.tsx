@@ -120,8 +120,8 @@ export interface PromptInputModelSelectProps {
 }
 
 export function PromptInputModelSelect({
-  value,
-  onValueChange,
+  value: _value,
+  onValueChange: _onValueChange,
   children,
 }: PromptInputModelSelectProps) {
   return <div>{children}</div>
@@ -156,7 +156,7 @@ export interface PromptInputModelSelectItemProps {
 }
 
 export function PromptInputModelSelectItem({
-  value,
+  value: _value,
   children,
   onClick,
 }: PromptInputModelSelectItemProps) {
@@ -169,10 +169,12 @@ export function PromptInputModelSelectItem({
 
 export interface PromptInputModelSelectValueProps {
   placeholder?: string
+  children?: ReactNode
 }
 
 export function PromptInputModelSelectValue({
   placeholder,
+  children,
 }: PromptInputModelSelectValueProps) {
-  return <span>{placeholder}</span>
+  return <span>{children ?? placeholder}</span>
 }
