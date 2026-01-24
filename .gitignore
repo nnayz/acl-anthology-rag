@@ -34,6 +34,7 @@ env/
 # IDE
 .idea/
 .vscode/
+.claude/
 *.swp
 *.swo
 *~
@@ -66,7 +67,6 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
-
 # Node (client)
 node_modules/
 npm-debug.log*
