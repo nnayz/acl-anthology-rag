@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <defs>
+    <style type="text/css"><![CDATA[
+      .box { fill:#f5f7fb; stroke:#2d3a4a; stroke-width:2; rx:8; ry:8; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size:16px; fill:#0b1320; font-weight:bold; }
+      .text { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#0b1320; }
+      .arrow { stroke:#2d3a4a; stroke-width:2; marker-end:url(#arrowhead); fill:none; }
+      .label { font-family: Arial, Helvetica, sans-serif; font-size:12px; fill:#2d3a4a; }
+      .section { font-family: Arial, Helvetica, sans-serif; font-size:18px; fill:#0b1320; font-weight:bold; }
+    ]]></style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#2d3a4a" />
+    </marker>
+  </defs>
+
+  <!-- Titles -->
+  <text x="150" y="40" class="section">Online Retrieval</text>
+  <text x="765" y="40" class="section">Offline Ingestion</text>
+
+  <!-- Online Retrieval Row 1: User -> Client -> API -->
+  <rect x="40" y="70" width="140" height="60" class="box"/>
+  <text x="60" y="105" class="title">User</text>
+
+  <rect x="220" y="70" width="200" height="80" class="box"/>
+  <text x="235" y="105" class="title">React Client</text>
+  <text x="235" y="125" class="text">Query / Paper ID</text>
+
+  <rect x="460" y="70" width="220" height="80" class="box"/>
+  <text x="475" y="105" class="title">FastAPI Backend</text>
+  <text x="475" y="125" class="text">HTTP API</text>
+
+  <line x1="180" y1="100" x2="220" y2="100" class="arrow"/>
+  <line x1="420" y1="110" x2="460" y2="110" class="arrow"/>
+
+  <!-- Online Retrieval Row 2: Processor -> LLM -> Embedding -> Qdrant -> Aggregator -->
+  <rect x="220" y="200" width="200" height="80" class="box"/>
+  <text x="235" y="235" class="title">Query Processor</text>
+  <text x="235" y="255" class="text">Type detect / normalize</text>
+
+  <rect x="460" y="200" width="220" height="80" class="box"/>
+  <text x="475" y="235" class="title">Groq LLM</text>
+  <text x="475" y="255" class="text">Query reformulation</text>
+
+  <rect x="720" y="200" width="220" height="80" class="box"/>
+  <text x="735" y="235" class="title">Fireworks Embeddings</text>
+  <text x="735" y="255" class="text">Text → vectors</text>
+
+  <rect x="980" y="200" width="180" height="80" class="box"/>
+  <text x="995" y="235" class="title">Qdrant</text>
+  <text x="995" y="255" class="text">Vector DB</text>
+
+  <rect x="460" y="320" width="220" height="80" class="box"/>
+  <text x="475" y="355" class="title">Aggregator</text>
+  <text x="475" y="375" class="text">RRF, ranking</text>
+
+  <!-- Arrows online -->
+  <line x1="570" y1="150" x2="320" y2="200" class="arrow"/>
+  <text x="330" y="180" class="label">interpret</text>
+
+  <line x1="420" y1="240" x2="460" y2="240" class="arrow"/>
+  <text x="430" y="230" class="label">prompt</text>
+
+  <line x1="680" y1="240" x2="720" y2="240" class="arrow"/>
+  <text x="690" y="230" class="label">queries</text>
+
+  <line x1="940" y1="240" x2="980" y2="240" class="arrow"/>
+  <text x="945" y="230" class="label">search</text>
+
+  <line x1="1070" y1="280" x2="570" y2="320" class="arrow"/>
+  <text x="880" y="305" class="label">top-k</text>
+
+  <line x1="570" y1="320" x2="570" y2="150" class="arrow"/>
+  <text x="580" y="210" class="label">results</text>
+
+  <!-- Offline Ingestion Column -->
+  <rect x="760" y="70" width="220" height="70" class="box"/>
+  <text x="775" y="105" class="title">ACL Anthology</text>
+  <text x="775" y="125" class="text">Metadata + abstracts</text>
+
+  <rect x="760" y="360" width="220" height="70" class="box"/>
+  <text x="775" y="395" class="title">Preprocess</text>
+  <text x="775" y="415" class="text">Normalize / clean</text>
+
+  <rect x="760" y="460" width="220" height="70" class="box"/>
+  <text x="775" y="495" class="title">Fireworks Embeddings</text>
+  <text x="775" y="515" class="text">Batch embed abstracts</text>
+
+  <rect x="1000" y="460" width="160" height="70" class="box"/>
+  <text x="1015" y="495" class="title">Qdrant</text>
+  <text x="1015" y="515" class="text">Index vectors</text>
+
+  <!-- Offline arrows -->
+  <line x1="870" y1="140" x2="870" y2="360" class="arrow"/>
+  <text x="880" y="250" class="label">download</text>
+
+  <line x1="870" y1="430" x2="870" y2="460" class="arrow"/>
+  <text x="880" y="450" class="label">cleaned</text>
+
+  <line x1="980" y1="495" x2="1000" y2="495" class="arrow"/>
+  <text x="985" y="485" class="label">upsert</text>
+</svg>

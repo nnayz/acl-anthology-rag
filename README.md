@@ -18,34 +18,15 @@ The ACL Anthology hosts tens of thousands of NLP research papers. Traditional ke
 - **Query Reformulation**: Leverages LLMs to expand user queries into multiple search vectors, improving recall.
 - **Dual Query Modes**: Supports both natural language questions and "Paper as Query" (using a paper ID to find related work).
 - **Unified Pipeline**: A consistent architecture for handling different types of inputs.
-- **Modern Stack**: Built with FastAPI, LangChain, Qdrant, and React.
+- **Modern Stack**: FastAPI, LangChain, Fireworks (embeddings), Groq (LLM), Qdrant, React.
 
 ## Architecture Overview
 
 The system follows a Retrieval-Augmented Generation (RAG) pattern, though currently focused on the retrieval aspect.
 
-```mermaid
-graph TD
-    User[User] -->|Query/Paper ID| Client[React Client]
-    Client -->|API Request| API[FastAPI Backend]
-    
-    subgraph "Online Retrieval"
-        API -->|Interpret| QP[Query Processor]
-        QP -->|Reformulate| LLM[LLM (Groq/Fireworks)]
-        LLM -->|Search Queries| Emb[Embedder]
-        Emb -->|Vectors| Qdrant[Qdrant Vector DB]
-        Qdrant -->|Results| Agg[Aggregator]
-    end
-    
-    subgraph "Offline Ingestion"
-        ACL[ACL Anthology] -->|Download| Ingest[Ingestion Pipeline]
-        Ingest -->|Clean & Embed| EmbModel[Embedding Model]
-        EmbModel -->|Vectors| Qdrant
-    end
-    
-    Agg -->|Ranked Papers| API
-    API -->|Response| Client
-```
+Note: Fireworks is used only for embedding generation. LLM-based query reformulation uses Groq.
+
+<img src="docs/diagrams/architecture.svg" alt="System Architecture" width="800" />
 
 ## Supported Query Modes
 
@@ -76,9 +57,9 @@ graph TD
 ## Quick Start
 
 ### Prerequisites
-- Docker & Docker Compose
 - Python 3.12+
 - Node.js 20+
+ - Access to a Qdrant endpoint (local install or Qdrant Cloud)
 
 ### Steps
 
@@ -88,25 +69,23 @@ graph TD
    cd acl-anthology-rag
    ```
 
-2. **Start Infrastructure (Qdrant)**
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Configure Environment**
+2. **Configure Environment**
    Copy `.env.example` to `.env` in `api/` and fill in your API keys (Groq/Fireworks).
    ```bash
    cp api/.env.example api/.env
    ```
+   Then set Qdrant connection in `api/.env`:
+   - Set `QDRANT_ENDPOINT` to your running instance (e.g., `http://localhost:6333` for a local install, or your Qdrant Cloud URL).
+   - Optionally set `QDRANT_API_KEY` if using Qdrant Cloud.
 
-4. **Run Backend**
+3. **Run Backend**
    ```bash
    cd api
    uv sync
    uv run fastapi dev src/app.py
    ```
 
-5. **Run Frontend**
+4. **Run Frontend**
    ```bash
    cd client
    npm install
@@ -127,7 +106,6 @@ See [Installation Guide](docs/installation.md) for detailed setup.
 │   │   └── vectorstore/ # Qdrant interface
 ├── client/              # Frontend (React)
 ├── docs/                # Documentation
-└── docker-compose.yml   # Infrastructure
 ```
 
 ## Documentation Index
@@ -137,6 +115,24 @@ See [Installation Guide](docs/installation.md) for detailed setup.
 - [**Configuration**](docs/configuration.md): Environment variables and settings.
 - [**Usage**](docs/usage.md): How to use the system effectively.
 - [**Workflows**](docs/workflows.md): Detailed offline and online pipeline steps.
+
+## Limitations
+
+- Operates on abstracts only (no full-text indexing).
+- Requires external services: Groq (LLM for reformulation) and a Qdrant endpoint.
+- Embedding generation via Fireworks API; throughput and cost depend on API limits.
+- Limited quantitative evaluation included (primarily qualitative relevance checks).
+- No cross-encoder re-ranking; ranking relies on dense similarity and RRF fusion.
+- Not productionized (no auth, observability, or autoscaling in scope).
+
+## Future Work
+
+- Add hybrid retrieval (dense + BM25) and cross-encoder re-ranking.
+- Incorporate full-text indexing and PDF parsing.
+- Add user feedback loops and relevance learning.
+- Improve UI (filters, facets, citations, export options).
+- Batch/streaming ingestion pipeline with resumability and monitoring.
+- Expand evaluation with curated benchmarks and inter-annotator agreement.
 
 ## License
 

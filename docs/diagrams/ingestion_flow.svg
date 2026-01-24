@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <style type="text/css"><![CDATA[
+      .box { fill:#ffffff; stroke:#000000; stroke-width:1.5; rx:5; ry:5; }
+      .text { font-family: Helvetica, Arial, sans-serif; font-size:12px; fill:#000000; text-anchor: middle; }
+      .arrow { stroke:#000000; stroke-width:1.5; marker-end:url(#arrowhead); fill:none; }
+      .label { font-family: Helvetica, Arial, sans-serif; font-size:10px; fill:#444444; text-anchor: middle; }
+    ]]></style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000000" />
+    </marker>
+  </defs>
+
+  <!-- Nodes -->
+  <rect x="50" y="170" width="100" height="60" class="box"/>
+  <text x="100" y="205" class="text">ACL Anthology</text>
+
+  <rect x="200" y="170" width="100" height="60" class="box"/>
+  <text x="250" y="195" class="text">download.py</text>
+  <text x="250" y="215" class="text">(Stream Parser)</text>
+
+  <rect x="350" y="170" width="100" height="60" class="box"/>
+  <text x="400" y="195" class="text">preprocess.py</text>
+  <text x="400" y="215" class="text">(Normalization)</text>
+
+  <rect x="500" y="170" width="100" height="60" class="box"/>
+  <text x="550" y="195" class="text">embed.py</text>
+  <text x="550" y="215" class="text">(Fireworks API)</text>
+
+  <rect x="650" y="170" width="100" height="60" class="box"/>
+  <text x="700" y="195" class="text">Qdrant</text>
+  <text x="700" y="215" class="text">(Vector Store)</text>
+
+  <!-- Edges -->
+  <line x1="150" y1="200" x2="200" y2="200" class="arrow"/>
+  <text x="175" y="190" class="label">XML/Gzip</text>
+
+  <line x1="300" y1="200" x2="350" y2="200" class="arrow"/>
+  <text x="325" y="190" class="label">Raw Items</text>
+
+  <line x1="450" y1="200" x2="500" y2="200" class="arrow"/>
+  <text x="475" y="190" class="label">Clean Text</text>
+
+  <line x1="600" y1="200" x2="650" y2="200" class="arrow"/>
+  <text x="625" y="190" class="label">Vectors</text>
+
+  <!-- Loop for batching -->
+  <path d="M 520 230 Q 550 260 580 230" fill="none" stroke="#000000" stroke-dasharray="4"/>
+  <text x="550" y="270" class="label">Batching</text>
+</svg>
