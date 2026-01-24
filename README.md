@@ -1,184 +1,143 @@
-⸻
+# ACL Anthology Semantic Retrieval System
 
-ACL Anthology Semantic Retrieval System
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Version](https://img.shields.io/badge/version-0.1.0-orange)
+![Python](https://img.shields.io/badge/python-3.12+-blue)
+![React](https://img.shields.io/badge/react-19-blue)
 
-This project implements a semantic retrieval system over the ACL Anthology corpus. The goal is to help users discover relevant NLP research papers using either natural language questions or ACL Anthology paper identifiers.
+## Motivation
 
-The system is designed as a lightweight Retrieval-Augmented Generation (RAG) style pipeline, suitable for academic experimentation rather than production deployment.
+The ACL Anthology hosts tens of thousands of NLP research papers. Traditional keyword-based search often fails to capture the semantic nuance of research queries, struggling with synonyms, paraphrases, and conceptual similarity. 
 
-⸻
+**ACL Anthology RAG** bridges this gap by implementing a semantic retrieval system. It moves beyond simple keyword matching to understand the *meaning* behind a query, allowing researchers to discover relevant work even when they don't know the exact terminology.
 
-Problem Motivation
+## Key Features
 
-The ACL Anthology contains tens of thousands of NLP research papers. Traditional keyword search struggles with semantic understanding, paraphrases, and conceptual similarity.
+- **Semantic Search**: Uses dense vector embeddings to find conceptually similar papers.
+- **Query Reformulation**: Leverages LLMs to expand user queries into multiple search vectors, improving recall.
+- **Dual Query Modes**: Supports both natural language questions and "Paper as Query" (using a paper ID to find related work).
+- **Unified Pipeline**: A consistent architecture for handling different types of inputs.
+- **Modern Stack**: Built with FastAPI, LangChain, Qdrant, and React.
 
-This project addresses that by:
-	•	Representing paper abstracts as dense vector embeddings
-	•	Using semantic similarity search instead of keyword matching
-	•	Supporting both free-form questions and paper-based similarity search
+## Architecture Overview
 
-⸻
+The system follows a Retrieval-Augmented Generation (RAG) pattern, though currently focused on the retrieval aspect.
 
-Supported Query Modes
+```mermaid
+graph TD
+    User[User] -->|Query/Paper ID| Client[React Client]
+    Client -->|API Request| API[FastAPI Backend]
+    
+    subgraph "Online Retrieval"
+        API -->|Interpret| QP[Query Processor]
+        QP -->|Reformulate| LLM[LLM (Groq/Fireworks)]
+        LLM -->|Search Queries| Emb[Embedder]
+        Emb -->|Vectors| Qdrant[Qdrant Vector DB]
+        Qdrant -->|Results| Agg[Aggregator]
+    end
+    
+    subgraph "Offline Ingestion"
+        ACL[ACL Anthology] -->|Download| Ingest[Ingestion Pipeline]
+        Ingest -->|Clean & Embed| EmbModel[Embedding Model]
+        EmbModel -->|Vectors| Qdrant
+    end
+    
+    Agg -->|Ranked Papers| API
+    API -->|Response| Client
+```
 
-The system supports two query modalities, both of which ultimately use the same retrieval pipeline.
+## Supported Query Modes
 
-1. Natural Language Query
+### 1. Natural Language Query
+**Best for:** Exploratory research, topic discovery.
+- **Input:** "How do I improve low-resource translation?"
+- **Process:** The system expands this into multiple semantic queries (e.g., "low-resource NMT techniques", "data augmentation for translation").
 
-Users can ask questions such as:
-	•	“Papers on low-resource neural machine translation”
-	•	“Work on multilingual transfer learning for NLP”
+### 2. ACL Anthology Paper ID
+**Best for:** Finding related work, literature review.
+- **Input:** `2023.acl-long.412`
+- **Process:** The system fetches the abstract of the specified paper and uses it as a semantic proxy to find other papers in the same research neighborhood.
 
-This mode is intended for exploratory research and topic discovery.
+## Offline vs Online Steps
 
-2. ACL Anthology Paper ID Query
+### Offline (Ingestion)
+1. **Download**: Metadata and abstracts are fetched from the ACL Anthology.
+2. **Preprocess**: Text is cleaned, normalized, and formatted.
+3. **Embed**: Dense vectors are generated for each abstract.
+4. **Index**: Vectors are stored in Qdrant for fast retrieval.
 
-Users can also provide a specific ACL Anthology identifier, for example:
-	•	2023.acl-long.412
+### Online (Retrieval)
+1. **Receive**: User input (text or ID) is received.
+2. **Reformulate**: LLM generates multiple search queries.
+3. **Retrieve**: Vector search finds candidate papers for each query.
+4. **Aggregate**: Reciprocal Rank Fusion (RRF) combines and ranks results.
 
-In this case, the system retrieves the corresponding paper’s abstract and uses it as a semantic proxy to find similar papers.
+## Quick Start
 
-⸻
+### Prerequisites
+- Docker & Docker Compose
+- Python 3.12+
+- Node.js 20+
 
-Core Design Principle
+### Steps
 
-All queries are converted into semantic search queries using an LLM before vector retrieval.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/nnayz/acl-anthology-rag.git
+   cd acl-anthology-rag
+   ```
 
-The system never embeds the raw user query directly. Instead, it uses an LLM to reformulate the input into multiple focused search queries. This improves recall and captures different semantic facets of the information need.
+2. **Start Infrastructure (Qdrant)**
+   ```bash
+   docker-compose up -d
+   ```
 
-This principle applies equally to both query modes.
+3. **Configure Environment**
+   Copy `.env.example` to `.env` in `api/` and fill in your API keys (Groq/Fireworks).
+   ```bash
+   cp api/.env.example api/.env
+   ```
 
-⸻
+4. **Run Backend**
+   ```bash
+   cd api
+   uv sync
+   uv run fastapi dev src/app.py
+   ```
 
-Data Preparation Workflow
+5. **Run Frontend**
+   ```bash
+   cd client
+   npm install
+   npm run dev
+   ```
 
-Before user interaction, the system performs an offline ingestion step:
-	1.	Abstracts and metadata are collected from the ACL Anthology.
-	2.	Each abstract is cleaned and normalized.
-	3.	Dense vector embeddings are generated for each abstract.
-	4.	The embeddings and metadata are stored in a vector database.
+See [Installation Guide](docs/installation.md) for detailed setup.
 
-Only abstracts are stored and embedded. Full paper texts are not used.
+## Project Structure
 
-⸻
+```
+.
+├── api/                 # Backend (FastAPI)
+│   ├── src/
+│   │   ├── ingestion/   # Data processing pipeline
+│   │   ├── retrieval/   # Search logic & ranking
+│   │   ├── llm/         # LLM integration
+│   │   └── vectorstore/ # Qdrant interface
+├── client/              # Frontend (React)
+├── docs/                # Documentation
+└── docker-compose.yml   # Infrastructure
+```
 
-Query Processing Workflow
+## Documentation Index
 
-Step 1: Input Interpretation
-	•	If the user provides natural language, the text is passed directly to the LLM.
-	•	If the user provides a paper ID, the system first retrieves the paper’s abstract and metadata.
+- [**Architecture**](docs/architecture.md): Deep dive into system components and design.
+- [**Installation**](docs/installation.md): Detailed setup and troubleshooting.
+- [**Configuration**](docs/configuration.md): Environment variables and settings.
+- [**Usage**](docs/usage.md): How to use the system effectively.
+- [**Workflows**](docs/workflows.md): Detailed offline and online pipeline steps.
 
-Step 2: Query Reformulation
+## License
 
-An LLM generates multiple semantically meaningful search queries based on the input. These queries may include:
-	•	Paraphrases
-	•	Subtopic-focused queries
-	•	Keyword-style expansions
-
-This step allows the system to better cover the semantic space of the user’s intent.
-
-Step 3: Embedding
-
-Each reformulated query is converted into a vector embedding using the same embedding model used for the abstracts.
-
-Step 4: Vector Retrieval
-
-For each query embedding:
-	•	A similarity search is performed against the abstract embeddings.
-	•	Top-k candidate papers are retrieved.
-
-Step 5: Result Aggregation
-
-Results from all query embeddings are merged and ranked to produce a final list of relevant papers.
-
-⸻
-
-Why Use Paper Abstracts as Queries
-
-In the paper-ID mode, the abstract functions as a rich semantic representation of the paper’s contribution. Using it as input to the query reformulation step enables:
-	•	Document-to-document similarity search
-	•	Discovery of related work
-	•	Exploration of research neighborhoods
-
-This approach aligns with classical information retrieval concepts such as document-as-query retrieval.
-
-⸻
-
-Architectural Advantages
-	•	A single unified retrieval pipeline for all query types
-	•	No special-case logic after query interpretation
-	•	Clear separation between ingestion and querying
-	•	Easy to explain and justify academically
-
-⸻
-
-Mermaid Workflow Diagram
-
-flowchart TD
-    A[User Input] --> B{Query Type}
-
-    B -->|Natural Language| C[LLM Query Reformulation]
-    B -->|ACL Paper ID| D[Fetch Paper Abstract]
-    D --> C
-
-    C --> E[Multiple Reformulated Queries]
-    E --> F[Query Embeddings]
-
-    F --> G[Vector Database<br/>Abstract Embeddings]
-    G --> H[Top-K Similar Papers]
-
-    H --> I[Rank & Aggregate Results]
-    I --> J[Final Response to User]
-
-
-⸻
-
-Project Structure
-
-The backend API follows a modular architecture aligned with the system's workflow stages.
-
-api/src/
-├── main.py              # Application entry point
-├── api/                 # HTTP interface (FastAPI)
-│   ├── app.py           # FastAPI application setup
-│   └── routes.py        # API endpoint definitions
-├── core/                # Shared components
-│   ├── config.py        # Configuration management
-│   └── schemas.py       # Pydantic data models
-├── ingestion/           # Offline data preparation
-│   ├── download.py      # ACL Anthology data fetching
-│   ├── preprocess.py    # Text cleaning and normalization
-│   ├── embed.py         # Embedding generation
-│   └── ingest.py        # Pipeline orchestration
-├── retrieval/           # Query-time processing
-│   ├── query_processor.py   # Query interpretation
-│   ├── aggregator.py        # Result merging and ranking
-│   └── pipeline.py          # Retrieval orchestration
-├── llm/                 # LLM integration
-│   ├── reformulator.py  # Query expansion
-│   └── prompts.py       # Prompt templates
-└── vectorstore/         # Vector database interface
-    └── client.py        # Qdrant client wrapper
-
-Naming Conventions
-	•	Modules: lowercase with underscores (e.g., query_processor.py)
-	•	Classes: PascalCase (e.g., QueryProcessor)
-	•	Functions: lowercase with underscores (e.g., process_query)
-	•	Constants: UPPERCASE with underscores (e.g., DEFAULT_TOP_K)
-	•	Config files: lowercase (e.g., config.py, .env)
-
-⸻
-
-Scope and Limitations
-	•	The system operates only on abstracts, not full texts.
-	•	It is intended for academic use and demonstration.
-	•	No fine-tuning or feedback learning is included.
-	•	Response generation is limited to retrieval and presentation.
-
-⸻
-
-Summary
-
-This project demonstrates how semantic retrieval over scientific literature can be achieved using modern embedding models and LLM-based query reformulation. By unifying natural language and document-based queries into a single pipeline, the system provides a clean and conceptually strong approach to research paper discovery.
-
-⸻
+MIT License
