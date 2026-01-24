@@ -4,7 +4,7 @@ Vector database client and LangChain component management.
 This module provides centralized singleton management for all LangChain
 components used in the ACL Anthology RAG system:
 - QdrantClient for vector database operations
-- HuggingFaceEmbeddings for text embedding
+- NomicEmbeddings for text embedding (via Nomic API)
 - QdrantVectorStore for LangChain-integrated vector search
 
 Using singletons ensures:
@@ -16,7 +16,7 @@ Using singletons ensures:
 from threading import Lock
 from typing import Optional
 
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_nomic import NomicEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 
@@ -29,7 +29,7 @@ class LangChainComponents:
 
     Provides thread-safe lazy initialization of:
     - Qdrant client
-    - HuggingFace embeddings model
+    - Nomic embeddings model (via API)
     - Qdrant vector store
 
     Usage:
@@ -54,28 +54,26 @@ class LangChainComponents:
             return
 
         self._qdrant_client: Optional[QdrantClient] = None
-        self._embeddings: Optional[HuggingFaceEmbeddings] = None
+        self._embeddings: Optional[NomicEmbeddings] = None
         self._vectorstore: Optional[QdrantVectorStore] = None
-        self._device: str = "cpu"
         self._timeout: int = settings.QDRANT_TIMEOUT
         self._initialized = True
 
     def configure(
         self,
-        device: str = "cpu",
         timeout: Optional[int] = None,
+        **kwargs,
     ) -> "LangChainComponents":
         """
         Configure component settings before initialization.
 
         Args:
-            device: Device for embeddings ('cpu' or 'cuda')
             timeout: Request timeout for Qdrant client (default: from settings)
+            **kwargs: Additional arguments (ignored for API-based embeddings)
 
         Returns:
             Self for method chaining
         """
-        self._device = device
         if timeout is not None:
             self._timeout = timeout
         return self
@@ -92,18 +90,12 @@ class LangChainComponents:
         return self._qdrant_client
 
     @property
-    def embeddings(self) -> HuggingFaceEmbeddings:
+    def embeddings(self) -> NomicEmbeddings:
         """Lazy-load and return the embeddings model singleton."""
         if self._embeddings is None:
-            self._embeddings = HuggingFaceEmbeddings(
-                model_name=settings.EMBEDDING_MODEL,
-                model_kwargs={
-                    "trust_remote_code": True,
-                    "device": self._device,
-                },
-                encode_kwargs={
-                    "normalize_embeddings": True,
-                },
+            self._embeddings = NomicEmbeddings(
+                model=settings.EMBEDDING_MODEL,
+                nomic_api_key=settings.NOMIC_API_KEY,
             )
         return self._embeddings
 
@@ -164,29 +156,28 @@ def get_qdrant_client(timeout: Optional[int] = None) -> QdrantClient:
     return get_langchain_components().configure(timeout=timeout).qdrant_client
 
 
-def get_embeddings(device: str = "cpu") -> HuggingFaceEmbeddings:
+def get_embeddings(**kwargs) -> NomicEmbeddings:
     """
     Returns the embeddings model singleton.
 
     Args:
-        device: Device to use (used only on first call)
+        **kwargs: Ignored (kept for backward compatibility)
     """
-    return get_langchain_components().configure(device=device).embeddings
+    return get_langchain_components().embeddings
 
 
 def get_vectorstore(
     collection_name: Optional[str] = None,
-    device: str = "cpu",
+    **kwargs,
 ) -> QdrantVectorStore:
     """
     Returns a LangChain Qdrant vector store connected to the collection.
 
     Args:
         collection_name: Name of the Qdrant collection (default: from settings)
-        device: Device for embeddings (used only on first call)
+        **kwargs: Ignored (kept for backward compatibility)
 
     Returns:
         Configured QdrantVectorStore instance
     """
-    components = get_langchain_components().configure(device=device)
-    return components.get_vectorstore(collection_name)
+    return get_langchain_components().get_vectorstore(collection_name)
