@@ -20,38 +20,17 @@ from fastapi.responses import StreamingResponse
 
 from src.core.schemas import (
     PaperMetadata,
-    QueryClassification,
-    QueryRequest,
-    QueryType,
-    SearchMode,
     SearchRequest,
     StreamEvent,
     StreamEventType,
     StreamMetadata,
 )
 from src.retrieval.pipeline import get_pipeline
-from src.retrieval.query_processor import detect_query_type, is_valid_acl_id
+from src.retrieval.query_processor import is_valid_acl_id
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["search"])
-
-
-@router.post("/classify", response_model=QueryClassification)
-async def classify_query(request: QueryRequest) -> QueryClassification:
-    """
-    Classify a user query to determine its type.
-
-    Returns whether the query is a natural language search or an ACL paper ID.
-    """
-    query_type, paper_id = detect_query_type(request.query)
-
-    return QueryClassification(
-        query_type=QueryType(query_type.value),
-        original_query=request.query,
-        paper_id=paper_id,
-        is_valid=True,
-    )
 
 
 @router.post("/search")
@@ -118,8 +97,6 @@ async def generate_sse_stream(request: SearchRequest) -> AsyncIterator[str]:
         # Send error event
         error_data = json.dumps({"error": str(e)})
         yield f"event: error\ndata: {error_data}\n\n"
-
-
 
 
 @router.get("/paper/{paper_id}", response_model=PaperMetadata)

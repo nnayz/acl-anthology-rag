@@ -31,7 +31,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def setup_indexes(client: QdrantClient, collection_name: str, force: bool = False) -> None:
+def setup_indexes(
+    client: QdrantClient, collection_name: str, force: bool = False
+) -> None:
     """
     Create payload indexes for efficient filtering.
 

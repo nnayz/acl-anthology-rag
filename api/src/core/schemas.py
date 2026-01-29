@@ -14,21 +14,6 @@ from typing import Dict, List, Optional
 from pydantic import BaseModel, Field, model_validator
 
 
-class QueryType(str, Enum):
-    """Type of query detected from user input."""
-
-    NATURAL_LANGUAGE = "natural_language"
-    PAPER_ID = "paper_id"
-
-
-class SearchMode(str, Enum):
-    """Mode for search execution."""
-
-    SEMANTIC = "semantic"  # Vector search only
-    FILTER_ONLY = "filter_only"  # Filters only, no vector search
-    HYBRID = "hybrid"  # Filters + vector search (default)
-
-
 class YearFilter(BaseModel):
     """Filter for year-based queries."""
 
@@ -54,9 +39,7 @@ class SearchFilters(BaseModel):
         None, description="Keywords to match in title"
     )
     language: Optional[str] = Field(None, description="Language filter")
-    authors: Optional[List[str]] = Field(
-        None, description="Author names to search for"
-    )
+    authors: Optional[List[str]] = Field(None, description="Author names to search for")
     has_awards: Optional[bool] = Field(
         None, description="Filter for papers with any award"
     )
@@ -92,31 +75,12 @@ class ParsedQuery(BaseModel):
         None, description="Remaining semantic search query after filter extraction"
     )
     original_query: str = Field(..., description="The original query string")
-
-
-class QueryRequest(BaseModel):
-    """Request schema for the query classification endpoint."""
-
-    query: str = Field(
-        ...,
-        min_length=1,
-        max_length=1000,
-        description="User query string - either natural language or ACL paper ID",
+    is_relevant: bool = Field(
+        default=True,
+        description="Whether the query is relevant to academic paper search",
     )
-
-
-class QueryClassification(BaseModel):
-    """
-    Response schema for query classification.
-    """
-
-    query_type: QueryType = Field(..., description="Detected type of the query")
-    original_query: str = Field(..., description="The original query string")
-    paper_id: Optional[str] = Field(
-        None, description="Normalized paper ID if query_type is PAPER_ID"
-    )
-    is_valid: bool = Field(
-        True, description="Whether the query is valid for processing"
+    irrelevant_response: Optional[str] = Field(
+        None, description="Response to show for irrelevant queries"
     )
 
 
@@ -137,42 +101,27 @@ class PaperMetadata(BaseModel):
 
 
 class SearchRequest(BaseModel):
-    """Request schema for semantic search endpoint."""
+    """
+    Request schema for semantic search endpoint.
+    """
 
     query: Optional[str] = Field(
         default=None,
         min_length=1,
-        max_length=1000,
-        description="Search query string (required for semantic/hybrid modes)",
+        max_length=1000,  # 1000 characters to prevent abuse
+        description="Search query string",
     )
     top_k: int = Field(
         default=5,
         ge=1,
-        le=20,
+        le=20,  # prevent context abuse
         description="Number of results to return",
-    )
-    filters: Optional[SearchFilters] = Field(
-        None, description="Explicit structured filters to apply"
-    )
-    mode: SearchMode = Field(
-        default=SearchMode.HYBRID,
-        description="Search mode: semantic, filter_only, or hybrid",
-    )
-    parse_filters_from_query: bool = Field(
-        default=True,
-        description="Whether to parse filters from the query using LLM",
     )
 
     @model_validator(mode="after")
     def validate_mode_requirements(self) -> "SearchRequest":
-        if self.mode in (SearchMode.SEMANTIC, SearchMode.HYBRID) and not self.query:
-            raise ValueError(
-                f"query is required for {self.mode.value} mode"
-            )
-        if self.mode == SearchMode.FILTER_ONLY and (
-            not self.filters or self.filters.is_empty()
-        ):
-            raise ValueError("filters are required for filter_only mode")
+        if not self.query:
+            raise ValueError("query is required")
         return self
 
 
@@ -183,34 +132,6 @@ class SearchResult(BaseModel):
 
     paper: PaperMetadata
     score: float = Field(..., ge=0.0, le=1.0, description="Similarity score")
-
-
-class SearchResponse(BaseModel):
-    """Response schema for search endpoint."""
-
-    query_type: QueryType
-    original_query: str
-    results: List[SearchResult]
-    paper_id: Optional[str] = Field(
-        None, description="If query was a paper ID, the normalized ID"
-    )
-    source_paper: Optional[PaperMetadata] = Field(
-        None,
-        description="The paper referenced in the query (for paper ID queries)",
-    )
-    response: Optional[str] = Field(
-        None,
-        description="LLM-generated natural language response summarizing results (markdown format)",
-    )
-    mode: Optional[SearchMode] = Field(
-        None, description="The search mode that was used"
-    )
-    parsed_filters: Optional[SearchFilters] = Field(
-        None, description="Filters parsed from the natural language query"
-    )
-    applied_filters: Optional[SearchFilters] = Field(
-        None, description="Filters that were actually applied to the search"
-    )
 
 
 class StreamEventType(str, Enum):
@@ -235,15 +156,13 @@ class StreamEvent(BaseModel):
 class StreamMetadata(BaseModel):
     """Metadata sent at start of streaming response."""
 
-    query_type: QueryType
     original_query: str
     results: List[SearchResult]
     paper_id: Optional[str] = None
     source_paper: Optional[PaperMetadata] = None
-    mode: Optional[SearchMode] = None
     parsed_filters: Optional[SearchFilters] = None
-    applied_filters: Optional[SearchFilters] = None
     # Monitoring data
+    is_relevant: bool = True
     semantic_query: Optional[str] = None
     reformulated_queries: Optional[List[str]] = None
     timestamps: Optional[Dict[str, float]] = None

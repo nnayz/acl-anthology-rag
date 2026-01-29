@@ -8,15 +8,39 @@ are designed to elicit focused, search-oriented outputs.
 
 from langchain_core.prompts import ChatPromptTemplate
 
-# =====================
 # Filter Extraction Prompts
-# =====================
 
 FILTER_EXTRACTION_SYSTEM_PROMPT = """You are an expert at parsing academic paper search queries into structured filters.
 
-Your task is to extract structured filters from natural language queries about academic papers in computational linguistics and NLP.
+Your task is to:
+1. First determine if the query is RELEVANT to searching academic papers
+2. If relevant, extract structured filters from the natural language query
 
-Available filters:
+RELEVANCE CHECK - BE PERMISSIVE:
+Default to is_relevant=true. Only mark as irrelevant for CLEARLY off-topic queries.
+
+RELEVANT (mark is_relevant=true):
+- ANY query about research topics, methods, techniques, algorithms, models
+- Questions about concepts (even if phrased casually): "what is attention", "explain transformers"
+- Topic searches: "machine translation", "sentiment analysis", "BERT", "GPT"
+- Author queries: "papers by X", "who wrote about Y"
+- Comparative queries: "difference between X and Y"
+- Exploratory queries: "latest research on X", "advances in Y"
+- Technical questions that papers could answer: "how does X work", "what are the best methods for Y"
+- Vague but on-topic: "NLP stuff", "language models", "deep learning for text"
+- Questions about the field: "state of the art in X", "survey on Y"
+
+IRRELEVANT (mark is_relevant=false) - ONLY these cases:
+- Pure greetings with no query: "hi", "hello", "hey there"
+- Completely unrelated topics: "weather today", "recipe for cake", "sports scores"
+- Personal questions: "how are you", "what's your name"
+- Non-academic requests: "write me a poem", "tell me a joke"
+
+When in doubt, mark as RELEVANT. Users are here to search papers - give them the benefit of the doubt.
+
+If the query is IRRELEVANT, set is_relevant to false and provide a polite response explaining what this system can help with.
+
+Available filters (only for relevant queries):
 - year: Extract exact year OR year range (min_year, max_year)
   - "from 2017" -> min_year: 2017
   - "papers in 2020" -> exact: 2020
@@ -48,6 +72,8 @@ IMPORTANT:
 
 Return ONLY valid JSON with this exact structure:
 {{
+  "is_relevant": true | false,
+  "irrelevant_response": "polite response for off-topic queries" | null,
   "filters": {{
     "year": {{"exact": int|null, "min_year": int|null, "max_year": int|null}} | null,
     "authors": ["name1", "name2"] | null,
@@ -56,7 +82,7 @@ Return ONLY valid JSON with this exact structure:
     "has_awards": true | null,
     "awards": ["award1"] | null,
     "bibkey": "exact-bibkey" | null
-  }},
+  }} | null,
   "semantic_query": "remaining search intent" | null
 }}"""
 
@@ -81,9 +107,7 @@ def get_filter_extraction_prompt() -> ChatPromptTemplate:
     )
 
 
-# =====================
 # Query Reformulation Prompts
-# =====================
 
 # System prompt for query reformulation
 REFORMULATION_SYSTEM_PROMPT = """You are a query reformulation expert for academic paper search in computational linguistics and NLP.

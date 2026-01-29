@@ -6,7 +6,7 @@ into structured filters and remaining semantic search intent.
 """
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 from langchain_core.output_parsers import JsonOutputParser
@@ -66,7 +66,9 @@ class FilterParser:
         self._build_chain()
 
     def _build_chain(self):
-        """Build the LCEL chain with fallback handling."""
+        """
+        Build the LCEL chain with fallback handling.
+        """
         base_chain = get_filter_extraction_prompt() | self.llm | self.parser
 
         # Fallback returns None, indicating parsing failed
@@ -76,7 +78,9 @@ class FilterParser:
         )
 
     def _parse_year_filter(self, year_data: Optional[Dict]) -> Optional[YearFilter]:
-        """Parse year filter from LLM output."""
+        """
+        Parse year filter from LLM output.
+        """
         if not year_data:
             return None
 
@@ -110,7 +114,9 @@ class FilterParser:
         return YearFilter(exact=exact, min_year=min_year, max_year=max_year)
 
     def _parse_filters(self, filters_data: Optional[Dict]) -> Optional[SearchFilters]:
-        """Parse SearchFilters from LLM output."""
+        """
+        Parse SearchFilters from LLM output.
+        """
         if not filters_data:
             return None
 
@@ -152,7 +158,7 @@ class FilterParser:
         Returns:
             ParsedQuery with extracted filters and remaining semantic query
         """
-        current_year = datetime.now().year
+        current_year = datetime.now(timezone.utc).year
 
         result = await self.extraction_chain.ainvoke(
             {
@@ -169,6 +175,22 @@ class FilterParser:
                 original_query=query,
             )
 
+        # Check relevance first
+        is_relevant = result.get("is_relevant", True)
+        if not is_relevant:
+            irrelevant_response = result.get("irrelevant_response") or (
+                "I'm an academic paper search assistant for computational linguistics and NLP research. "
+                "I can help you find papers, explore research topics, discover authors' work, and more. "
+                "Please ask me about NLP, machine learning, or computational linguistics papers!"
+            )
+            return ParsedQuery(
+                filters=None,
+                semantic_query=None,
+                original_query=query,
+                is_relevant=False,
+                irrelevant_response=irrelevant_response,
+            )
+
         # Parse the LLM output
         filters = self._parse_filters(result.get("filters"))
         semantic_query = result.get("semantic_query")
@@ -183,6 +205,7 @@ class FilterParser:
             filters=filters,
             semantic_query=semantic_query,
             original_query=query,
+            is_relevant=True,
         )
 
 
