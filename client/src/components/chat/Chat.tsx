@@ -75,6 +75,7 @@ export function Chat() {
     try {
       const response: SearchResponse = await search(content)
 
+<<<<<<< Updated upstream
       // Use the LLM-generated response, or fall back to a simple message
       const assistantContent = response.response 
         || (response.results.length === 0 
@@ -89,6 +90,84 @@ export function Chat() {
         sourcePaper: response.source_paper,
         // Include search results for inline citations
         searchResults: response.results,
+=======
+    // Start streaming search
+    abortControllerRef.current = searchStream(
+      content,
+      {
+        onMetadata: (metadata: StreamMetadata) => {
+          // Store monitoring data
+          setMonitoringData({
+            originalQuery: metadata.original_query,
+            semanticQuery: metadata.semantic_query,
+            parsedFilters: metadata.parsed_filters,
+            isRelevant: metadata.is_relevant ?? true,
+            reformulatedQueries: metadata.reformulated_queries || [],
+            results: metadata.results,
+            timestamps: metadata.timestamps || {},
+          })
+
+          // Update message with metadata (results, filters, etc.)
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMessageId
+                ? {
+                    ...msg,
+                    sourcePaper: metadata.source_paper ?? undefined,
+                    searchResults: metadata.results,
+                  }
+                : msg
+            )
+          )
+        },
+        onChunk: (chunk: string) => {
+          // Append chunk to message content
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMessageId
+                ? { ...msg, content: msg.content + chunk }
+                : msg
+            )
+          )
+        },
+        onDone: () => {
+          setIsLoading(false)
+          abortControllerRef.current = null
+
+          // If no content was streamed, add fallback message
+          setMessages((prev) =>
+            prev.map((msg) => {
+              if (msg.id === assistantMessageId && !msg.content) {
+                const hasResults = msg.searchResults && msg.searchResults.length > 0
+                return {
+                  ...msg,
+                  content: hasResults
+                    ? `Found ${msg.searchResults?.length} relevant papers.`
+                    : "No papers found matching your query. Try a different search term.",
+                }
+              }
+              return msg
+            })
+          )
+        },
+        onError: (error: Error) => {
+          console.error("Streaming error:", error)
+          setIsLoading(false)
+          abortControllerRef.current = null
+
+          // Update message with error
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMessageId
+                ? {
+                    ...msg,
+                    content: "Sorry, I couldn't connect to the server. Please try again later.",
+                  }
+                : msg
+            )
+          )
+        },
+>>>>>>> Stashed changes
       }
 
       setMessages((prev) => [...prev, assistantMessage])
@@ -143,13 +222,15 @@ export function Chat() {
         onDeleteChat={handleDeleteChat}
       />
 
-      {/* Main content */}
-      <div className="flex flex-1 flex-col">
+      {/* Main content + Monitoring Panel */}
+      <div className="flex flex-1 flex-col min-w-0">
         <Navbar
           sidebarOpen={sidebarOpen}
           onSidebarToggle={() => setSidebarOpen(!sidebarOpen)}
         />
-        <div className="relative flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 overflow-hidden">
+          {/* Chat area */}
+          <div className="relative flex flex-1 flex-col overflow-hidden min-w-0">
           {hasMessages ? (
             <>
               {/* Messages - scrollable area that takes remaining space above fixed input */}
@@ -228,6 +309,14 @@ export function Chat() {
               </div>
             </div>
           )}
+          </div>
+
+          {/* Monitoring Panel */}
+          <MonitoringPanel
+            data={monitoringData}
+            isOpen={monitoringOpen}
+            onToggle={() => setMonitoringOpen(!monitoringOpen)}
+          />
         </div>
       </div>
     </div>

@@ -77,3 +77,5 @@ yarn-error.log*
 client/dist/
 
 **/data/
+
+api/eval
