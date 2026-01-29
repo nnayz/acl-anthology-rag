@@ -168,6 +168,10 @@ export function Chat() {
   }
 
   const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = null
+    }
     setIsLoading(false)
   }
 

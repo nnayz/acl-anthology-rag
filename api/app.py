@@ -31,15 +31,9 @@ app = FastAPI(
 
 # CORS middleware for frontend integration
 app.add_middleware(
-<<<<<<< Updated upstream
     CORSMiddleware,
     allow_origins=["*"],  # Allow all origins for Vercel deployment
-    allow_credentials=True,
-=======
-    CORSMiddleware,  # ty:ignore[invalid-argument-type]
-    allow_origins=["*"],  # Allow all origins for Vercel deployment
     allow_credentials=False,
->>>>>>> Stashed changes
     allow_methods=["*"],
     allow_headers=["*"],
 )
