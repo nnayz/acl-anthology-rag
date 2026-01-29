@@ -6,12 +6,12 @@ The ACL Anthology RAG system is configured via environment variables. These are 
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `GROQ_API_KEY` | API key for Groq (LLM provider) | - | Yes* |
-| `FIREWORKS_API_KEY` | API key for Fireworks AI (Alternative LLM) | - | No |
+| `GROQ_API_KEY` | API key for Groq (LLM provider) | - | Yes |
+| `FIREWORKS_API_KEY` | API key for Fireworks (embeddings provider) | - | Yes |
 | `QDRANT_API_KEY` | API key for Qdrant (if using cloud) | - | No |
 | `QDRANT_ENDPOINT` | URL for Qdrant instance | `http://localhost:6333` | No |
 
-*\*At least one LLM provider key is required.*
+*Default setup uses Groq for LLM calls and Fireworks for embeddings.*
 
 ## LLM Configuration
 
@@ -30,7 +30,7 @@ Settings for the vector representation and storage.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `EMBEDDING_MODEL` | HuggingFace model ID for embeddings | `nomic-ai/nomic-embed-text-v1.5` |
+| `EMBEDDING_MODEL` | Fireworks embedding model identifier | `nomic-ai/nomic-embed-text-v1.5` |
 | `EMBEDDING_DIM` | Dimension of the embedding vectors | `768` |
 | `QDRANT_COLLECTION` | Name of the collection in Qdrant | `acl-anthology` |
 | `QDRANT_TIMEOUT` | Request timeout in seconds | `60` |
@@ -58,7 +58,7 @@ Settings for the offline data processing pipeline.
 ```ini
 # API Keys
 GROQ_API_KEY=gsk_...
-# FIREWORKS_API_KEY=fw_...
+FIREWORKS_API_KEY=fw_...
 
 # Qdrant (Local)
 QDRANT_ENDPOINT=http://localhost:6333

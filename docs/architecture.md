@@ -58,37 +58,43 @@ graph TD
   - Handles request validation and error management.
   - Orchestrates the retrieval pipeline.
 - **Key Modules:**
-  - `api/src/app.py`: Application entry point and middleware configuration.
-  - `api/src/api/routes.py`: Defines endpoints like `/search`.
+  - `api/app.py`: FastAPI application entrypoint (Vercel-friendly).
+  - `api/src/api/routes.py`: Defines endpoints like `POST /api/search` (SSE) and `GET /api/paper/{paper_id}`.
 
 ### 3. Query Processor (`api/src/retrieval/query_processor.py`)
 - **Role:** Interprets the raw user input.
 - **Logic:**
-  - If input is a **Paper ID** (e.g., `2023.acl-long.1`), it fetches the paper's abstract from the raw dataset or API.
+  - If input is a **Paper ID** (e.g., `2023.acl-long.1`), the pipeline looks up the paper in the Qdrant payload and uses its title/abstract as the basis for generating search queries.
   - If input is **Natural Language**, it passes it directly to the next stage.
 - **Design Pattern:** Strategy Pattern (handles different input types uniformly).
 
-### 4. LLM Reformulator (`api/src/llm/reformulator.py`)
-- **Role:** Expands the initial query into multiple semantic search vectors.
+### 4. Filter Parser (`api/src/retrieval/filter_parser.py`)
+- **Role:** Extracts structured filters (year/authors/etc.), a remaining semantic query, and performs permissive relevance gating.
+- **Notes:**
+  - Runs before retrieval and can return early for clearly irrelevant queries.
+
+### 5. LLM Reformulator (`api/src/llm/reformulator.py`)
+- **Role:** Expands the semantic query into multiple search queries.
 - **Logic:**
-  - Uses an LLM (Groq or Fireworks) to generate synonyms, related concepts, and paraphrases.
-  - Improves recall by covering a wider area of the vector space.
+  - Uses Groq LLM and returns a JSON list of query strings.
+  - Improves recall by covering different facets of the information need.
 - **Configuration:** Adjustable number of generated queries (default: 3).
 
-### 5. Embedding Service (`api/src/ingestion/embed.py`)
+### 6. Embedding Service (`api/src/vectorstore/client.py`)
 - **Role:** Converts text into dense vectors.
-- **Model:** Defaults to `nomic-ai/nomic-embed-text-v1.5` (768 dimensions).
+- **Provider:** Fireworks embeddings via LangChain.
+- **Model:** Defaults to `nomic-ai/nomic-embed-text-v1.5`.
 - **Usage:**
   - **Offline:** Embeds all paper abstracts.
   - **Online:** Embeds the reformulated search queries.
 
-### 6. Retrieval Pipeline (`api/src/retrieval/pipeline.py`)
+### 7. Retrieval Pipeline (`api/src/retrieval/pipeline.py`)
 - **Role:** Executes the search against the vector database.
 - **Logic:**
   - Performs nearest neighbor search for *each* of the reformulated queries.
   - Retrieves `k` candidates for each query.
 
-### 7. Result Aggregator (`api/src/retrieval/aggregator.py`)
+### 8. Result Aggregator (`api/src/retrieval/aggregator.py`)
 - **Role:** Merges results from multiple queries into a single ranked list.
 - **Algorithm:** Reciprocal Rank Fusion (RRF).
 - **Logic:**
@@ -96,7 +102,12 @@ graph TD
   - Favors papers that appear in multiple result sets or rank highly in single sets.
   - Deduplicates papers.
 
-### 8. Vector Database
+### 9. Response Synthesizer (`api/src/llm/reformulator.py`)
+- **Role:** Streams a markdown response grounded in the retrieved results.
+- **Notes:**
+  - Uses bracketed numeric citations like `[1]`, `[2]` aligned to the ranked results.
+
+### 10. Vector Database
 - **Tech Stack:** Qdrant (Dockerized).
 - **Role:** Stores abstract embeddings and metadata (Title, URL, Year).
 - **Schema:**
@@ -126,14 +137,15 @@ Used to combine results from the multiple generated queries without needing comp
 
 ### Online Search Flow
 1. **Input**: User provides "Machine Translation".
-2. **Reformulate**: LLM generates:
+2. **Parse filters**: LLM extracts structured filters + semantic search intent.
+3. **Reformulate**: LLM generates:
    - "Neural Machine Translation state of the art"
    - "Low-resource language translation"
    - "Transformer based translation models"
-3. **Embed**: All 3 strings are embedded.
-4. **Search**: Qdrant runs 3 separate searches.
-5. **Fuse**: RRF combines the 3 lists of papers.
-6. **Return**: Top 30 unique papers returned to UI.
+4. **Embed**: All strings are embedded.
+5. **Search**: Qdrant runs multiple searches (one per query).
+6. **Fuse**: Hybrid RRF + score fusion combines the ranked lists.
+7. **Return**: Results + response are streamed to the UI via SSE.
 
 ## Extension Points
 

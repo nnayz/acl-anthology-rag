@@ -28,19 +28,24 @@
 
   <rect x="460" y="70" width="220" height="80" class="box"/>
   <text x="475" y="105" class="title">FastAPI Backend</text>
-  <text x="475" y="125" class="text">HTTP API</text>
+  <text x="475" y="125" class="text">SSE API (/api/search)</text>
 
   <line x1="180" y1="100" x2="220" y2="100" class="arrow"/>
   <line x1="420" y1="110" x2="460" y2="110" class="arrow"/>
 
-  <!-- Online Retrieval Row 2: Processor -> LLM -> Embedding -> Qdrant -> Aggregator -->
+  <!-- Online Retrieval Row 2: Processor -> Filter Parser -> LLM -> Embedding -> Qdrant -> Aggregator -->
   <rect x="220" y="200" width="200" height="80" class="box"/>
   <text x="235" y="235" class="title">Query Processor</text>
   <text x="235" y="255" class="text">Type detect / normalize</text>
 
   <rect x="460" y="200" width="220" height="80" class="box"/>
-  <text x="475" y="235" class="title">Groq LLM</text>
-  <text x="475" y="255" class="text">Query reformulation</text>
+  <text x="475" y="230" class="title">Filter Parser</text>
+  <text x="475" y="250" class="text">Filters + relevance</text>
+  <text x="475" y="270" class="text">(Groq LLM)</text>
+
+  <rect x="460" y="320" width="220" height="80" class="box"/>
+  <text x="475" y="350" class="title">Groq LLM</text>
+  <text x="475" y="370" class="text">Reformulate + synthesize</text>
 
   <rect x="720" y="200" width="220" height="80" class="box"/>
   <text x="735" y="235" class="title">Fireworks Embeddings</text>
@@ -50,28 +55,31 @@
   <text x="995" y="235" class="title">Qdrant</text>
   <text x="995" y="255" class="text">Vector DB</text>
 
-  <rect x="460" y="320" width="220" height="80" class="box"/>
-  <text x="475" y="355" class="title">Aggregator</text>
-  <text x="475" y="375" class="text">RRF, ranking</text>
+  <rect x="220" y="320" width="200" height="80" class="box"/>
+  <text x="235" y="350" class="title">Aggregator</text>
+  <text x="235" y="370" class="text">Hybrid RRF + score</text>
 
   <!-- Arrows online -->
   <line x1="570" y1="150" x2="320" y2="200" class="arrow"/>
   <text x="330" y="180" class="label">interpret</text>
 
   <line x1="420" y1="240" x2="460" y2="240" class="arrow"/>
-  <text x="430" y="230" class="label">prompt</text>
+  <text x="430" y="230" class="label">parse</text>
 
   <line x1="680" y1="240" x2="720" y2="240" class="arrow"/>
-  <text x="690" y="230" class="label">queries</text>
+  <text x="690" y="230" class="label">semantic query</text>
 
   <line x1="940" y1="240" x2="980" y2="240" class="arrow"/>
   <text x="945" y="230" class="label">search</text>
 
-  <line x1="1070" y1="280" x2="570" y2="320" class="arrow"/>
-  <text x="880" y="305" class="label">top-k</text>
+  <line x1="1070" y1="280" x2="320" y2="320" class="arrow"/>
+  <text x="880" y="305" class="label">candidates</text>
 
-  <line x1="570" y1="320" x2="570" y2="150" class="arrow"/>
-  <text x="580" y="210" class="label">results</text>
+  <line x1="320" y1="320" x2="570" y2="320" class="arrow"/>
+  <text x="410" y="310" class="label">ranked</text>
+
+  <line x1="570" y1="400" x2="570" y2="150" class="arrow"/>
+  <text x="580" y="220" class="label">SSE stream</text>
 
   <!-- Offline Ingestion Column -->
   <rect x="760" y="70" width="220" height="70" class="box"/>

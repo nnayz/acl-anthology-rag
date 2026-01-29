@@ -70,22 +70,35 @@ The search results display a list of papers ranked by relevance.
 
 You can interact directly with the backend via HTTP requests.
 
-**Endpoint:** `POST /search`
+**Endpoint:** `POST /api/search`
 
-**Payload:**
+This endpoint returns a **Server-Sent Events (SSE)** stream (`text/event-stream`).
+The stream includes:
+- `metadata`: JSON with retrieved results, extracted filters, reformulated queries, and timestamps
+- `chunk`: JSON-encoded strings that make up the model’s streamed response
+- `done`: stream completion signal
+
+**Request body:**
 ```json
 {
   "query": "explain attention mechanisms",
-  "mode": "natural_language",
   "top_k": 10
 }
 ```
 
-**Payload for Paper ID:**
+**Paper ID queries use the same request shape:**
 ```json
 {
   "query": "2023.acl-long.412",
-  "mode": "paper_id",
   "top_k": 10
 }
+```
+
+**Example (curl):**
+```bash
+curl -N \
+  -H "Accept: text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{"query":"papers about BERT by Devlin from 2019","top_k":5}' \
+  http://localhost:8000/api/search
 ```

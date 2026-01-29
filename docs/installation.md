@@ -56,11 +56,9 @@ cd api
    cp .env.example .env
    ```
 
-2. Edit `.env` and add your API keys. You need **at least one** of the following:
-   - `GROQ_API_KEY`: For using Llama models on Groq.
-   - `FIREWORKS_API_KEY`: For using models on Fireworks AI.
-
-   *Note: Embedding is done locally by default or via API depending on configuration.*
+2. Edit `.env` and add your API keys. Both are required for the default setup:
+   - `GROQ_API_KEY`: Used for filter parsing, query reformulation, and response synthesis.
+   - `FIREWORKS_API_KEY`: Used for embedding generation (ingestion + query-time embeddings).
 
 ### Install Dependencies
 
@@ -78,7 +76,7 @@ pip install -r requirements.txt
 ### Run the Server
 
 ```bash
-uv run fastapi dev src/app.py
+uv run fastapi dev app.py
 ```
 
 The API will be available at `http://localhost:8000`.
