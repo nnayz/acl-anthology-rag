@@ -14,11 +14,12 @@ Using singletons ensures:
 """
 
 from threading import Lock
-from typing import Optional
+from typing import List, Optional, Tuple
 
 from langchain_fireworks import FireworksEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
+from qdrant_client.models import Filter, ScoredPoint
 
 from src.core.config import settings
 
@@ -130,6 +131,90 @@ class LangChainComponents:
             collection_name=collection_name,
             embedding=self.embeddings,
         )
+
+    def scroll_with_filter(
+        self,
+        filter: Filter,
+        limit: int,
+        collection_name: Optional[str] = None,
+    ) -> List[ScoredPoint]:
+        """
+        Scroll through points matching a filter (no vector search).
+
+        This is used for filter-only queries where no semantic
+        similarity search is needed.
+
+        Args:
+            filter: Qdrant Filter object
+            limit: Maximum number of points to return
+            collection_name: Collection name (default: from settings)
+
+        Returns:
+            List of ScoredPoint objects (score will be 1.0 for all)
+        """
+        collection = collection_name or settings.QDRANT_COLLECTION
+
+        # Use scroll to get points matching the filter
+        points, _ = self.qdrant_client.scroll(
+            collection_name=collection,
+            scroll_filter=filter,
+            limit=limit,
+            with_payload=True,
+            with_vectors=False,
+        )
+
+        # Convert to ScoredPoint format for consistency
+        # Score is set to 1.0 since there's no semantic ranking
+        scored_points = []
+        for point in points:
+            scored_points.append(
+                ScoredPoint(
+                    id=point.id,
+                    version=0,
+                    score=1.0,
+                    payload=point.payload,
+                    vector=None,
+                )
+            )
+
+        return scored_points
+
+    def query_with_filter(
+        self,
+        query: str,
+        filter: Filter,
+        limit: int,
+        collection_name: Optional[str] = None,
+    ) -> List[ScoredPoint]:
+        """
+        Execute vector search with a filter applied.
+
+        Combines semantic similarity search with payload filtering.
+
+        Args:
+            query: Search query string
+            filter: Qdrant Filter object
+            limit: Maximum number of results
+            collection_name: Collection name (default: from settings)
+
+        Returns:
+            List of ScoredPoint objects
+        """
+        collection = collection_name or settings.QDRANT_COLLECTION
+
+        # Get embedding for query
+        query_vector = self.embeddings.embed_query(query)
+
+        # Search with filter
+        results = self.qdrant_client.query_points(
+            collection_name=collection,
+            query=query_vector,
+            query_filter=filter,
+            limit=limit,
+            with_payload=True,
+        )
+
+        return results.points
 
 
 # Global singleton instance

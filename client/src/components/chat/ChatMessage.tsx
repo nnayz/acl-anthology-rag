@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import type { PaperMetadata, SearchResult } from "@/lib/api"
+import type { PaperMetadata, SearchFilters, SearchMode, SearchResult } from "@/lib/api"
 import ReactMarkdown from "react-markdown"
 import type { Components } from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -15,10 +15,51 @@ export interface Message {
   sourcePaper?: PaperMetadata
   /** Search results for inline citations */
   searchResults?: SearchResult[]
+  /** Search mode used */
+  searchMode?: SearchMode
+  /** Filters that were applied */
+  appliedFilters?: SearchFilters | null
 }
 
 interface ChatMessageProps {
   message: Message
+}
+
+/**
+ * Format applied filters into a human-readable string
+ */
+function formatAppliedFilters(filters: SearchFilters | null | undefined): string | null {
+  if (!filters) return null
+
+  const parts: string[] = []
+
+  if (filters.year) {
+    if (filters.year.exact) {
+      parts.push(`year: ${filters.year.exact}`)
+    } else if (filters.year.min_year || filters.year.max_year) {
+      const min = filters.year.min_year || "..."
+      const max = filters.year.max_year || "..."
+      parts.push(`year: ${min}-${max}`)
+    }
+  }
+
+  if (filters.authors && filters.authors.length > 0) {
+    parts.push(`authors: ${filters.authors.join(", ")}`)
+  }
+
+  if (filters.has_awards) {
+    parts.push("award-winning")
+  }
+
+  if (filters.language) {
+    parts.push(`language: ${filters.language}`)
+  }
+
+  if (filters.bibkey) {
+    parts.push(`bibkey: ${filters.bibkey}`)
+  }
+
+  return parts.length > 0 ? parts.join(" · ") : null
 }
 
 /**
@@ -106,6 +147,7 @@ function processCitations(
 export function ChatMessage({ message }: ChatMessageProps) {
   const isUser = message.role === "user"
   const results = message.searchResults || []
+  const filterText = formatAppliedFilters(message.appliedFilters)
 
   // Create markdown components that process citations
   const markdownComponents: Components = {
@@ -180,6 +222,26 @@ export function ChatMessage({ message }: ChatMessageProps) {
             </p>
           ) : (
             <div className="space-y-2">
+              {/* Show applied filters indicator */}
+              {filterText && (
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <svg
+                    className="h-3 w-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                    />
+                  </svg>
+                  <span>Filtered by: {filterText}</span>
+                </div>
+              )}
+
               {/* Show source paper card if present (for paper ID queries) */}
               {message.sourcePaper && (
                 <PaperCard paper={message.sourcePaper} label="Referenced Paper" />

@@ -8,6 +8,83 @@ are designed to elicit focused, search-oriented outputs.
 
 from langchain_core.prompts import ChatPromptTemplate
 
+# =====================
+# Filter Extraction Prompts
+# =====================
+
+FILTER_EXTRACTION_SYSTEM_PROMPT = """You are an expert at parsing academic paper search queries into structured filters.
+
+Your task is to extract structured filters from natural language queries about academic papers in computational linguistics and NLP.
+
+Available filters:
+- year: Extract exact year OR year range (min_year, max_year)
+  - "from 2017" -> min_year: 2017
+  - "papers in 2020" -> exact: 2020
+  - "between 2018 and 2022" -> min_year: 2018, max_year: 2022
+  - "recent papers" or "latest" -> min_year: (current_year - 2)
+  - "last 5 years" -> min_year: (current_year - 5)
+- authors: List of author names mentioned (partial names OK)
+  - "by Vaswani" -> ["Vaswani"]
+  - "papers by Smith and Jones" -> ["Smith", "Jones"]
+- title_keywords: Specific words that must appear in the title
+  - "titled 'attention'" -> ["attention"]
+  - Only use for explicit title mentions, not general topic words
+- language: Language of the paper (if explicitly mentioned)
+  - "papers in English" -> "en"
+  - "Chinese language papers" -> "zh"
+- has_awards: true if query mentions award-winning papers
+  - "best paper", "award-winning" -> true
+- awards: Specific award names if mentioned
+  - "best paper award" -> ["Best Paper"]
+- bibkey: ACL anthology bibkey if explicitly mentioned
+  - "vaswani-etal-2017-attention" -> exact match
+
+IMPORTANT:
+- Only extract filters that are EXPLICITLY mentioned or strongly implied
+- Do NOT assume filters from general topic words
+- Topic words like "transformers", "NMT", "BERT" are NOT title_keywords - they go in semantic_query
+- Return null for semantic_query if ONLY filters are requested (no topic/concept search)
+- Return the semantic_query as the core search intent stripped of filter-related words
+
+Return ONLY valid JSON with this exact structure:
+{{
+  "filters": {{
+    "year": {{"exact": int|null, "min_year": int|null, "max_year": int|null}} | null,
+    "authors": ["name1", "name2"] | null,
+    "title_keywords": ["word1"] | null,
+    "language": "code" | null,
+    "has_awards": true | null,
+    "awards": ["award1"] | null,
+    "bibkey": "exact-bibkey" | null
+  }},
+  "semantic_query": "remaining search intent" | null
+}}"""
+
+FILTER_EXTRACTION_HUMAN_PROMPT = """Query: {query}
+Current year: {current_year}
+
+Parse this query into structured filters and remaining semantic search intent:"""
+
+
+def get_filter_extraction_prompt() -> ChatPromptTemplate:
+    """
+    Returns the ChatPromptTemplate for filter extraction from natural language.
+
+    The prompt instructs the LLM to parse a query into structured filters
+    and identify the remaining semantic search intent.
+    """
+    return ChatPromptTemplate.from_messages(
+        [
+            ("system", FILTER_EXTRACTION_SYSTEM_PROMPT),
+            ("human", FILTER_EXTRACTION_HUMAN_PROMPT),
+        ]
+    )
+
+
+# =====================
+# Query Reformulation Prompts
+# =====================
+
 # System prompt for query reformulation
 REFORMULATION_SYSTEM_PROMPT = """You are a query reformulation expert for academic paper search in computational linguistics and NLP.
 

@@ -31,8 +31,8 @@ app = FastAPI(
 
 # CORS middleware for frontend integration
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for Vercel deployment
+    CORSMiddleware, # ty:ignore[invalid-argument-type]
+    allow_origins=["http://localhost:5173", "https://acl-anthology-rag-bl6g.vercel.app/"],  # Allow all origins for Vercel deployment
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

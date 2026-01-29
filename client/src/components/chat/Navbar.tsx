@@ -1,16 +1,22 @@
 
 import { Button } from "@/components/ui/button"
-import { PanelLeft } from "lucide-react"
+import { PanelLeft, Brain } from "lucide-react"
 
 
 interface NavbarProps { 
   sidebarOpen?: boolean
   onSidebarToggle?: () => void
+  monitoringData?: any
+  monitoringOpen?: boolean
+  onMonitoringToggle?: () => void
 }
 
 export function Navbar({
   sidebarOpen,
   onSidebarToggle,
+  monitoringData,
+  monitoringOpen,
+  onMonitoringToggle,
 }: NavbarProps) {
   return (
     <div className="flex h-14 items-center justify-between px-4">
@@ -27,6 +33,18 @@ export function Navbar({
         )}
         <h1 className="text-sm font-medium text-foreground">ACL Anthology</h1>
       </div>
+      
+      {monitoringData && (
+        <Button
+          variant={monitoringOpen ? "default" : "ghost"}
+          size="sm"
+          onClick={onMonitoringToggle}
+          className="h-8 px-3"
+        >
+          <Brain className="h-4 w-4 mr-2" />
+          Monitor
+        </Button>
+      )}
     </div>
   )
 }
