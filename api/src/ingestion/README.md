@@ -1,21 +1,18 @@
-How to run download.py
+# Ingestion Pipeline
 
-Must have uv installed
+This directory contains the offline ingestion scripts that build the ACL Anthology dataset used for retrieval.
 
-source .venv/bin/activateActivate environemnt 
-go to ingestion folder 
-Run python download.py file 
-A new folder will be created called data within api/src/ingestion/data/raw 
-The raw folder contains the acl_metadata.json file 
+The pipeline stages are:
+1. `download.py`: fetch metadata + abstracts from the ACL Anthology
+2. `preprocess.py`: clean and normalize the downloaded dataset
+3. `embed.py`: generate embeddings and (optionally) write intermediate artifacts
 
-# Running `download.py`
-
-This guide explains how to download ACL Anthology metadata using the `download.py` script.
+You typically run these from the repo root or from `api/` using `uv`.
 
 ## Prerequisites
 - Ensure `uv` is installed.
-- Python 3.10+ is recommended.
-- Virtual environment is set up for the project.
+- Python 3.12+ (matches the backend).
+- A configured `api/.env` with `FIREWORKS_API_KEY` (embeddings) and Qdrant connection details.
 
 ## Steps
 
@@ -28,9 +25,9 @@ cd api/src/ingestion
 3. **Run Script**
 python download.py
 
-## Output: 
-A file named data will be automatically created at 
-api/src/ingestion/data/raw/acl_metadata.json
+## Output
+The raw metadata is written under:
+`api/src/ingestion/data/raw/acl_metadata.json`
 
 # Running `preprocess.py` (Issue 1.2: Clean and normalize abstracts)
 
@@ -66,3 +63,9 @@ The output is **versioned** via a UTC timestamp suffix to avoid overwriting prev
 From the repo root:
 
 - `python3 api/src/ingestion/preprocess.py`
+
+## Recommended full run (from `api/`)
+
+- `uv run python src/ingestion/download.py`
+- `uv run python src/ingestion/preprocess.py`
+- `uv run python src/ingestion/embed.py`

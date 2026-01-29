@@ -21,6 +21,7 @@ interface ChatMessageProps {
   message: Message
 }
 
+
 /**
  * Parse citation text like "1", "1, 2", "1-3" into an array of numbers
  */

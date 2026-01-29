@@ -2,33 +2,46 @@
 Retrieval pipeline orchestration.
 
 This module coordinates the full query processing workflow:
-Query -> Reformulation -> Embedding -> Vector Search -> Aggregation
+Query -> Filter Parsing -> Reformulation -> Embedding -> Vector Search -> Aggregation
 
 It provides the main entry point for executing searches against
 the ACL Anthology corpus using LangChain components.
 
 The pipeline is designed as a composable chain that:
-1. Classifies the query type (natural language vs paper ID)
-2. Reformulates into multiple search queries via LLM
-3. Embeds and searches each query sequentially
-4. Aggregates results using Reciprocal Rank Fusion
+1. Parses filters from natural language query (optional)
+2. Classifies the query type (natural language vs paper ID)
+3. Reformulates into multiple search queries via LLM
+4. Embeds and searches each query sequentially
+5. Aggregates results using Reciprocal Rank Fusion
+
+Supports three search modes:
+- SEMANTIC: Vector search only (default behavior)
+- FILTER_ONLY: Payload filtering without vector search
+- HYBRID: Combines filters with vector search
 """
 
 import logging
-from typing import List, Optional, Tuple
+import time
+from typing import AsyncIterator, List, Optional, Tuple, Union
+
+from qdrant_client.models import Filter
 
 from src.core.config import settings
 from src.core.schemas import (
     PaperMetadata,
-    QueryType,
+    SearchFilters,
     SearchRequest,
-    SearchResponse,
+    SearchResult,
+    StreamEvent,
+    StreamEventType,
+    StreamMetadata,
 )
 from src.llm.reformulator import get_reformulator, get_synthesizer
 from src.retrieval.aggregator import get_aggregator
+from src.retrieval.filter_builder import get_filter_builder
+from src.retrieval.filter_parser import get_filter_parser
 from src.retrieval.query_processor import (
     detect_query_type,
-    QueryType as ProcessorQueryType,
 )
 from src.vectorstore.client import get_langchain_components
 
@@ -42,10 +55,16 @@ class RetrievalPipeline:
     Uses centralized LangChain components for efficient multi-query retrieval.
 
     The pipeline follows this flow:
-    1. Query classification (natural language vs paper ID)
-    2. Query reformulation (LLM expands to multiple queries)
-    3. Sequential embedding + vector search
-    4. Result aggregation (RRF fusion + deduplication)
+    1. Parse filters from query (if enabled)
+    2. Query classification (natural language vs paper ID)
+    3. Query reformulation (LLM expands to multiple queries)
+    4. Sequential embedding + vector search (with optional filters)
+    5. Result aggregation (RRF fusion + deduplication)
+
+    Supports three search modes:
+    - SEMANTIC: Vector search only
+    - FILTER_ONLY: Payload filtering without vector search
+    - HYBRID: Combines filters with vector search (default)
 
     Attributes:
         collection_name: Name of the Qdrant collection
@@ -53,6 +72,8 @@ class RetrievalPipeline:
         components: Centralized LangChain components
         reformulator: Query reformulation LLM chain
         aggregator: Result aggregation logic
+        filter_parser: LLM-based filter extraction
+        filter_builder: Qdrant filter construction
     """
 
     def __init__(
@@ -78,6 +99,10 @@ class RetrievalPipeline:
         self.aggregator = get_aggregator()
         self.synthesizer = get_synthesizer()
 
+        # Filter handling components
+        self.filter_parser = get_filter_parser()
+        self.filter_builder = get_filter_builder()
+
     @property
     def qdrant_client(self):
         """Get the Qdrant client from centralized components."""
@@ -87,6 +112,7 @@ class RetrievalPipeline:
         self,
         query: str,
         top_k: int,
+        qdrant_filter: Optional[Filter] = None,
     ) -> List[Tuple[PaperMetadata, float]]:
         """
         Execute a single vector search query using direct Qdrant API.
@@ -99,6 +125,7 @@ class RetrievalPipeline:
         Args:
             query: Search query string
             top_k: Number of results to return
+            qdrant_filter: Optional Qdrant filter to apply
 
         Returns:
             List of (PaperMetadata, score) tuples
@@ -106,10 +133,11 @@ class RetrievalPipeline:
         # Get embedding for query using centralized embeddings
         query_vector = self._components.embeddings.embed_query(query)
 
-        # Search directly via Qdrant client
+        # Search directly via Qdrant client (with optional filter)
         search_results = self.qdrant_client.query_points(
             collection_name=self.collection_name,
             query=query_vector,
+            query_filter=qdrant_filter,
             limit=top_k,
             with_payload=True,
         )
@@ -136,6 +164,7 @@ class RetrievalPipeline:
         self,
         queries: List[str],
         top_k: int,
+        qdrant_filter: Optional[Filter] = None,
     ) -> List[List[Tuple[PaperMetadata, float]]]:
         """
         Execute multiple vector searches sequentially.
@@ -146,6 +175,7 @@ class RetrievalPipeline:
         Args:
             queries: List of search queries
             top_k: Number of results per query
+            qdrant_filter: Optional Qdrant filter to apply to all queries
 
         Returns:
             List of result lists, one per query
@@ -153,7 +183,7 @@ class RetrievalPipeline:
         results = []
         for query in queries:
             try:
-                result = await self._search_single_query(query, top_k)
+                result = await self._search_single_query(query, top_k, qdrant_filter)
                 results.append(result)
             except Exception as e:
                 logger.error(f"Search failed for query '{query}': {e}")
@@ -216,24 +246,71 @@ class RetrievalPipeline:
 
         return None
 
-    async def search(self, request: SearchRequest) -> SearchResponse:
+    async def search_stream(
+        self, request: SearchRequest
+    ) -> AsyncIterator[Union[StreamMetadata, StreamEvent]]:
         """
-        Execute the full retrieval pipeline.
+        Execute streaming search - yields metadata first, then response chunks.
+
+        This method performs the same search as search() but streams the
+        LLM-generated response instead of waiting for it to complete.
+
+        Yields:
+            First: StreamMetadata with search results and metadata
+            Then: StreamEvent objects with response chunks
+            Finally: StreamEvent with event=DONE
 
         Args:
-            request: Search request with query and top_k
-
-        Returns:
-            SearchResponse with ranked results
+            request: Search request with query, filters, and mode
         """
-        # Step 1: Classify query type (use regex first, then LLM if needed)
-        processor_query_type, paper_id = detect_query_type(request.query)
+        # Initialize monitoring timestamps
+        timestamps = {"start": time.time()}
+
+        original_query = request.query  # Validation handled by pydantic model validator
+        parsed_filters: Optional[SearchFilters] = None
+        semantic_query: Optional[str] = original_query
+
+        # Parse filters from query
+        parsed_query = await self.filter_parser.parse(original_query)
+        parsed_filters = parsed_query.filters
+        timestamps["filterParsed"] = time.time()
+
+        # Handle irrelevant queries early
+        if not parsed_query.is_relevant:
+            yield StreamMetadata(
+                original_query=original_query,
+                results=[],
+                parsed_filters=None,
+                is_relevant=False,
+                semantic_query=None,
+                reformulated_queries=[],
+                timestamps=timestamps,
+            )
+            yield StreamEvent(
+                event=StreamEventType.CHUNK,
+                data=parsed_query.irrelevant_response
+                or "I can only help with academic paper searches.",
+            )
+            yield StreamEvent(event=StreamEventType.DONE)
+            return
+
+        if parsed_query.semantic_query:
+            semantic_query = parsed_query.semantic_query
+        elif parsed_filters and not parsed_filters.is_empty():
+            semantic_query = None
+
+        # Build Qdrant filter
+        qdrant_filter: Optional[Filter] = None
+        if parsed_filters and not parsed_filters.is_empty():
+            qdrant_filter = self.filter_builder.build(parsed_filters)
+
+        # Detect paper ID query and get search queries
+        search_query = semantic_query or original_query
+        processor_query_type, paper_id = detect_query_type(search_query)
         source_paper: Optional[PaperMetadata] = None
+        is_paper_id_query = processor_query_type.value == "paper_id"
 
-        # Convert processor QueryType to schema QueryType
-        is_paper_id_query = processor_query_type == ProcessorQueryType.PAPER_ID
-
-        # Step 2: Get search queries (reformulation or paper-based)
+        # Get search queries
         if is_paper_id_query and paper_id is not None:
             source_paper = await self._get_paper_by_id(paper_id)
             if source_paper and source_paper.abstract:
@@ -242,25 +319,33 @@ class RetrievalPipeline:
                     abstract=source_paper.abstract,
                 )
             else:
-                # Paper not found in database
-                return SearchResponse(
-                    query_type=QueryType.PAPER_ID,
-                    original_query=request.query,
-                    paper_id=paper_id,
-                    source_paper=None,
+                yield StreamMetadata(
+                    original_query=original_query,
                     results=[],
-                    response=f"I couldn't find paper **{paper_id}** in the ACL Anthology database. Please check the paper ID and try again.",
+                    paper_id=paper_id,
+                    parsed_filters=parsed_filters,
+                    semantic_query=semantic_query,
+                    reformulated_queries=[],
+                    timestamps=timestamps,
                 )
+                yield StreamEvent(
+                    event=StreamEventType.CHUNK,
+                    data=f"I couldn't find paper **{paper_id}** in the ACL Anthology database. Please check the paper ID and try again.",
+                )
+                yield StreamEvent(event=StreamEventType.DONE)
+                return
         else:
-            queries = await self.reformulator.reformulate(request.query)
+            queries = await self.reformulator.reformulate(search_query)
 
-        logger.debug(f"Reformulated into {len(queries)} queries: {queries}")
+        timestamps["queriesReformed"] = time.time()
 
-        # Step 3 & 4: Embed and search for each query
+        # Embed and search
         per_query_k = request.top_k * self.search_k_multiplier
-        results_per_query = await self._search_multiple_queries(queries, per_query_k)
+        results_per_query = await self._search_multiple_queries(
+            queries, per_query_k, qdrant_filter
+        )
 
-        # Step 5: Aggregate results
+        # Aggregate results
         if len(results_per_query) == 1:
             final_results = self.aggregator.deduplicate_simple(
                 results_per_query[0],
@@ -274,29 +359,36 @@ class RetrievalPipeline:
         else:
             final_results = []
 
-        # Remove source paper from results if present (don't show it as similar to itself)
+        timestamps["searchCompleted"] = time.time()
+
+        # Remove source paper from results
         if source_paper:
             final_results = [
                 r for r in final_results if r.paper.paper_id != source_paper.paper_id
             ]
 
-        # Step 6: Synthesize natural language response
-        response = await self.synthesizer.synthesize(
-            query=request.query,
+        # Yield metadata first
+        yield StreamMetadata(
+            original_query=original_query,
             results=final_results,
-            source_paper=source_paper,
-        )
-
-        return SearchResponse(
-            query_type=(
-                QueryType.PAPER_ID if is_paper_id_query else QueryType.NATURAL_LANGUAGE
-            ),
-            original_query=request.query,
             paper_id=paper_id if is_paper_id_query else None,
             source_paper=source_paper,
-            results=final_results,
-            response=response,
+            parsed_filters=parsed_filters,
+            semantic_query=semantic_query,
+            reformulated_queries=queries,
+            timestamps=timestamps,
         )
+
+        # Stream the synthesized response
+        async for chunk in self.synthesizer.synthesize_stream(
+            query=original_query or search_query,
+            results=final_results,
+            source_paper=source_paper,
+        ):
+            yield StreamEvent(event=StreamEventType.CHUNK, data=chunk)
+
+        timestamps["responseGenerated"] = time.time()
+        yield StreamEvent(event=StreamEventType.DONE)
 
 
 # Module-level singleton

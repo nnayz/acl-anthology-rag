@@ -82,7 +82,7 @@ Note: Fireworks is used only for embedding generation. LLM-based query reformula
    ```bash
    cd api
    uv sync
-   uv run fastapi dev src/app.py
+   uv run fastapi dev app.py
    ```
 
 4. **Run Frontend**
@@ -115,6 +115,7 @@ See [Installation Guide](docs/installation.md) for detailed setup.
 - [**Configuration**](docs/configuration.md): Environment variables and settings.
 - [**Usage**](docs/usage.md): How to use the system effectively.
 - [**Workflows**](docs/workflows.md): Detailed offline and online pipeline steps.
+- [**Evaluation**](docs/evaluation.md): Offline evaluation pipeline, metrics, and reports.
 
 ## Limitations
 

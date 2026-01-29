@@ -1,15 +1,20 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { search, type SearchResponse } from "@/lib/api"
+import { searchStream, type StreamMetadata } from "@/lib/api"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Sidebar, type ChatHistory } from "../Sidebar"
 import { ChatInput } from "./ChatInput"
 import { ChatMessage, type Message } from "./ChatMessage"
 import { Navbar } from "./Navbar"
+import { MonitoringPanel } from "../monitoring/MonitoringPanel"
 
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [monitoringOpen, setMonitoringOpen] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [monitoringData, setMonitoringData] = useState<any>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([
     {
       id: "1",
@@ -72,40 +77,101 @@ export function Chat() {
       setCurrentChatId(newChatId)
     }
 
-    try {
-      const response: SearchResponse = await search(content)
-
-      // Use the LLM-generated response, or fall back to a simple message
-      const assistantContent = response.response 
-        || (response.results.length === 0 
-          ? "No papers found matching your query. Try a different search term."
-          : `Found ${response.results.length} relevant papers.`)
-
-      const assistantMessage: Message = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: assistantContent,
-        // Include source paper for paper ID queries
-        sourcePaper: response.source_paper,
-        // Include search results for inline citations
-        searchResults: response.results,
-      }
-
-      setMessages((prev) => [...prev, assistantMessage])
-    } catch (error) {
-      console.error("API error:", error)
-      const assistantMessage: Message = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: "Sorry, I couldn't connect to the server. Please try again later.",
-      }
-      setMessages((prev) => [...prev, assistantMessage])
-    } finally {
-      setIsLoading(false)
+    // Create placeholder assistant message
+    const assistantMessageId = crypto.randomUUID()
+    const assistantMessage: Message = {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+      searchResults: [],
     }
+    setMessages((prev) => [...prev, assistantMessage])
+
+    // Start streaming search
+    abortControllerRef.current = searchStream(
+      content,
+      {
+        onMetadata: (metadata: StreamMetadata) => {
+          // Store monitoring data
+          setMonitoringData({
+            originalQuery: metadata.original_query,
+            semanticQuery: metadata.semantic_query ?? undefined,
+            parsedFilters: metadata.parsed_filters ?? undefined,
+            isRelevant: metadata.is_relevant ?? true,
+            reformulatedQueries: metadata.reformulated_queries || [],
+            results: metadata.results,
+            timestamps: metadata.timestamps || {},
+          })
+
+          // Update message with metadata (results, filters, etc.)
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMessageId
+                ? {
+                    ...msg,
+                    sourcePaper: metadata.source_paper ?? undefined,
+                    searchResults: metadata.results,
+                  }
+                : msg
+            )
+          )
+        },
+        onChunk: (chunk: string) => {
+          // Append chunk to message content
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMessageId
+                ? { ...msg, content: msg.content + chunk }
+                : msg
+            )
+          )
+        },
+        onDone: () => {
+          setIsLoading(false)
+          abortControllerRef.current = null
+
+          // If no content was streamed, add fallback message
+          setMessages((prev) =>
+            prev.map((msg) => {
+              if (msg.id === assistantMessageId && !msg.content) {
+                const hasResults = msg.searchResults && msg.searchResults.length > 0
+                return {
+                  ...msg,
+                  content: hasResults
+                    ? `Found ${msg.searchResults?.length} relevant papers.`
+                    : "No papers found matching your query. Try a different search term.",
+                }
+              }
+              return msg
+            })
+          )
+        },
+        onError: (error: Error) => {
+          console.error("Streaming error:", error)
+          setIsLoading(false)
+          abortControllerRef.current = null
+
+          // Update message with error
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMessageId
+                ? {
+                    ...msg,
+                    content: "Sorry, I couldn't connect to the server. Please try again later.",
+                  }
+                : msg
+            )
+          )
+        },
+      }
+    )
   }
 
   const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+      abortControllerRef.current = null
+    }
     setIsLoading(false)
   }
 
@@ -143,13 +209,18 @@ export function Chat() {
         onDeleteChat={handleDeleteChat}
       />
 
-      {/* Main content */}
-      <div className="flex flex-1 flex-col">
+      {/* Main content + Monitoring Panel */}
+      <div className="flex flex-1 flex-col min-w-0">
         <Navbar
           sidebarOpen={sidebarOpen}
           onSidebarToggle={() => setSidebarOpen(!sidebarOpen)}
+          monitoringData={monitoringData}
+          monitoringOpen={monitoringOpen}
+          onMonitoringToggle={() => setMonitoringOpen(!monitoringOpen)}
         />
-        <div className="relative flex flex-1 flex-col overflow-hidden">
+        <div className="flex flex-1 overflow-hidden">
+          {/* Chat area */}
+          <div className="relative flex flex-1 flex-col overflow-hidden min-w-0">
           {hasMessages ? (
             <>
               {/* Messages - scrollable area that takes remaining space above fixed input */}
@@ -228,6 +299,14 @@ export function Chat() {
               </div>
             </div>
           )}
+          </div>
+
+          {/* Monitoring Panel */}
+          <MonitoringPanel
+            data={monitoringData}
+            isOpen={monitoringOpen}
+            onToggle={() => setMonitoringOpen(!monitoringOpen)}
+          />
         </div>
       </div>
     </div>

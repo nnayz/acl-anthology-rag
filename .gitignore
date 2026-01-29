@@ -30,6 +30,8 @@ env/
 .env
 .env.local
 .env.*.local
+client/.env.local
+client/.env.prod
 
 # IDE
 .idea/
@@ -77,3 +79,14 @@ yarn-error.log*
 client/dist/
 
 **/data/
+!api/eval/data/
+!api/eval/data/**
+api/eval/data/results/
+api/eval/data/results/**
+
+
+slides/
+report.pdf
+report.tex
+ACL Anthology.pptx.pdf
+ACL Anthology.pptx.txt

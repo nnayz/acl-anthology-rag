@@ -51,10 +51,13 @@ The goal of this pipeline is to return relevant papers for a user query in real-
 sequenceDiagram
     participant U as User
     participant API as API Server
+    participant FP as Filter Parser (LLM)
     participant LLM as LLM Service
     participant DB as Qdrant
     
     U->>API: Query: "machine translation"
+    API->>FP: Extract filters + semantic query + relevance
+    FP-->>API: parsed_filters, semantic_query, is_relevant
     API->>LLM: "Reformulate this query..."
     LLM-->>API: ["NMT", "seq2seq", "attention"]
     loop For each sub-query
@@ -62,30 +65,37 @@ sequenceDiagram
         DB-->>API: [Candidate Papers]
     end
     API->>API: Aggregate (RRF Fusion)
-    API-->>U: Final Ranked List
+    API-->>U: SSE stream (metadata + response chunks)
 ```
 
-### Step 1: Query Interpretation (`QueryProcessor`)
-- Checks if input matches a Paper ID regex (e.g., `\d{4}\.\w+-\w+\.\d+`).
-- **If ID**: Fetches the abstract for that ID to use as the query text.
-- **If Text**: Uses the user's text directly.
+### Step 1: Filter Parsing + Relevance (`FilterParser`)
+- Parses the user query into:
+  - `parsed_filters` (e.g., year range, authors, awards)
+  - `semantic_query` (the remaining semantic search intent)
+  - `is_relevant` (whether the system should proceed)
+- If `is_relevant` is false, the pipeline returns early with a helpful message.
 
-### Step 2: Semantic Reformulation (`Reformulator`)
+### Step 2: Query Interpretation (`QueryProcessor`)
+- Checks for an ACL Anthology paper ID either as the entire query or embedded in a longer query.
+- If a paper ID is detected, the pipeline looks up that paper and uses its title/abstract to generate search queries.
+
+### Step 3: Semantic Reformulation (`Reformulator`)
 - **Prompt**: "You are an AI research assistant. Generate 3 diverse search queries for..."
 - **Input**: User query / Paper abstract.
 - **Output**: A list of strings representing different semantic angles.
 
-### Step 3: Parallel Vector Search (`Pipeline`)
+### Step 4: Multi-Query Vector Search (`Pipeline`)
 - Each reformulated query string is embedded using the *same* model as ingestion.
-- Multiple searches are run in parallel against Qdrant.
-- Each search returns `k` (e.g., 20) candidates.
+- Searches are executed sequentially (embedding model calls are treated as non-thread-safe).
+- Each search returns `k` candidates where `k = top_k * SEARCH_K_MULTIPLIER`.
 
-### Step 4: Aggregation & Ranking (`Aggregator`)
-- **Algorithm**: Reciprocal Rank Fusion (RRF).
-- **Formula**: `score = 1 / (k + rank)`
-- **Logic**: A paper found by multiple query variations gets a higher combined score.
+### Step 5: Aggregation & Ranking (`Aggregator`)
+- **Algorithm**: Hybrid fusion combining Reciprocal Rank Fusion (RRF) with raw similarity scores.
+- **RRF contribution** (per query): `rrf += 1 / (RRF_K + rank)`
+- **Final score**: `score = w * avg_similarity + (1 - w) * normalized_rrf`
 - **Result**: A deduplicated, re-ranked list of unique papers.
 
-### Step 5: Response
-- The top `N` papers are returned to the frontend.
-- No new text is generated; the system returns the original metadata (Abstract, Title) directly to the user.
+### Step 6: Response (Streaming)
+- The server returns a Server-Sent Events (SSE) stream.
+- The first event contains `metadata` (results, filters, reformulated queries, timestamps).
+- The server then streams response `chunk` events produced by the LLM response synthesizer.
