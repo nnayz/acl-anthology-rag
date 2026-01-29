@@ -1,15 +1,20 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { search, type SearchResponse } from "@/lib/api"
+import { searchStream, type StreamMetadata } from "@/lib/api"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Sidebar, type ChatHistory } from "../Sidebar"
 import { ChatInput } from "./ChatInput"
 import { ChatMessage, type Message } from "./ChatMessage"
 import { Navbar } from "./Navbar"
+import { MonitoringPanel } from "../monitoring/MonitoringPanel"
 
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [monitoringOpen, setMonitoringOpen] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [monitoringData, setMonitoringData] = useState<any>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([
     {
       id: "1",
@@ -72,25 +77,16 @@ export function Chat() {
       setCurrentChatId(newChatId)
     }
 
-    try {
-      const response: SearchResponse = await search(content)
+    // Create placeholder assistant message
+    const assistantMessageId = crypto.randomUUID()
+    const assistantMessage: Message = {
+      id: assistantMessageId,
+      role: "assistant",
+      content: "",
+      searchResults: [],
+    }
+    setMessages((prev) => [...prev, assistantMessage])
 
-<<<<<<< Updated upstream
-      // Use the LLM-generated response, or fall back to a simple message
-      const assistantContent = response.response 
-        || (response.results.length === 0 
-          ? "No papers found matching your query. Try a different search term."
-          : `Found ${response.results.length} relevant papers.`)
-
-      const assistantMessage: Message = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: assistantContent,
-        // Include source paper for paper ID queries
-        sourcePaper: response.source_paper,
-        // Include search results for inline citations
-        searchResults: response.results,
-=======
     // Start streaming search
     abortControllerRef.current = searchStream(
       content,
@@ -99,8 +95,8 @@ export function Chat() {
           // Store monitoring data
           setMonitoringData({
             originalQuery: metadata.original_query,
-            semanticQuery: metadata.semantic_query,
-            parsedFilters: metadata.parsed_filters,
+            semanticQuery: metadata.semantic_query ?? undefined,
+            parsedFilters: metadata.parsed_filters ?? undefined,
             isRelevant: metadata.is_relevant ?? true,
             reformulatedQueries: metadata.reformulated_queries || [],
             results: metadata.results,
@@ -167,21 +163,8 @@ export function Chat() {
             )
           )
         },
->>>>>>> Stashed changes
       }
-
-      setMessages((prev) => [...prev, assistantMessage])
-    } catch (error) {
-      console.error("API error:", error)
-      const assistantMessage: Message = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: "Sorry, I couldn't connect to the server. Please try again later.",
-      }
-      setMessages((prev) => [...prev, assistantMessage])
-    } finally {
-      setIsLoading(false)
-    }
+    )
   }
 
   const handleStop = () => {
@@ -227,6 +210,9 @@ export function Chat() {
         <Navbar
           sidebarOpen={sidebarOpen}
           onSidebarToggle={() => setSidebarOpen(!sidebarOpen)}
+          monitoringData={monitoringData}
+          monitoringOpen={monitoringOpen}
+          onMonitoringToggle={() => setMonitoringOpen(!monitoringOpen)}
         />
         <div className="flex flex-1 overflow-hidden">
           {/* Chat area */}
