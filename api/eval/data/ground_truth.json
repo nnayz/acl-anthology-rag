@@ -1,0 +1,625 @@
+{
+  "version": "1.0",
+  "description": "Ground truth evaluation dataset for ACL Anthology RAG system. 60 queries across 8 categories.",
+  "notes": "Paper IDs in expected_relevant_paper_ids should be verified against the Qdrant collection before running evaluation. Keywords are used for lightweight generation quality checks.",
+  "queries": [
+    {
+      "id": "simple_01",
+      "category": "simple_factual",
+      "query": "neural machine translation with attention mechanisms",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["attention", "neural machine translation", "NMT", "encoder-decoder", "sequence-to-sequence"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "simple_02",
+      "category": "simple_factual",
+      "query": "word embeddings word2vec",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["word2vec", "word embeddings", "distributed representations", "skip-gram", "CBOW"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "simple_03",
+      "category": "simple_factual",
+      "query": "sentiment analysis of product reviews",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["sentiment", "opinion mining", "reviews", "polarity", "classification"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "simple_04",
+      "category": "simple_factual",
+      "query": "named entity recognition using CRF",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["named entity recognition", "NER", "CRF", "conditional random field", "sequence labeling"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "simple_05",
+      "category": "simple_factual",
+      "query": "text summarization extractive methods",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["summarization", "extractive", "sentence selection", "document summarization"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "simple_06",
+      "category": "simple_factual",
+      "query": "part of speech tagging neural networks",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["POS tagging", "part-of-speech", "neural", "sequence labeling", "tagging"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "simple_07",
+      "category": "simple_factual",
+      "query": "language model perplexity evaluation",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["language model", "perplexity", "evaluation", "n-gram"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "simple_08",
+      "category": "simple_factual",
+      "query": "dependency parsing transition based",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["dependency parsing", "transition-based", "parser", "syntactic"],
+      "expected_is_relevant": true,
+      "difficulty": "easy"
+    },
+    {
+      "id": "complex_01",
+      "category": "complex_multi_aspect",
+      "query": "cross-lingual transfer learning for low-resource languages using multilingual BERT",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["cross-lingual", "transfer learning", "low-resource", "multilingual", "BERT", "mBERT"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "complex_02",
+      "category": "complex_multi_aspect",
+      "query": "how do large language models handle negation in natural language inference",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["negation", "natural language inference", "NLI", "language models", "reasoning"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "complex_03",
+      "category": "complex_multi_aspect",
+      "query": "joint extraction of entities and relations using graph neural networks",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["entity extraction", "relation extraction", "joint", "graph neural network", "GNN"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "complex_04",
+      "category": "complex_multi_aspect",
+      "query": "domain adaptation techniques for biomedical named entity recognition",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["domain adaptation", "biomedical", "NER", "named entity recognition", "transfer"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "complex_05",
+      "category": "complex_multi_aspect",
+      "query": "zero-shot text classification using natural language inference and prompting",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["zero-shot", "text classification", "NLI", "prompting", "label"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "complex_06",
+      "category": "complex_multi_aspect",
+      "query": "multi-task learning combining sentiment analysis and aspect extraction",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["multi-task", "sentiment", "aspect extraction", "ABSA", "joint learning"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "complex_07",
+      "category": "complex_multi_aspect",
+      "query": "data augmentation strategies for machine reading comprehension robustness",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["data augmentation", "reading comprehension", "robustness", "QA", "question answering"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "complex_08",
+      "category": "complex_multi_aspect",
+      "query": "ethical considerations in training large language models on web data",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["ethics", "large language models", "web data", "bias", "fairness", "training data"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "filter_01",
+      "category": "filtered",
+      "query": "best paper awards from 2023",
+      "expected_filters": {
+        "year": {"exact": 2023},
+        "has_awards": true
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["award", "best paper", "2023"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "filter_02",
+      "category": "filtered",
+      "query": "papers by Yann LeCun on natural language processing",
+      "expected_filters": {
+        "authors": ["LeCun"]
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["LeCun", "natural language processing"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "filter_03",
+      "category": "filtered",
+      "query": "machine translation research between 2018 and 2022",
+      "expected_filters": {
+        "year": {"min_year": 2018, "max_year": 2022}
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["machine translation", "2018", "2019", "2020", "2021", "2022"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "filter_04",
+      "category": "filtered",
+      "query": "award-winning papers on summarization",
+      "expected_filters": {
+        "has_awards": true
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["award", "summarization"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "filter_05",
+      "category": "filtered",
+      "query": "recent papers on prompt engineering",
+      "expected_filters": {
+        "year": {"min_year": 2024}
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["prompt engineering", "prompting", "in-context learning"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "filter_06",
+      "category": "filtered",
+      "query": "papers by Vaswani from 2017",
+      "expected_filters": {
+        "year": {"exact": 2017},
+        "authors": ["Vaswani"]
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["Vaswani", "attention", "transformer", "2017"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "filter_07",
+      "category": "filtered",
+      "query": "Chinese language papers on word segmentation",
+      "expected_filters": {
+        "language": "zh"
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["Chinese", "word segmentation", "tokenization"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "filter_08",
+      "category": "filtered",
+      "query": "dialogue systems papers in the last 5 years",
+      "expected_filters": {
+        "year": {"min_year": 2021}
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["dialogue", "conversational", "dialog systems"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "paper_id_01",
+      "category": "paper_id",
+      "query": "2020.acl-main.747",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["testing", "NLP", "behavioral"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "paper_id_02",
+      "category": "paper_id",
+      "query": "find papers similar to 2017.emnlp-main.523",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "paper_id_03",
+      "category": "paper_id",
+      "query": "D14-1179",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["attention", "translation", "neural"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "paper_id_04",
+      "category": "paper_id",
+      "query": "2023.acl-long.1",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "paper_id_05",
+      "category": "paper_id",
+      "query": "what is related to 2019.naacl-main.423",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "paper_id_06",
+      "category": "paper_id",
+      "query": "P18-1238",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "comparative_01",
+      "category": "comparative",
+      "query": "compare BERT and GPT approaches to language understanding",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["BERT", "GPT", "language understanding", "pre-training", "comparison"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "comparative_02",
+      "category": "comparative",
+      "query": "differences between extractive and abstractive summarization",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["extractive", "abstractive", "summarization", "comparison"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "comparative_03",
+      "category": "comparative",
+      "query": "transformer architecture compared to LSTM for sequence labeling",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["transformer", "LSTM", "sequence labeling", "comparison", "architecture"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "comparative_04",
+      "category": "comparative",
+      "query": "comparison of subword tokenization methods BPE sentencepiece",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["BPE", "SentencePiece", "subword", "tokenization"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "comparative_05",
+      "category": "comparative",
+      "query": "rule-based versus neural approaches to machine translation",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["rule-based", "neural", "machine translation", "statistical"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "comparative_06",
+      "category": "comparative",
+      "query": "advantages of pre-training over training from scratch for NLP",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["pre-training", "fine-tuning", "transfer learning", "NLP"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "temporal_01",
+      "category": "temporal",
+      "query": "how has neural machine translation evolved since 2014",
+      "expected_filters": {
+        "year": {"min_year": 2014}
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["neural machine translation", "evolution", "progress", "history"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "temporal_02",
+      "category": "temporal",
+      "query": "recent advances in question answering 2022 2023",
+      "expected_filters": {
+        "year": {"min_year": 2022, "max_year": 2023}
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["question answering", "QA", "2022", "2023", "recent"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "temporal_03",
+      "category": "temporal",
+      "query": "trends in multilingual NLP over the past decade",
+      "expected_filters": {
+        "year": {"min_year": 2016}
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["multilingual", "NLP", "trends", "cross-lingual"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "temporal_04",
+      "category": "temporal",
+      "query": "latest research on hallucination in language models",
+      "expected_filters": {
+        "year": {"min_year": 2024}
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["hallucination", "language models", "factuality", "grounding"],
+      "expected_is_relevant": true,
+      "difficulty": "medium"
+    },
+    {
+      "id": "temporal_05",
+      "category": "temporal",
+      "query": "evolution of word representation from word2vec to contextual embeddings",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["word2vec", "contextual embeddings", "ELMo", "BERT", "word representation"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "temporal_06",
+      "category": "temporal",
+      "query": "progress in coreference resolution over the years",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["coreference resolution", "anaphora", "mention detection"],
+      "expected_is_relevant": true,
+      "difficulty": "hard"
+    },
+    {
+      "id": "irrelevant_01",
+      "category": "irrelevant",
+      "query": "what is the weather today",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "irrelevant_02",
+      "category": "irrelevant",
+      "query": "recipe for chocolate cake",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "irrelevant_03",
+      "category": "irrelevant",
+      "query": "hi how are you doing",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "irrelevant_04",
+      "category": "irrelevant",
+      "query": "who won the world cup in 2022",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "irrelevant_05",
+      "category": "irrelevant",
+      "query": "tell me a joke",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "irrelevant_06",
+      "category": "irrelevant",
+      "query": "what is the meaning of life",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "irrelevant_07",
+      "category": "irrelevant",
+      "query": "best restaurants in San Francisco",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "irrelevant_08",
+      "category": "irrelevant",
+      "query": "hello",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "easy"
+    },
+    {
+      "id": "edge_01",
+      "category": "edge_case",
+      "query": "trasformers attenton",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["transformer", "attention"],
+      "expected_is_relevant": true,
+      "difficulty": "hard",
+      "notes": "Typos - tests robustness of embedding model"
+    },
+    {
+      "id": "edge_02",
+      "category": "edge_case",
+      "query": "NLP",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["natural language processing", "NLP"],
+      "expected_is_relevant": true,
+      "difficulty": "hard",
+      "notes": "Very broad query"
+    },
+    {
+      "id": "edge_03",
+      "category": "edge_case",
+      "query": "a]@#$%^& neural",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["neural"],
+      "expected_is_relevant": true,
+      "difficulty": "hard",
+      "notes": "Special characters mixed with valid term"
+    },
+    {
+      "id": "edge_04",
+      "category": "edge_case",
+      "query": "papers",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": true,
+      "difficulty": "hard",
+      "notes": "Extremely vague but still relevant to the domain"
+    },
+    {
+      "id": "edge_05",
+      "category": "edge_case",
+      "query": "the quick brown fox jumps over the lazy dog",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "hard",
+      "notes": "Grammatically correct but nonsensical in context"
+    },
+    {
+      "id": "edge_06",
+      "category": "edge_case",
+      "query": "aaaaaaaaaaaaaaaaaa",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": [],
+      "expected_is_relevant": false,
+      "difficulty": "hard",
+      "notes": "Repeated characters - garbage input"
+    },
+    {
+      "id": "edge_07",
+      "category": "edge_case",
+      "query": "I want papers about BERT for NER in clinical notes from 2020 to 2023 by Stanford authors with best paper awards in English",
+      "expected_filters": {
+        "year": {"min_year": 2020, "max_year": 2023},
+        "has_awards": true,
+        "language": "en"
+      },
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["BERT", "NER", "clinical", "biomedical"],
+      "expected_is_relevant": true,
+      "difficulty": "hard",
+      "notes": "Many filters at once - stress test filter extraction"
+    },
+    {
+      "id": "edge_08",
+      "category": "edge_case",
+      "query": "transformer transformer transformer attention attention",
+      "expected_filters": null,
+      "expected_relevant_paper_ids": [],
+      "expected_relevant_keywords": ["transformer", "attention"],
+      "expected_is_relevant": true,
+      "difficulty": "medium",
+      "notes": "Repetitive query - should still return relevant results"
+    }
+  ]
+}

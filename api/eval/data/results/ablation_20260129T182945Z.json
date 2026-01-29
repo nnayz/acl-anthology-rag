@@ -1,0 +1,237 @@
+{
+  "timestamp": "2026-01-29T17:00:07.257839+00:00",
+  "reformulation": {
+    "experiment": "reformulation",
+    "results": {
+      "0": {
+        "num_queries": 48,
+        "num_with_ground_truth": 0
+      },
+      "1": {
+        "num_queries": 48,
+        "num_with_ground_truth": 0
+      },
+      "2": {
+        "num_queries": 48,
+        "num_with_ground_truth": 0
+      },
+      "3": {
+        "num_queries": 48,
+        "num_with_ground_truth": 0
+      },
+      "4": {
+        "num_queries": 48,
+        "num_with_ground_truth": 0
+      }
+    }
+  },
+  "rrf": {
+    "experiment": "rrf",
+    "grid_results": {},
+    "num_raw_queries": 48
+  },
+  "topk": {
+    "experiment": "topk",
+    "results": {}
+  },
+  "filter": {
+    "experiment": "filter",
+    "with_filters": [
+      {
+        "query_id": "filter_01",
+        "retrieved_ids": [
+          "2025.sdp-1.1",
+          "2025.acl-long.1224",
+          "2023.americasnlp-1.21",
+          "2023.humeval-1.4",
+          "2023.emnlp-main.797"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_02",
+        "retrieved_ids": [
+          "2021.teachingnlp-1.9",
+          "N19-5002",
+          "2023.findings-emnlp.799",
+          "2024.teachingnlp-1.2",
+          "2023.ranlp-1.111"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_03",
+        "retrieved_ids": [
+          "1997.mtsummit-papers.13",
+          "2001.mtsummit-road.6",
+          "1997.mtsummit-plenaries.13",
+          "W18-6401",
+          "1997.mtsummit-papers.6"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_04",
+        "retrieved_ids": [
+          "2020.sdp-1.39",
+          "2024.lrec-main.536",
+          "2021.acl-srw.30",
+          "2022.gem-1.17",
+          "2024.naacl-long.371"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_05",
+        "retrieved_ids": [
+          "2025.emnlp-main.1681",
+          "2024.findings-naacl.119",
+          "2024.findings-naacl.258",
+          "2022.acl-demo.9",
+          "2022.acl-demo.10"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_06",
+        "retrieved_ids": [
+          "2022.wildre-1.8",
+          "2020.wat-1.10",
+          "2022.wildre-1.5",
+          "2021.dravidianlangtech-1.36",
+          "2020.lrec-1.808"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_07",
+        "retrieved_ids": [
+          "2023.acl-industry.1",
+          "D18-1531",
+          "P19-1314",
+          "L10-1048",
+          "2022.findings-acl.310"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_08",
+        "retrieved_ids": [
+          "1999.mtsummit-1.16",
+          "I17-5003",
+          "N18-6006",
+          "2022.lrec-1.135",
+          "2022.nlp4convai-1.13"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      }
+    ],
+    "without_filters": [
+      {
+        "query_id": "filter_01",
+        "retrieved_ids": [
+          "2025.acl-long.1224",
+          "2023.emnlp-main.797",
+          "2021.semeval-1.57",
+          "2023.findings-emnlp.799",
+          "2023.humeval-1.4"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_02",
+        "retrieved_ids": [
+          "2021.teachingnlp-1.9",
+          "N19-5002",
+          "D19-2006",
+          "2023.ranlp-1.111",
+          "2023.findings-emnlp.799"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_03",
+        "retrieved_ids": [
+          "1997.mtsummit-papers.13",
+          "2022.amta-upg.4",
+          "1999.mtsummit-1.13",
+          "W18-6401",
+          "1997.mtsummit-plenaries.1"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_04",
+        "retrieved_ids": [
+          "2020.sdp-1.39",
+          "2024.lrec-main.536",
+          "2022.gem-1.17",
+          "2021.acl-srw.30",
+          "L14-1077"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_05",
+        "retrieved_ids": [
+          "2025.emnlp-main.1681",
+          "2024.findings-naacl.258",
+          "2024.findings-naacl.119",
+          "2023.ranlp-1.69",
+          "2024.personalize-1.10"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_06",
+        "retrieved_ids": [
+          "2025.chipsal-1.1",
+          "2020.findings-emnlp.445",
+          "2020.bucc-1.10",
+          "2020.icon-adapmt.3",
+          "2025.chipsal-1.26"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_07",
+        "retrieved_ids": [
+          "2023.acl-industry.1",
+          "D18-1531",
+          "L10-1048",
+          "L06-1131",
+          "1994.vlc-1.6"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      },
+      {
+        "query_id": "filter_08",
+        "retrieved_ids": [
+          "2022.lrec-1.135",
+          "2022.nlp4convai-1.13",
+          "2023.yrrsds-1.24",
+          "2023.yrrsds-1.11",
+          "2024.yrrsds-1.11"
+        ],
+        "num_results": 5,
+        "relevant_ids": "set()"
+      }
+    ],
+    "num_queries": 8
+  }
+}

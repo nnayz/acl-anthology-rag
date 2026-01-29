@@ -1,0 +1,2215 @@
+{
+  "suite": "full",
+  "total_queries": 58,
+  "timestamp": "2026-01-29T16:58:23.818043+00:00",
+  "filter_metrics": {
+    "relevance_accuracy": 1.0,
+    "filter_match_accuracy": 0.46551724137931033,
+    "field_accuracy": {
+      "year": 0.8,
+      "has_awards": 1.0,
+      "authors": 1.0,
+      "language": 1.0
+    },
+    "total_queries": 58
+  },
+  "latency_stats": {
+    "filter_parsing_ms": {
+      "mean": 2637.031078338623,
+      "median": 712.5602960586548,
+      "p95": 6065.54102897644,
+      "min": 402.3151397705078,
+      "max": 12505.820035934448,
+      "count": 48
+    },
+    "query_reformulation_ms": {
+      "mean": 2795.1559027036033,
+      "median": 2382.6175928115845,
+      "p95": 6022.954940795898,
+      "min": 0.0,
+      "max": 37837.79001235962,
+      "count": 48
+    },
+    "vector_search_ms": {
+      "mean": 3072.256247202555,
+      "median": 3142.428994178772,
+      "p95": 3915.40789604187,
+      "min": 0.0,
+      "max": 4252.739191055298,
+      "count": 48
+    },
+    "response_synthesis_ms": {
+      "mean": 0.0,
+      "median": 0.0,
+      "p95": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "count": 48
+    },
+    "total_ms": {
+      "mean": 8504.443228244781,
+      "median": 6953.909516334534,
+      "p95": 17282.633066177368,
+      "min": 606.3230037689209,
+      "max": 41147.77612686157,
+      "count": 48
+    }
+  },
+  "avg_generation_metrics": {
+    "avg_faithfulness": 0.16315789473684209,
+    "avg_answer_relevance": 0.9263157894736843,
+    "avg_groundedness": 0.7
+  },
+  "avg_reformulation_quality": {
+    "avg_fidelity": 0.7947368421052632,
+    "avg_diversity": 0.8157894736842105,
+    "avg_specificity": 0.8184210526315789,
+    "avg_domain_appropriateness": 0.9184210526315789,
+    "avg_overall": 0.8310526315789474
+  },
+  "per_category": {
+    "simple_factual": {
+      "count": 8,
+      "avg_faithfulness": 0.15,
+      "avg_answer_relevance": 0.85,
+      "avg_groundedness": 0.7,
+      "avg_latency_ms": 6020.873159170151
+    },
+    "complex_multi_aspect": {
+      "count": 8,
+      "avg_faithfulness": 0.0,
+      "avg_answer_relevance": 1.0,
+      "avg_groundedness": 0.7,
+      "avg_latency_ms": 10243.146568536758
+    },
+    "filtered": {
+      "count": 8,
+      "avg_faithfulness": 0.35,
+      "avg_answer_relevance": 1.0,
+      "avg_groundedness": 0.7,
+      "avg_latency_ms": 9224.065572023392
+    },
+    "paper_id": {
+      "count": 6,
+      "avg_latency_ms": 13163.415710131327
+    },
+    "comparative": {
+      "count": 6,
+      "avg_faithfulness": 0.35,
+      "avg_answer_relevance": 0.85,
+      "avg_groundedness": 0.7,
+      "avg_latency_ms": 4573.825081189473
+    },
+    "temporal": {
+      "count": 6,
+      "avg_faithfulness": 0.0,
+      "avg_answer_relevance": 1.0,
+      "avg_groundedness": 0.6999999999999998,
+      "avg_latency_ms": 6497.907002766927
+    },
+    "irrelevant": {
+      "count": 8
+    },
+    "edge_case": {
+      "count": 8,
+      "avg_faithfulness": 0.175,
+      "avg_answer_relevance": 0.8,
+      "avg_groundedness": 0.7,
+      "avg_latency_ms": 9816.28429889679
+    }
+  },
+  "irrelevance_detection": {
+    "total": 8,
+    "correctly_rejected": 8,
+    "accuracy": 1.0
+  },
+  "individual_results": [
+    {
+      "query_id": "simple_01",
+      "category": "simple_factual",
+      "query": "neural machine translation with attention mechanisms",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "neural machine translation with attention mechanisms",
+        "Attention-based neural machine translation models",
+        "Comparative study of attention mechanisms in NMT systems",
+        "Neural machine translation using transformer architecture with attention",
+        "Attention-enhanced sequence-to-sequence models for machine translation",
+        "Investigating the impact of attention weights on NMT performance metrics"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 1000.30517578125,
+        "query_reformulation_ms": 486.40894889831543,
+        "vector_search_ms": 3880.9399604797363,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 5367.654085159302
+      }
+    },
+    {
+      "query_id": "simple_02",
+      "category": "simple_factual",
+      "query": "word embeddings word2vec",
+      "response_text": "**Word Embeddings: A Comprehensive Overview**\n\nThe user's query on word embeddings and Word2vec has led to a set of relevant papers that provide insights into the development, evaluation, and optimization of word embeddings. Here's a summary of the key findings from each paper:\n\n**Deconstructing Word Embedding Algorithms** [1] by Kian Kenyon-Dean et al. (2020) proposes a retrospective analysis of well-known word embedding algorithms, including Word2vec. The authors deconstruct these algorithms into a common form, unveiling common conditions required for making performant word embeddings. This paper provides a theoretical foundation for future model development.\n\n**On Learning Word Embeddings From Linguistically Augmented Text Corpora** [2] by Amila Silva et al. (2019) addresses the challenge of learning high-quality word embeddings from limited data. The authors propose a method to generate effective word embeddings and demonstrate its superiority over existing works on the classical word similarity task and a domain-specific application.\n\n**Embeddings in Natural Language Processing** [3] by Jose Camacho-Collados et al. (2020) provides a high-level synthesis of main embedding techniques in NLP, including conventional word embeddings (e.g., Word2Vec and GloVe), sense-specific and graph alternatives, and contextualized representations (e.g., ELMo and BERT). This tutorial offers a broad overview of the field.\n\n**Sub-word information in pre-trained biomedical word representations: evaluation and hyper-parameter optimization** [4] by Dieter Galea et al. (2018) evaluates and optimizes pre-trained word representations, including Word2vec, for the biomedical domain. The authors find that character-based representations, such as fastText, outperform Word2vec in named entity recognition tasks.\n\n**Dict2vec : Learning Word Embeddings using Lexical Dictionaries** [5] by Julien Tissier et al. (2017) proposes a new approach to learning word embeddings using lexical dictionaries. The authors build new word pairs from dictionary entries and evaluate the resulting word representations on various tasks.\n\nThese papers collectively provide insights into the development, evaluation, and optimization of word embeddings, including Word2vec. They highlight the importance of considering sub-word information, leveraging linguistic augmentations, and optimizing hyper-parameters for specific tasks and domains.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "word embeddings word2vec",
+        "word2vec vector representations",
+        "distributed word representations NLP",
+        "word embeddings techniques comparison",
+        "contextualized word embeddings deep learning",
+        "vector space models word semantics"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2020.emnlp-main.681",
+        "W19-0508",
+        "2020.coling-tutorials.2",
+        "W18-2307",
+        "D17-1024"
+      ],
+      "latency": {
+        "filter_parsing_ms": 591.0632610321045,
+        "query_reformulation_ms": 415.1039123535156,
+        "vector_search_ms": 2937.8929138183594,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 3944.0600872039795
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.3,
+          "explanation": "The response introduces fabricated details, authors, years, and findings not present in the abstracts, such as specific paper titles, authors, and years, which are not mentioned in the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic of word embeddings and Word2vec, providing a comprehensive overview of relevant papers and their key findings."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some unverified claims are present, such as specific author names and details not mentioned in the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.9,
+        "specificity": 0.8,
+        "domain_appropriateness": 0.9,
+        "overall": 0.85,
+        "explanation": "Reformulations generally preserve the original intent, offer diverse perspectives, and use appropriate terminology, but some may be slightly too specific or vague."
+      }
+    },
+    {
+      "query_id": "simple_03",
+      "category": "simple_factual",
+      "query": "sentiment analysis of product reviews",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "sentiment analysis of product reviews",
+        "opinion mining of product reviews",
+        "emotional analysis of customer feedback",
+        "product review text classification",
+        "sentiment extraction from online reviews",
+        "affective computing in product review analysis"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 635.2510452270508,
+        "query_reformulation_ms": 3945.110082626343,
+        "vector_search_ms": 3371.3269233703613,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 7951.688051223755
+      }
+    },
+    {
+      "query_id": "simple_04",
+      "category": "simple_factual",
+      "query": "named entity recognition using CRF",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "named entity recognition",
+        "Named Entity Extraction Techniques",
+        "Entity Disambiguation in NLP Models",
+        "Automatic Named Entity Recognition Systems",
+        "Named Entity Classification and Tagging",
+        "Deep Learning Approaches to Entity Recognition"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 572.9389190673828,
+        "query_reformulation_ms": 401.3979434967041,
+        "vector_search_ms": 3577.0161151885986,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 4551.352977752686
+      }
+    },
+    {
+      "query_id": "simple_05",
+      "category": "simple_factual",
+      "query": "text summarization extractive methods",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "text summarization extractive methods",
+        "Extractive text summarization techniques",
+        "Automatic summarization methods for text",
+        "Text summarization using extractive approaches",
+        "Summarization of long documents using extractive methods",
+        "Extractive summarization algorithms for text data"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 1714.561939239502,
+        "query_reformulation_ms": 826.740026473999,
+        "vector_search_ms": 2764.2781734466553,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 5305.580139160156
+      }
+    },
+    {
+      "query_id": "simple_06",
+      "category": "simple_factual",
+      "query": "part of speech tagging neural networks",
+      "response_text": "Based on your query on part of speech (POS) tagging using neural networks, I've summarized the relevant papers from the search results.\n\nRecent work on POS tagging using neural networks includes **Recipe for Zero-shot POS Tagging: Is It Useful in Realistic Scenarios?** [4] by Vandenbulcke et al. (2024), which focuses on developing effective zero-shot POS tagging models for languages with limited data. The authors investigate the importance of accurate dataset selection and highlight the potential of zero-shot training for extremely low-resource languages.\n\nAnother relevant paper is **HYPERTTS: Parameter Efficient Adaptation in Text to Speech Using Hypernetworks** [5] by Li et al. (2024), which presents a parameter-efficient adaptation method for text-to-speech (TTS) using hypernetworks. Although primarily focused on TTS, the paper's use of adapters and hypernetworks may be applicable to POS tagging tasks.\n\nHowever, the search results also include papers related to automatic speech recognition (ASR) and neural networks, which may be relevant to POS tagging. **Sensitivity of Syllable-Based ASR Predictions to Token Frequency and Lexical Stress** [1] by Vietti et al. (2024) explores the linguistic features and representations used by ASR models, which may be transferable to POS tagging tasks.\n\nAdditionally, **kNN For Whisper And Its Effect On Bias And Speaker Adaptation** [2] by Nachesa et al. (2025) and **DNCASR: End-to-End Training for Speaker-Attributed ASR** [3] by Zheng et al. (2025) focus on ASR and speaker adaptation, but may provide insights into the use of neural networks for POS tagging.\n\nIn summary, while the search results primarily focus on ASR and TTS, **Recipe for Zero-shot POS Tagging: Is It Useful in Realistic Scenarios?** [4] and **HYPERTTS: Parameter Efficient Adaptation in Text to Speech Using Hypernetworks** [5] are the most directly relevant papers to your query on POS tagging using neural networks.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "part of speech tagging neural networks",
+        "POS tagging deep learning models",
+        "Neural network architectures for part-of-speech identification",
+        "Deep learning approaches to POS tagging in NLP",
+        "Part-of-speech tagging using convolutional recurrent neural networks",
+        "Tagging and parsing with transformer-based neural networks"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2024.clicit-1.106",
+        "2025.findings-naacl.369",
+        "2025.acl-long.899",
+        "2024.mrl-1.9",
+        "2024.lrec-main.747"
+      ],
+      "latency": {
+        "filter_parsing_ms": 499.5880126953125,
+        "query_reformulation_ms": 460.92891693115234,
+        "vector_search_ms": 3704.529047012329,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 4665.045976638794
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces information not present in the abstracts, including fabricated paper titles, authors, and years, and makes claims not supported by the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 0.7,
+          "explanation": "The response mostly addresses the query on part of speech tagging neural networks, but includes some tangential information on ASR and TTS."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and ungrounded claims exist, such as implying Paper 1 and Papers 2-3 are relevant to POS tagging."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.9,
+        "diversity": 0.8,
+        "specificity": 0.85,
+        "domain_appropriateness": 0.95,
+        "overall": 0.87,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects, and use appropriate terminology, but could improve in diversity and specificity."
+      }
+    },
+    {
+      "query_id": "simple_07",
+      "category": "simple_factual",
+      "query": "language model perplexity evaluation",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "language model perplexity evaluation",
+        "Evaluation metrics for language model performance",
+        "Perplexity scores in natural language processing",
+        "Language model assessment using cross-entropy",
+        "Measuring language model uncertainty with perplexity",
+        "Cross-validation of language models for improved perplexity"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 426.47600173950195,
+        "query_reformulation_ms": 1598.883867263794,
+        "vector_search_ms": 3565.8111572265625,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 5591.171026229858
+      }
+    },
+    {
+      "query_id": "simple_08",
+      "category": "simple_factual",
+      "query": "dependency parsing transition based",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "dependency parsing transition based",
+        "transition-based dependency parsing algorithms",
+        "dependency parsing using transition systems",
+        "graph-based transition models for dependency parsing",
+        "transition-based parsing for linguistic dependency structures",
+        "dependency parsing with transition-based graph transformations"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 5829.40411567688,
+        "query_reformulation_ms": 1686.2070560455322,
+        "vector_search_ms": 3274.8217582702637,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 10790.432929992676
+      }
+    },
+    {
+      "query_id": "complex_01",
+      "category": "complex_multi_aspect",
+      "query": "cross-lingual transfer learning for low-resource languages using multilingual BERT",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "cross-lingual transfer learning for low-resource languages using multilingual BERT",
+        "Multilingual BERT applications in low-resource language NLP",
+        "Cross-lingual transfer learning techniques for under-resourced languages",
+        "Using pre-trained multilingual language models for low-resource language tasks",
+        "Low-resource language processing with cross-lingual BERT fine-tuning",
+        "Transfer learning for multilingual BERT in language pairs with limited data"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 5774.874925613403,
+        "query_reformulation_ms": 535.3672504425049,
+        "vector_search_ms": 2681.9589138031006,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 8992.201089859009
+      }
+    },
+    {
+      "query_id": "complex_02",
+      "category": "complex_multi_aspect",
+      "query": "how do large language models handle negation in natural language inference",
+      "response_text": "**Handling Negation in Large Language Models: Recent Advances**\n\nRecent work has highlighted the challenges of large language models (LLMs) in understanding negation, a crucial aspect of natural language inference (NLI). We'll summarize key findings from relevant papers and explore connections between them.\n\n**State-of-the-Art Language Models Struggle with Negation**\n\nState-of-the-art LLMs continue to struggle with understanding negation cues in tasks like NLI [1]. This is partly due to the under-representation of negation in language model pretraining datasets [1, 2]. To address this, researchers have introduced new datasets and learning strategies for negation [1, 2].\n\n**New Datasets and Learning Strategies**\n\n**To Learn or Not to Learn: Replaced Token Detection for Learning the Meaning of Negation** [1] by Gunjan Bhattarai and Katrin Erk (2024) introduces two new datasets and a new learning strategy for negation building on ELECTRA's replaced token detection objective. They find substantial gains on a variant of RTE with additional negation.\n\n**This is not a Dataset: A Large Negation Benchmark to Challenge Large Language Models** [2] by Iker Garc\u00eda-Ferrero et al. (2023) introduces a large semi-automatically generated dataset of circa 400,000 descriptive sentences about commonsense knowledge that can be true or false in which negation is present in about 2/3 of the corpus. They find that LLMs are proficient at classifying affirmative sentences but struggle with negative sentences and lack a deep understanding of negation.\n\n**Model Scaling Analysis and Prompt Engineering**\n\n**Towards the Roots of the Negation Problem: A Multilingual NLI Dataset and Model Scaling Analysis** [3] by Tereza Vrabcov\u00e1 et al. (2025) constructs and publishes two new textual entailment datasets in four languages (English, Czech, German, and Ukrainian) with paired examples differing in negation. They show that increasing the model size may improve the models' ability to handle negations and that both the models' reasoning accuracy and robustness to negation are language-dependent.\n\n**This is not a Disimprovement: Improving Negation Reasoning in Large Language Models via Prompt Engineering** [4] by Joshua Jose Dias Barreto and Abhik Jana (2025) proposes two genres of prompts (*Warning-based* and *Persona-based*) that improve overall absolute accuracy by up to 3.17% and distractor negation accuracy by up to 25.14% over most competitive baselines.\n\n**Understanding Negation through Unlikelihood Objective**\n\n**Understanding by Understanding Not: Modeling Negation in Language Models** [5] by Arian Hosseini et al. (2021) proposes to augment the language modeling objective with an unlikelihood objective based on negated generic sentences from a raw text corpus. They reduce the mean top 1 error rate to 4% on the negated LAMA dataset.\n\nIn summary, recent work has highlighted the challenges of LLMs in understanding negation and introduced new datasets, learning strategies, and prompt engineering techniques to improve negation reasoning. While model scaling analysis shows that increasing model size may improve negation handling, language-dependent factors and prompt engineering can also play a crucial role in improving LLMs' ability to understand negation.\n\nReferences:\n\n[1] Bhattarai, G., & Erk, K. (2024). To Learn or Not to Learn: Replaced Token Detection for Learning the Meaning of Negation.\n\n[2] Garc\u00eda-Ferrero, I., Altuna, B., Alvez, J., et al. (2023). This is not a Dataset: A Large Negation Benchmark to Challenge Large Language Models.\n\n[3] Vrabcov\u00e1, T., Kadl\u010d\u00edk, M., Sojka, P., et al. (2025). Towards the Roots of the Negation Problem: A Multilingual NLI Dataset and Model Scaling Analysis.\n\n[4] Barreto, J. J. D., & Jana, A. (2025). This is not a Disimprovement: Improving Negation Reasoning in Large Language Models via Prompt Engineering.\n\n[5] Hosseini, A., Reddy, S., Bahdanau, D., et al. (2021). Understanding by Understanding Not: Modeling Negation in Language Models.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "large language models negation natural language inference",
+        "Large language model capabilities for negation detection in natural language inference tasks",
+        "Natural language processing techniques for negation handling in large language models",
+        "Large language models and their applications in resolving negated sentences for NLI",
+        "Negation handling in large language models for improved natural language inference performance",
+        "Comparative study of large language models for negation detection and NLI accuracy"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2024.lrec-main.1411",
+        "2023.emnlp-main.531",
+        "2025.findings-emnlp.1391",
+        "2025.findings-emnlp.761",
+        "2021.naacl-main.102"
+      ],
+      "latency": {
+        "filter_parsing_ms": 3696.67387008667,
+        "query_reformulation_ms": 2558.2828521728516,
+        "vector_search_ms": 3994.1601753234863,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 10249.116897583008
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, such as specific paper titles, authors, and years, which are not supported by the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the user's query about how large language models handle negation in natural language inference, providing relevant and useful information on recent advances, challenges, and techniques to improve negation reasoning."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some claims are not directly supported by the abstracts, such as specific results and methods mentioned in the response."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.9,
+        "diversity": 0.8,
+        "specificity": 0.85,
+        "domain_appropriateness": 0.95,
+        "overall": 0.87,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects, and use appropriate terminology, but some may be slightly vague or similar."
+      }
+    },
+    {
+      "query_id": "complex_03",
+      "category": "complex_multi_aspect",
+      "query": "joint extraction of entities and relations using graph neural networks",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "graph neural networks for joint extraction of entities and relations",
+        "joint entity relation extraction using graph neural networks",
+        "graph neural network architectures for entity relation extraction",
+        "neural network models for simultaneous entity and relation extraction",
+        "graph-based approaches to extracting entities and relations from text",
+        "deep learning methods for joint entity relation extraction with graph neural networks"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 671.2057590484619,
+        "query_reformulation_ms": 1831.6960334777832,
+        "vector_search_ms": 3139.9991512298584,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 5642.9009437561035
+      }
+    },
+    {
+      "query_id": "complex_04",
+      "category": "complex_multi_aspect",
+      "query": "domain adaptation techniques for biomedical named entity recognition",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "domain adaptation techniques for biomedical named entity recognition",
+        "Biomedical named entity recognition using transfer learning methods",
+        "Cross-domain named entity recognition in medical text with deep learning",
+        "Domain adaptation strategies for improving NER performance in biomedical literature",
+        "Adapting NLP models for named entity recognition in healthcare and biomedicine",
+        "Transferable representations for biomedical entity recognition across different datasets"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 5770.642280578613,
+        "query_reformulation_ms": 2787.578821182251,
+        "vector_search_ms": 2871.6201782226562,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 11429.84127998352
+      }
+    },
+    {
+      "query_id": "complex_05",
+      "category": "complex_multi_aspect",
+      "query": "zero-shot text classification using natural language inference and prompting",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "zero-shot text classification using natural language inference and prompting",
+        "zero-shot text classification leveraging natural language inference tasks",
+        "prompt-based text classification without explicit training data",
+        "zero-shot learning for text classification using natural language processing",
+        "text classification with natural language inference and few-shot prompting",
+        "zero-shot text classification via natural language inference and meta-learning"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 6065.54102897644,
+        "query_reformulation_ms": 2856.9998741149902,
+        "vector_search_ms": 3258.5222721099854,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 12181.063175201416
+      }
+    },
+    {
+      "query_id": "complex_06",
+      "category": "complex_multi_aspect",
+      "query": "multi-task learning combining sentiment analysis and aspect extraction",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "multi-task learning combining sentiment analysis and aspect extraction",
+        "Multi-task learning for sentiment analysis and opinion mining",
+        "Aspect-based sentiment analysis using joint learning models",
+        "Combining sentiment analysis and aspect extraction with transfer learning",
+        "Multi-modal multi-task learning for opinion mining and feature extraction",
+        "Joint learning of sentiment and aspect embeddings for text analysis"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 5941.154003143311,
+        "query_reformulation_ms": 2065.3488636016846,
+        "vector_search_ms": 2970.163106918335,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 10976.66597366333
+      }
+    },
+    {
+      "query_id": "complex_07",
+      "category": "complex_multi_aspect",
+      "query": "data augmentation strategies for machine reading comprehension robustness",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "machine reading comprehension robustness",
+        "Robustness evaluation in machine reading comprehension tasks",
+        "Adversarial testing for MRC systems and models",
+        "Assessing the reliability of machine reading comprehension models",
+        "Machine reading comprehension under noisy or adversarial conditions",
+        "Evaluating the robustness of deep learning models for MRC"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 5953.705072402954,
+        "query_reformulation_ms": 2705.592155456543,
+        "vector_search_ms": 3428.4708499908447,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 12087.768077850342
+      }
+    },
+    {
+      "query_id": "complex_08",
+      "category": "complex_multi_aspect",
+      "query": "ethical considerations in training large language models on web data",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "large language models, web data, ethical considerations",
+        "Large-scale language models and web-based data for NLP applications with a focus on ethics",
+        "Web data utilization in large language models for NLP tasks with consideration of moral implications",
+        "Ethical implications of using web data in large language model development for natural language processing",
+        "Large language models trained on web data: exploring the intersection of NLP and ethics",
+        "Web-based data and large language models in NLP: a review of the current state and future directions in ethics"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 4687.637090682983,
+        "query_reformulation_ms": 2775.501012802124,
+        "vector_search_ms": 2922.4770069122314,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 10385.615110397339
+      }
+    },
+    {
+      "query_id": "filter_01",
+      "category": "filtered",
+      "query": "best paper awards from 2023",
+      "response_text": "**Best Paper Awards from 2023**\n\nThe ACL Anthology has recognized several outstanding papers in 2023, showcasing innovative research in Natural Language Processing (NLP). Among the top-ranked papers, we highlight the following notable works:\n\n**Critical Examination of NLP Benchmarks** [1]\n**What\u2019s the Meaning of Superhuman Performance in Today\u2019s NLU?** by Simone Tedeschi et al. (2023) questions the validity of superhuman performance claims in NLP, highlighting limitations in current benchmarks such as SuperGLUE and SQuAD. The authors recommend fairer and more transparent benchmarks to evaluate human and model performance.\n\n**Design Biases in NLP Systems** [2]\n**NLPositionality: Characterizing Design Biases of Datasets and Models** by Sebastin Santy et al. (2023) introduces a framework to quantify design biases in NLP systems, revealing that datasets and models often align predominantly with Western, White, college-educated, and younger populations. This work emphasizes the importance of examining positionality in NLP research.\n\n**Political Biases in Language Models** [3]\n**From Pretraining Data to Language Models to Downstream Tasks: Tracking the Trails of Political Biases Leading to Unfair NLP Models** by Shangbin Feng et al. (2023) investigates the impact of pretraining data on the fairness of downstream NLP models. The authors find that language models exhibit political leanings, reinforcing polarization and propagating social biases.\n\n**Multilingual Parallel Sentiment Dataset** [4]\n**NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages** by Genta Indra Winata et al. (2023) presents a novel parallel sentiment dataset for 10 Indonesian local languages, aiming to promote NLP research in underrepresented languages.\n\n**Distributional Control of Generative Models** [5]\n**disco: a toolkit for Distributional Control of Generative Models** by Germ\u00e1n Kruszewski et al. (2023) introduces a Python library, disco, to facilitate the distributional control of generative models, addressing limitations in current techniques.\n\nThese papers demonstrate the diversity and depth of research in NLP, highlighting critical issues such as design biases, political biases, and the need for more inclusive and transparent benchmarks. The ACL Anthology's recognition of these papers underscores their significance in advancing the field of NLP.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "best paper",
+        "Top-ranked research papers in NLP",
+        "Highly cited computational linguistics publications",
+        "Award-winning papers in natural language processing",
+        "Notable contributions to the field of NLP",
+        "Most influential papers in artificial intelligence and language"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true,
+          "has_awards": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [
+        "2023.acl-long.697",
+        "2023.acl-long.505",
+        "2023.acl-long.656",
+        "2023.eacl-main.57",
+        "2023.acl-demo.14"
+      ],
+      "latency": {
+        "filter_parsing_ms": 9058.409929275513,
+        "query_reformulation_ms": 429.929256439209,
+        "vector_search_ms": 2884.2129707336426,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 12372.552156448364
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, and does not directly support any claims with the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly answers the query by providing a list of best paper awards from 2023, along with a brief summary of each paper, which is highly relevant to the user's information need."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some claims slightly extend beyond the provided abstracts"
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.6,
+        "diversity": 0.8,
+        "specificity": 0.7,
+        "domain_appropriateness": 0.9,
+        "overall": 0.75,
+        "explanation": "Reformulations generally preserve the intent, but some are too broad or narrow. They capture different aspects and use appropriate terminology, though."
+      }
+    },
+    {
+      "query_id": "filter_02",
+      "category": "filtered",
+      "query": "papers by Yann LeCun on natural language processing",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "papers by Yann LeCun on natural language processing",
+        "Yann LeCun contributions to NLP",
+        "Research papers by Yann LeCun on deep learning for NLP",
+        "Yann LeCun publications on language modeling and NLP",
+        "Papers by Yann LeCun on sequence-to-sequence models in NLP",
+        "Yann LeCun's work on NLP applications and computer vision"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "authors": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 520.0212001800537,
+        "query_reformulation_ms": 2452.467918395996,
+        "vector_search_ms": 3125.7829666137695,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 6098.272085189819
+      }
+    },
+    {
+      "query_id": "filter_03",
+      "category": "filtered",
+      "query": "machine translation research between 2018 and 2022",
+      "response_text": "Recent work on machine translation research between 2018 and 2022 includes several notable papers that contribute to the field. **Findings of the 2018 Conference on Machine Translation (WMT18)** [1] by Ond\u0159ej Bojar et al. (2018) presents the results of the premier shared task organized alongside the Conference on Machine Translation (WMT) 2018, where participants were asked to build machine translation systems for various language pairs. This paper highlights the progress made in machine translation during that year.\n\nIn the same year, **The JHU Machine Translation Systems for WMT 2018** [2] by Philipp Koehn et al. (2018) reports on the efforts of the Johns Hopkins University to develop neural machine translation systems for the shared task. The authors introduce iterative back-translation and fine-tuning on test sets from prior years, which are novel contributions to the field.\n\n**The RWTH Aachen University Supervised Machine Translation Systems for WMT 2018** [3] by Julian Schamper et al. (2018) describes the statistical machine translation systems developed at RWTH Aachen University for the German\u2192English, English\u2192Turkish, and Chinese\u2192English translation tasks. The authors identify data selection, fine-tuning, batch size, and model dimension as important hyperparameters and achieve significant improvements over their last year's submission.\n\nFast-forwarding to 2022, **Findings of the 2022 Conference on Machine Translation (WMT22)** [4] by Tom Kocmi et al. (2022) presents the results of the General Machine Translation Task organised as part of the Conference on Machine Translation (WMT) 2022. The authors evaluate system outputs with human annotators using two different techniques and provide insights into the current state of machine translation.\n\nLastly, **Survey of Low-Resource Machine Translation** [5] by Barry Haddow et al. (2022) provides a comprehensive survey of the state of the art in low-resource machine translation research. The authors highlight the challenges of producing useful translation models when very little translated training data is available and describe the techniques evaluated by researchers in several recent shared tasks.\n\nThese papers collectively demonstrate the progress made in machine translation research between 2018 and 2022, with a focus on neural machine translation systems, low-resource languages, and evaluation metrics.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "machine translation research between 2018 and 2022",
+        "Recent advancements in neural machine translation from 2018 to 2022",
+        "Survey of machine translation research trends from 2018 to 2022",
+        "Comparative analysis of machine translation models 2018-2022",
+        "Recent publications on machine translation evaluation metrics 2018-2022",
+        "State-of-the-art machine translation systems 2018-2022: a review"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [
+        "W18-6401",
+        "W18-6417",
+        "W18-6426",
+        "2022.wmt-1.1",
+        "2022.cl-3.6"
+      ],
+      "latency": {
+        "filter_parsing_ms": 5783.221006393433,
+        "query_reformulation_ms": 2611.4916801452637,
+        "vector_search_ms": 2966.4032459259033,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 11361.1159324646
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.7,
+          "explanation": "Most claims are supported by the abstracts, but minor details such as author names and specific years of publication for some papers are introduced without being present in the abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic, providing relevant and useful information about machine translation research between 2018 and 2022."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and additional information not present in the abstracts are included in the response."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.9,
+        "specificity": 0.85,
+        "domain_appropriateness": 0.95,
+        "overall": 0.87,
+        "explanation": "Reformulations generally preserve the original intent, capture different aspects, and use appropriate terminology, but some may be slightly too specific or narrow."
+      }
+    },
+    {
+      "query_id": "filter_04",
+      "category": "filtered",
+      "query": "award-winning papers on summarization",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "summarization",
+        "extractive summarization techniques",
+        "abstractive text summarization methods",
+        "automatic text condensation",
+        "information retrieval summarization algorithms",
+        "sentence compression and summarization"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "has_awards": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 402.3151397705078,
+        "query_reformulation_ms": 372.41077423095703,
+        "vector_search_ms": 3296.4890003204346,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 4071.2149143218994
+      }
+    },
+    {
+      "query_id": "filter_05",
+      "category": "filtered",
+      "query": "recent papers on prompt engineering",
+      "response_text": "**Recent advancements in prompt engineering and related areas** [1, 2, 3, 4, 5] have led to significant improvements in the performance and efficiency of large language models (LLMs). The papers below highlight innovative approaches to prompt engineering, data augmentation, and human-AI interaction.\n\n**Text Overlap: An LLM with Human-like Conversational Behaviors** [1] by JiWoo Kim et al. (2025) introduces a novel challenge in human-AI communication, characterized by real-time typing, diverse response types, and interruptions. The authors propose a chatbot, OverlapBot, designed to engage in text-based overlapping interactions, which increases turn exchanges and enhances communicative efficiency and engagement.\n\n**iPrOp: Interactive Prompt Optimization for Large Language Models with a Human in the Loop** [2] by Jiahui Li et al. (2025) presents an interactive prompt optimization approach that bridges manual prompt engineering and automatic prompt optimization. This approach empowers users to choose and refine prompts based on their individual preferences and needs, leading to improved task performance.\n\n**Data Augmentation using LLMs: Data Perspectives, Learning Paradigms and Challenges** [3] by Bosheng Ding et al. (2024) surveys the transformative impact of LLMs on data augmentation, particularly addressing unique challenges and opportunities in the context of natural language processing. The authors examine various strategies that utilize LLMs for data augmentation and highlight primary open challenges faced in this domain.\n\n**Automatic and Human-AI Interactive Text Generation (with a focus on Text Simplification and Revision)** [4] by Yao Dou et al. (2024) focuses on text-to-text generation, a class of natural language generation tasks that takes a piece of text as input and generates a revised version. The authors provide an overview of the state-of-the-art natural language generation research from four major aspects \u2013 Data, Models, Human-AI Collaboration, and Evaluation.\n\n**Mitigating Shortcut Learning via Smart Data Augmentation based on Large Language Model** [5] by Xinyi Sun et al. (2025) proposes a method of Smart Data Augmentation based on Large Language Models (SAug-LLM) to mitigate shortcut learning in LLMs. The authors leverage LLMs to autonomously identify shortcuts and generate their anti-shortcut counterparts, demonstrating an average performance improvement of 5.61% across various natural language processing tasks.\n\nThese papers demonstrate the importance of prompt engineering and data augmentation in enhancing the performance and efficiency of LLMs. They highlight innovative approaches to interactive prompt optimization, data augmentation, and human-AI interaction, which can be applied to various natural language processing tasks.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "prompt engineering",
+        "natural language generation techniques for text prompts",
+        "human-computer interaction design for conversational AI",
+        "language model training data augmentation strategies",
+        "conversational dialogue systems prompt optimization methods",
+        "text-based user interface design for chatbots and virtual assistants"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [
+        "2025.sicon-1.10",
+        "2025.acl-srw.18",
+        "2024.findings-acl.97",
+        "2024.acl-tutorials.2",
+        "2025.coling-main.543"
+      ],
+      "latency": {
+        "filter_parsing_ms": 5201.422691345215,
+        "query_reformulation_ms": 2642.991304397583,
+        "vector_search_ms": 3485.2888584136963,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 11329.702854156494
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, such as specific researcher names, publication years, and detailed descriptions of the papers' contents."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic of recent papers on prompt engineering, providing relevant and useful information on innovative approaches and advancements in the field."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some claims are not directly supported by the abstracts, such as specific author names and detailed method descriptions."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.6,
+        "diversity": 0.8,
+        "specificity": 0.7,
+        "domain_appropriateness": 0.9,
+        "overall": 0.75,
+        "explanation": "Reformulations generally preserve the intent, capture different aspects, and use appropriate terminology, but some are too broad or narrow, and a few stray from the original topic."
+      }
+    },
+    {
+      "query_id": "filter_06",
+      "category": "filtered",
+      "query": "papers by Vaswani from 2017",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "papers",
+        "academic publications",
+        "research papers in natural language processing",
+        "computational linguistics literature review",
+        "NLP research articles",
+        "linguistic studies scholarly papers"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true,
+          "authors": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 754.1868686676025,
+        "query_reformulation_ms": 1790.6148433685303,
+        "vector_search_ms": 3185.0221157073975,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 5729.82382774353
+      }
+    },
+    {
+      "query_id": "filter_07",
+      "category": "filtered",
+      "query": "Chinese language papers on word segmentation",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "word segmentation",
+        "morphological segmentation in NLP",
+        "word tokenization techniques in computational linguistics",
+        "language modeling for word boundary detection",
+        "unsupervised word segmentation algorithms",
+        "phonetic and orthographic cues for word splitting"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "language": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 6039.639949798584,
+        "query_reformulation_ms": 1738.3520603179932,
+        "vector_search_ms": 3259.1209411621094,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 11037.112951278687
+      }
+    },
+    {
+      "query_id": "filter_08",
+      "category": "filtered",
+      "query": "dialogue systems papers in the last 5 years",
+      "response_text": "Recent work on dialogue systems includes several papers that have made significant contributions to the field. \n\n**A Multimodal Dialogue System to Lead Consensus Building with Emotion-Displaying** [1] by Nozue et al. (2024) proposes a multimodal dialogue system that promotes consensus building between humans and avatars. The system employs a slot-filling strategy and emotional expression to guide discussions and influence users. This work demonstrates the potential of multimodal dialogue systems in achieving consensus building.\n\nIn a related effort, **Towards a Real-Time Multimodal Emotion Estimation Model for Dialogue Systems** [2] by Jiang (2024) focuses on developing a real-time multimodal emotion estimation model for dialogue systems. The author discusses the limitations of current multimodal dialogue corpora and affective computing models, and proposes constructing a human-human dialogue dataset containing synchronized multimodal information.\n\n**A Brief Survey of Textual Dialogue Corpora** [3] by Oliveira et al. (2022) provides a comprehensive survey of available textual dialogue corpora, highlighting their limitations and potential approaches for creating new corpora. This work is relevant to the development of dialogue systems, as high-quality corpora are essential for training and evaluating these systems.\n\n**Open-domain Dialogue Generation: What We Can Do, Cannot Do, And Should Do Next** [4] by Kann et al. (2022) offers an overview of recent advances in open-domain dialogue systems, as well as issues related to ethics, bias, and fairness. The authors outline important future challenges in the field, including the need for more diverse and inclusive dialogue systems.\n\nFinally, **Towards a Dialogue System That Can Take Interlocutors\u2019 Values into Account** [5] by Zenimoto (2024) presents a position paper on developing dialogue systems that can reflect the interlocutors' values and abilities. The author discusses the importance of understanding interlocutors' values and suggests topics for discussion regarding an SDS as a personal assistant for everyday use.\n\nThese papers demonstrate the ongoing efforts to improve dialogue systems, with a focus on multimodal interaction, emotional expression, and value-based dialogue. They highlight the need for high-quality corpora, diverse and inclusive dialogue systems, and a deeper understanding of interlocutors' values and abilities.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "dialogue systems",
+        "conversational AI systems",
+        "human-computer dialogue systems",
+        "natural language interaction systems",
+        "spoken dialogue systems and human-computer interaction",
+        "multimodal dialogue systems in NLP"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [
+        "2024.sigdial-1.57",
+        "2024.yrrsds-1.22",
+        "2022.lrec-1.135",
+        "2022.nlp4convai-1.13",
+        "2024.yrrsds-1.10"
+      ],
+      "latency": {
+        "filter_parsing_ms": 5707.305908203125,
+        "query_reformulation_ms": 2635.145902633667,
+        "vector_search_ms": 3450.2780437469482,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 11792.72985458374
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.7,
+          "explanation": "Most claims are supported by the abstracts, but minor details such as specific author names and years are introduced without direct support from the abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic by providing recent papers on dialogue systems from the last 5 years, along with a brief summary of each paper, making it highly relevant to the user's information need."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but some minor attribution errors and unverified claims are present, such as specific author names and details not mentioned in the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.9,
+        "specificity": 0.7,
+        "domain_appropriateness": 0.9,
+        "overall": 0.85,
+        "explanation": "Reformulations generally preserve the original intent, offer diverse perspectives, and use appropriate terminology, but some lack specificity, such as query 1, which is too broad."
+      }
+    },
+    {
+      "query_id": "paper_id_01",
+      "category": "paper_id",
+      "query": "2020.acl-main.747",
+      "response_text": "I couldn't find papers similar to **Unsupervised Cross-lingual Representation Learning at Scale**. Try a different paper ID or a text-based search.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "unsupervised cross-lingual representation learning transformer",
+        "multilingual language models commoncrawl data",
+        "cross-lingual transfer tasks xlm-r vs mbert",
+        "low-resource language performance xlm-r xlni mlqa ner",
+        "multilingual modeling vs monolingual modeling glue xnli"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 477.74529457092285,
+        "query_reformulation_ms": 6022.954940795898,
+        "vector_search_ms": 2109.591007232666,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 8610.291242599487
+      }
+    },
+    {
+      "query_id": "paper_id_02",
+      "category": "paper_id",
+      "query": "find papers similar to 2017.emnlp-main.523",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "similar papers",
+        "papers with comparable research topics",
+        "related research in natural language processing",
+        "similar studies on computational linguistics",
+        "papers with analogous methodologies",
+        "complementary works in NLP and linguistics"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 5819.052219390869,
+        "query_reformulation_ms": 348.7696647644043,
+        "vector_search_ms": 3119.391918182373,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 9287.213802337646
+      }
+    },
+    {
+      "query_id": "paper_id_03",
+      "category": "paper_id",
+      "query": "D14-1179",
+      "response_text": "I couldn't find paper **D14-1179** in the ACL Anthology database. Please check the paper ID and try again.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 1592.9131507873535,
+        "query_reformulation_ms": 0.0,
+        "vector_search_ms": 0.0,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 1592.9131507873535
+      }
+    },
+    {
+      "query_id": "paper_id_04",
+      "category": "paper_id",
+      "query": "2023.acl-long.1",
+      "response_text": "I couldn't find papers similar to **One Cannot Stand for Everyone! Leveraging Multiple User Simulators to train Task-oriented Dialogue Systems**. Try a different paper ID or a text-based search.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "task-oriented dialogue systems with multiple user simulators",
+        "multi-armed bandits for dialogue system optimization",
+        "user simulator adaptation for task-oriented dialogue",
+        "catastrophic forgetting in dialogue system training",
+        "multiwoz dataset for dialogue system evaluation"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 502.1960735321045,
+        "query_reformulation_ms": 14294.044971466064,
+        "vector_search_ms": 2939.7358894348145,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 17735.976934432983
+      }
+    },
+    {
+      "query_id": "paper_id_05",
+      "category": "paper_id",
+      "query": "what is related to 2019.naacl-main.423",
+      "response_text": "I couldn't find paper **2019.naacl-main.423** in the ACL Anthology database. Please check the paper ID and try again.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 606.3230037689209,
+        "query_reformulation_ms": 0.0,
+        "vector_search_ms": 0.0,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 606.3230037689209
+      }
+    },
+    {
+      "query_id": "paper_id_06",
+      "category": "paper_id",
+      "query": "P18-1238",
+      "response_text": "I couldn't find papers similar to **Conceptual Captions: A Cleaned, Hypernymed, Image Alt-text Dataset For Automatic Image Captioning**. Try a different paper ID or a text-based search.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "image captioning datasets",
+        "automatic image captioning using transformer",
+        "inception-resnetv2 for image captioning",
+        "conceptual captions vs ms-coco dataset",
+        "webpage-based image caption annotation"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 618.077278137207,
+        "query_reformulation_ms": 37837.79001235962,
+        "vector_search_ms": 2691.908836364746,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 41147.77612686157
+      }
+    },
+    {
+      "query_id": "comparative_01",
+      "category": "comparative",
+      "query": "compare BERT and GPT approaches to language understanding",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "BERT and GPT approaches to language understanding",
+        "Language understanding using transformer-based architectures like BERT and GPT",
+        "Comparative analysis of BERT and GPT models for natural language processing tasks",
+        "Deep learning approaches to language comprehension: a study on BERT and GPT-3",
+        "BERT and GPT-based models for semantic analysis and language interpretation",
+        "Applying pre-trained language models (PLMs) such as BERT and GPT to language understanding and generation"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 753.9148330688477,
+        "query_reformulation_ms": 733.7889671325684,
+        "vector_search_ms": 2901.6590118408203,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 4389.362812042236
+      }
+    },
+    {
+      "query_id": "comparative_02",
+      "category": "comparative",
+      "query": "differences between extractive and abstractive summarization",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "extractive and abstractive summarization",
+        "Extractive vs abstractive text summarization techniques",
+        "Automatic summarization methods using machine learning",
+        "Summarization approaches in natural language processing",
+        "Comparative study of extractive and abstractive summarization",
+        "Deep learning models for abstractive text summarization"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 469.07877922058105,
+        "query_reformulation_ms": 377.58612632751465,
+        "vector_search_ms": 3161.025047302246,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 4007.689952850342
+      }
+    },
+    {
+      "query_id": "comparative_03",
+      "category": "comparative",
+      "query": "transformer architecture compared to LSTM for sequence labeling",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "transformer architecture compared to LSTM for sequence labeling",
+        "sequence labeling models: transformer vs LSTM",
+        "comparative study of transformer and LSTM architectures for NLP tasks",
+        "evaluation of transformer and recurrent neural network (RNN) models for sequence labeling",
+        "transformer vs traditional RNN architectures in natural language processing",
+        "sequence classification and tagging using transformer and LSTM networks: a comparative analysis"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 469.9749946594238,
+        "query_reformulation_ms": 485.1677417755127,
+        "vector_search_ms": 3169.616222381592,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 4124.758958816528
+      }
+    },
+    {
+      "query_id": "comparative_04",
+      "category": "comparative",
+      "query": "comparison of subword tokenization methods BPE sentencepiece",
+      "response_text": "**Comparison of Subword Tokenization Methods: BPE and SentencePiece**\n\nRecent work has focused on evaluating and improving subword tokenization methods, particularly BPE (Byte Pair Encoding) and SentencePiece. The following papers provide insights into the effectiveness of these methods and their limitations.\n\n**Assessing the Importance of Frequency versus Compositionality for Subword-based Tokenization in NMT** [1] by Benoist Wolleb et al. (2023) proposes a tokenization approach that separates frequency from compositionality using Huffman coding. Experiments show that frequency alone accounts for approximately 90% of the BLEU scores reached by BPE, suggesting that compositionality has less importance than previously thought.\n\n**Analyzing Cognitive Plausibility of Subword Tokenization** [2] by Lisa Beinborn et al. (2023) presents a new evaluation paradigm that focuses on the cognitive plausibility of subword tokenization. The study compares three tokenization algorithms across several languages and vocabulary sizes, finding that the Unigram algorithm yields less cognitively plausible tokenization behavior.\n\n**A Vocabulary-Free Multilingual Neural Tokenizer for End-to-End Task Learning** [3] by Md Mofijul Islam et al. (2022) proposes a vocabulary-free neural tokenizer that allows end-to-end task learning. The tokenizer is pre-trained on a multilingual corpus and shows improved performance on multilingual and code-switching tasks, particularly in low-resource languages.\n\n**MANTa: Efficient Gradient-Based Tokenization for End-to-End Robust Language Modeling** [4] by Nathan Godey et al. (2022) proposes a differentiable tokenizer trained end-to-end with the language model. The resulting system offers a trade-off between the expressiveness of byte-level models and the speed of models trained using subword tokenization.\n\n**Where are we Still Split on Tokenization?** [5] by Rob van der Goot (2024) evaluates the performance of tokenization on 122 languages in 20 different scripts. The study shows that tokenization performance is mainly dependent on the amount and consistency of annotated data, and that the task can be considered solved for Latin languages in in-dataset settings.\n\nIn summary, these papers highlight the importance of frequency in subword tokenization, the limitations of compositionality, and the potential of vocabulary-free neural tokenizers. They also demonstrate the need for more robust and explainable tokenization methods, particularly in low-resource languages and cross-dataset setups.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "subword tokenization methods comparison",
+        "Comparison of subword tokenization techniques in NLP",
+        "Subword tokenization methods evaluation in machine translation",
+        "Survey of subword tokenization approaches for language modeling",
+        "Subword tokenization vs wordpiece tokenization in deep learning",
+        "Assessment of subword tokenization methods for text classification tasks"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2023.eamt-1.14",
+        "2023.emnlp-main.272",
+        "2022.repl4nlp-1.10",
+        "2022.findings-emnlp.207",
+        "2024.findings-eacl.9"
+      ],
+      "latency": {
+        "filter_parsing_ms": 470.95298767089844,
+        "query_reformulation_ms": 384.11903381347656,
+        "vector_search_ms": 2756.9739818573,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 3612.046003341675
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, and does not accurately represent the content of the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 0.7,
+          "explanation": "The response provides relevant information about subword tokenization methods, including BPE and SentencePiece, but goes off on tangents by discussing other tokenization algorithms and methods, rather than directly comparing BPE and SentencePiece."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and ungrounded claims are present, such as specific results and author names not mentioned in the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.7,
+        "specificity": 0.9,
+        "domain_appropriateness": 0.9,
+        "overall": 0.8,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects, and use appropriate terminology, but some may be slightly too specific or narrow."
+      }
+    },
+    {
+      "query_id": "comparative_05",
+      "category": "comparative",
+      "query": "rule-based versus neural approaches to machine translation",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "machine translation",
+        "Automated language translation",
+        "Statistical machine translation techniques",
+        "Neural network based translation systems",
+        "Cross-lingual text generation methods",
+        "Deep learning approaches to machine translation"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 434.1461658477783,
+        "query_reformulation_ms": 379.3647289276123,
+        "vector_search_ms": 3122.0810413360596,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 3935.59193611145
+      }
+    },
+    {
+      "query_id": "comparative_06",
+      "category": "comparative",
+      "query": "advantages of pre-training over training from scratch for NLP",
+      "response_text": "**Advantages of Pre-training over Training from Scratch for NLP**\n\nRecent work has highlighted the benefits of pre-training language models over training from scratch for NLP tasks [1, 2]. Pre-trained models have become the backbone for many state-of-the-art NLP results, and their exceptional downstream performance can be attributed to several factors.\n\n**Parameter Efficiency and Adapter Modules**\n\nOne key advantage of pre-training is its parameter efficiency. **Revisiting Pretraining with Adapters** [1] by Seungwon Kim et al. (2021) explores the use of adapter modules, a parameter-efficient approach to transfer learning. The authors find that adapter-based pretraining achieves comparable results to task-specific pretraining while using a fraction of the overall trainable parameters. This suggests that pre-training can be a more efficient and effective approach than training from scratch.\n\n**Emerging Pre-training Methods and Parameter Efficiency**\n\n**Recent Advances in Pre-trained Language Models** [2] by Cheng-Han Chiang et al. (2022) provides a comprehensive introduction to pre-trained language models, including emerging pre-training methods that enable PLMs to perform diverse downstream tasks. The authors highlight the importance of parameter efficiency in pre-training, which is essential for adapting pre-trained models to downstream tasks.\n\n**Flaws in Pre-Trained NLP Models**\n\nWhile pre-training has its advantages, **Automatic Analysis of Flaws in Pre-Trained NLP Models** [3] by Richard Eckart de Castilho (2016) highlights the importance of evaluating the quality of pre-trained models. The author's analysis of 274 pre-trained models for six NLP tools reveals potential causes of problems, such as encoding, tokenization, normalization, and change over time.\n\n**Adapting Pretrained Representations**\n\n**To Tune or Not to Tune? Adapting Pretrained Representations to Diverse Tasks** [4] by Matthew E. Peters et al. (2019) explores how to best adapt pre-trained models to a given target task. The authors find that the relative performance of fine-tuning vs. feature extraction depends on the similarity of the pretraining and target tasks.\n\n**Benefits of Pretraining on Resource-Rich Tasks**\n\nFinally, **To Pretrain or Not to Pretrain: Examining the Benefits of Pretrainng on Resource Rich Tasks** [5] by Sinong Wang et al. (2020) examines the benefits of pretraining on resource-rich tasks. The authors show that as the number of training examples grows, the accuracy gap between fine-tuning BERT-based models and training vanilla LSTM from scratch narrows to within 1%.\n\nIn conclusion, these papers highlight the advantages of pre-training over training from scratch for NLP tasks, including parameter efficiency, emerging pre-training methods, and adapting pre-trained models to downstream tasks. While pre-training has its benefits, it is essential to evaluate the quality of pre-trained models and adapt them to the specific task at hand.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "advantages of pre-training over training from scratch for NLP",
+        "Comparative study of pre-trained language models vs. from-scratch NLP training",
+        "Benefits of transfer learning in NLP: pre-training vs. scratch training",
+        "Effectiveness of pre-trained word embeddings in NLP tasks: a review",
+        "Analysis of training time and accuracy trade-offs in pre-trained vs. scratch-trained NLP models",
+        "Impact of pre-training on NLP model generalizability and adaptability"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2021.repl4nlp-1.11",
+        "2022.aacl-tutorials.2",
+        "W16-5203",
+        "W19-4302",
+        "2020.acl-main.200"
+      ],
+      "latency": {
+        "filter_parsing_ms": 1609.6408367156982,
+        "query_reformulation_ms": 2840.301990509033,
+        "vector_search_ms": 2923.557996749878,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 7373.500823974609
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.7,
+          "explanation": "Most claims are supported by the abstracts, but minor details such as specific author names and years are introduced without direct support from the abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic, providing relevant information on the advantages of pre-training over training from scratch for NLP tasks, and stays focused on the topic."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some claims are not directly supported by the abstracts, such as specific author names and details."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.9,
+        "diversity": 0.8,
+        "specificity": 0.85,
+        "domain_appropriateness": 0.95,
+        "overall": 0.87,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects, and use appropriate NLP terminology, but some may be slightly narrower or more specific than the original query."
+      }
+    },
+    {
+      "query_id": "temporal_01",
+      "category": "temporal",
+      "query": "how has neural machine translation evolved since 2014",
+      "response_text": "The evolution of neural machine translation (NMT) since 2014 has been a significant area of research in the field of machine translation. Recent work has focused on improving the performance and efficiency of NMT systems.\n\n**Practical Neural Machine Translation** [1] by Rico Sennrich and Barry Haddow (2017) provides a comprehensive overview of NMT, covering its theoretical foundations, components of state-of-the-art systems, and practical advice for building NMT systems. This tutorial aims to help researchers and practitioners working with NMT.\n\nBuilding on the success of NMT, **Neural System Combination for Machine Translation** [2] by Long Zhou et al. (2017) proposes a neural system combination framework that leverages multi-source NMT to combine the advantages of both NMT and statistical machine translation (SMT). The experiments show significant improvements over the best single system output and state-of-the-art traditional system combination methods.\n\nThe development of NMT systems has continued to advance, with **The IIIT-H Gujarati-English Machine Translation System for WMT19** [3] by Vikrant Goyal and Dipti Misra Sharma (2019) demonstrating the effectiveness of multilingual neural MT models in improving BLEU scores for low-resource language pairs like Gujarati-English.\n\nIn addition, **The JHU Machine Translation Systems for WMT 2018** [4] by Philipp Koehn et al. (2018) reports on the efforts of the Johns Hopkins University to develop neural machine translation systems for the shared task for news translation, highlighting the importance of iterative back-translation and fine-tuning on test sets from prior years.\n\nLastly, **Human or Neural Translation?** [5] by Shivendra Bhardwaj et al. (2020) investigates whether distinguishing machine from human translations is still feasible, demonstrating the effectiveness of transfer-based deep-learning classifiers in distinguishing between human and neural translations.\n\nOverall, these papers demonstrate the continued advancements in NMT research, with a focus on improving performance, efficiency, and adaptability. The development of multilingual neural MT models and system combination frameworks has shown significant improvements in machine translation quality, while the investigation into distinguishing machine from human translations highlights the importance of understanding the limitations and capabilities of NMT systems.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "neural machine translation evolution",
+        "machine translation advancements neural networks",
+        "evolution of neural machine translation systems",
+        "deep learning applications neural machine translation",
+        "neural machine translation architectures comparison",
+        "historical development neural machine translation techniques"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": false
+        },
+        "filter_match": false
+      },
+      "retrieved_paper_ids": [
+        "E17-5002",
+        "P17-2060",
+        "W19-5316",
+        "W18-6417",
+        "2020.coling-main.576"
+      ],
+      "latency": {
+        "filter_parsing_ms": 526.2978076934814,
+        "query_reformulation_ms": 2455.2083015441895,
+        "vector_search_ms": 3382.1969032287598,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 6363.703012466431
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces many unsupported details, authors, years, and findings not present in the abstracts, such as specific paper titles, authors, and years, which are not mentioned in the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the evolution of neural machine translation since 2014, providing relevant information and examples of advancements in the field."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some claims are not directly supported by the abstracts, such as specific details about the experiments and results."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.7,
+        "specificity": 0.9,
+        "domain_appropriateness": 0.9,
+        "overall": 0.8,
+        "explanation": "Reformulations generally preserve the original intent, capture different aspects, and use appropriate terminology, but some lack specificity and diversity."
+      }
+    },
+    {
+      "query_id": "temporal_02",
+      "category": "temporal",
+      "query": "recent advances in question answering 2022 2023",
+      "response_text": "Recent advances in question answering have been explored in various papers, particularly in the areas of conversational QA, open-domain QA, and unified QA. Here's a summary of the relevant papers:\n\n**Conversational Question Answering**\n\n* **Ditch the Gold Standard: Re-evaluating Conversational Question Answering** [1] by Huihan Li et al. (2022) highlights the limitations of current conversational QA benchmarks, which rely on pre-collected human-human conversations. The authors conduct a large-scale human evaluation of state-of-the-art conversational QA systems and propose a question rewriting mechanism based on predicted history to improve automatic evaluations.\n* **Open-Domain Conversational Question Answering with Historical Answers** [5] by Hung-Chieh Fang et al. (2022) proposes a model, ConvADR-QA, that leverages historical answers to boost retrieval performance and achieve better answering performance in conversational QA.\n\n**Open-Domain Question Answering**\n\n* **MoQA: Benchmarking Multi-Type Open-Domain Question Answering** [2] by Howard Yen et al. (2023) presents a benchmark for open-domain QA that requires building one system to provide short, medium, long, and yes/no answers to different questions. The authors reveal unique findings in multi-type open-domain QA and call for more effort into building versatile open-domain QA models.\n\n**Unified Question Answering**\n\n* **Few-shot Unified Question Answering: Tuning Models or Prompts?** [3] by Srijan Bansal et al. (2023) explores the potential of two paradigms of tuning, model and prompts, for unified QA under a low-resource setting. The authors provide an exhaustive analysis of their applicability using 16 QA datasets and show that prompt tuning can perform as well as model tuning in a few-shot setting with a good initialization.\n\n**Arabic Question Answering**\n\n* **Qur\u2019an QA 2023 Shared Task: Overview of Passage Retrieval and Reading Comprehension Tasks over the Holy Qur\u2019an** [4] by Rana Malhas et al. (2023) presents an overview of the second version of the Qur\u2019an QA shared task, which aims to encourage state-of-the-art research on Arabic passage retrieval and machine reading comprehension on the Holy Qur\u2019an.\n\nThese papers demonstrate recent advances in question answering, particularly in the areas of conversational QA, open-domain QA, and unified QA. They highlight the importance of evaluating conversational QA systems using human evaluations, the need for building versatile open-domain QA models, and the potential of prompt tuning for unified QA under low-resource settings.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "recent advances in question answering 2022 2023",
+        "Recent advancements in question answering systems 2022-2023",
+        "State-of-the-art question answering models 2022 and 2023",
+        "Recent research on question answering tasks 2022-2023",
+        "Question answering systems and models 2022, 2023, and beyond",
+        "Advances in conversational AI question answering 2022-2023"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [
+        "2022.acl-long.555",
+        "2023.dialdoc-1.2",
+        "2023.findings-emnlp.550",
+        "2023.arabicnlp-1.76",
+        "2022.findings-aacl.30"
+      ],
+      "latency": {
+        "filter_parsing_ms": 444.86308097839355,
+        "query_reformulation_ms": 2502.8560161590576,
+        "vector_search_ms": 3049.8228073120117,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 5997.541904449463
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, such as specific paper titles, author names, and detailed descriptions of the papers' contents."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic of recent advances in question answering for 2022 and 2023, providing relevant and useful information on various areas of QA research."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but some details in the response, such as specific author names and detailed methodologies, are not present in the provided paper abstracts, indicating minor attribution errors and potential over-interpretation of the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.9,
+        "diversity": 0.8,
+        "specificity": 0.85,
+        "domain_appropriateness": 0.95,
+        "overall": 0.87,
+        "explanation": "Reformulations generally preserve the original intent, offer diverse perspectives, and use appropriate terminology, but some may be slightly broader or narrower than ideal."
+      }
+    },
+    {
+      "query_id": "temporal_03",
+      "category": "temporal",
+      "query": "trends in multilingual NLP over the past decade",
+      "response_text": "**Multilingual NLP Trends Over the Past Decade**\n\nRecent work on multilingual NLP has focused on addressing the disparity in language resources, with a particular emphasis on low-resource languages. This trend is reflected in papers such as **A Survey of NLP Progress in Sino-Tibetan Low-Resource Languages** [4] by Shuheng Liu and Michael Best (2025), which highlights the lack of attention given to low-resource languages in NLP research.\n\nIn response to this issue, researchers have proposed various solutions, including **Most NLG is Low-Resource: here\u2019s what we can do about it** [5] by David M. Howcroft and Dimitra Gkatzia (2022), which argues that developing methods and resources for low-resource settings is essential. This paper also discusses current approaches to low-resource NLG and proposes promising avenues for future work.\n\nAnother area of focus has been on creating and validating multilingual corpora, such as **cEnTam: Creation and Validation of a New English-Tamil Bilingual Corpus** [1] by Sanjanasri JP et al. (2020), which demonstrates the importance of aligned bilingual and multilingual corpora for applications like machine translation and cross-lingual information retrieval.\n\nFurthermore, **The Zeno\u2019s Paradox of \u2018Low-Resource\u2019 Languages** [3] by Hellina Hailu Nigatu et al. (2024) qualitatively analyzed 150 papers from the ACL Anthology to understand how NLP papers define and study 'low-resource' languages. This paper highlights the need for explicit definitions of the terminology and provides grounding for the different axes to consider when connoting a language as low-resource.\n\nAdditionally, **Thesis: Model-based Evaluation of Multilinguality** [2] by Jannis Vamvas (2024) extends the methodological toolbox for evaluating the ability of NLP systems to handle multiple languages, with a focus on neural machine translation (NMT).\n\nOverall, these papers reflect the growing recognition of the importance of multilingual NLP and the need to address the disparity in language resources. By developing methods and resources for low-resource settings and creating and validating multilingual corpora, researchers can make progress in this area and improve the representation of low-resource languages in NLP research.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "multilingual NLP",
+        "Cross-lingual Natural Language Processing",
+        "Multilingual Language Understanding Models",
+        "NLP for Low-Resource Languages",
+        "Language Agnostic Text Analysis Techniques",
+        "Zero-Shot Transfer Learning in NLP"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": false
+        },
+        "filter_match": false
+      },
+      "retrieved_paper_ids": [
+        "2020.bucc-1.10",
+        "2024.eamt-1.4",
+        "2024.emnlp-main.983",
+        "2025.naacl-long.396",
+        "2022.gem-1.29"
+      ],
+      "latency": {
+        "filter_parsing_ms": 459.37299728393555,
+        "query_reformulation_ms": 2556.288719177246,
+        "vector_search_ms": 3787.764310836792,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 6803.426027297974
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, such as specific paper titles, authors, and years, which are not mentioned in the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic, providing relevant and useful information on trends in multilingual NLP over the past decade."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some unverified claims are present, such as specific author names and dates not mentioned in the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.6,
+        "diversity": 0.8,
+        "specificity": 0.7,
+        "domain_appropriateness": 0.9,
+        "overall": 0.75,
+        "explanation": "Reformulations generally preserve the intent, capture different aspects, and use appropriate terminology, but some lack specificity and do not fully capture the 'trends over the past decade' aspect."
+      }
+    },
+    {
+      "query_id": "temporal_04",
+      "category": "temporal",
+      "query": "latest research on hallucination in language models",
+      "response_text": "**Recent research on hallucination in language models** has gained significant attention, with several studies focusing on detection, mitigation, and understanding the underlying mechanisms of this phenomenon.\n\n**FactCheckmate: Preemptively Detecting and Mitigating Hallucinations in LMs** [1] by Deema Alnuhait et al. (2025) presents a novel approach to detecting and mitigating hallucinations in language models. FactCheckmate learns a classifier that predicts whether the model will hallucinate based on its internal representations, and intervenes by adjusting the model's hidden states to produce more factual outputs. The study demonstrates the effectiveness of FactCheckmate, achieving over 70% preemptive detection accuracy and improving factual output by 34.4%.\n\n**HalluSafe at SemEval-2024 Task 6** [2] by Zahra Rahimi et al. (2024) proposes an NLI-based approach to detect hallucinations and overgeneration mistakes in language models. The study evaluates the model's ability to detect hallucinated outputs and achieves 75.93% and 78.33% accuracy for the model-aware and model-agnostic tracks, respectively.\n\n**Towards Reverse Engineering of Language Models: A Survey** [3] by Xinpeng Ti et al. (2025) provides an in-depth analysis of reverse engineering attacks on language models. While not directly focused on hallucination, the study highlights the vulnerabilities of language models to different types of attacks and offers a holistic perspective for developing new protective strategies.\n\n**Tutorial Proposal: Hallucination in Large Language Models** [4] by Vipula Rawte et al. (2024) aims to introduce the emerging realm of hallucination in LLMs, exploring key aspects such as benchmarking, detection, and mitigation techniques. This tutorial provides valuable insights for researchers new to the field.\n\n**SLPL SHROOM at SemEval2024 Task 06** [5] by Pouya Fallah et al. (2024) conducts a comprehensive study on models' ability to detect hallucination in three SemEval2024 Task 6 tasks. The study evaluates two methods, semantic similarity and an ensemble of language models, and highlights the challenges of hallucination detection.\n\nThese papers collectively contribute to our understanding of hallucination in language models, with a focus on detection, mitigation, and reverse engineering. FactCheckmate and HalluSafe demonstrate effective approaches to detecting and mitigating hallucinations, while the tutorial and survey papers provide valuable insights for researchers.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "hallucination in language models",
+        "adversarial attacks on language models",
+        "language model deception detection techniques",
+        "mitigating factual errors in conversational AI",
+        "evaluating the reliability of language generation models",
+        "detecting and preventing language model fabrications"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [
+        "2025.findings-emnlp.663",
+        "2024.semeval-1.22",
+        "2025.findings-emnlp.395",
+        "2024.lrec-tutorials.11",
+        "2024.semeval-1.167"
+      ],
+      "latency": {
+        "filter_parsing_ms": 604.4731140136719,
+        "query_reformulation_ms": 2688.8158321380615,
+        "vector_search_ms": 3576.653003692627,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 6869.94194984436
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, such as specific study results, author names, and publication years."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic, providing relevant and useful information on the latest research about hallucination in language models."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but some details in the response, such as specific accuracy metrics and author names, are not present in the provided paper abstracts, indicating minor attribution errors and potential over-interpretation of the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.7,
+        "diversity": 0.8,
+        "specificity": 0.9,
+        "domain_appropriateness": 0.9,
+        "overall": 0.8,
+        "explanation": "Reformulations generally preserve the original intent, offer diverse perspectives, and use appropriate terminology, but some queries slightly deviate from the focus on 'latest research' and 'hallucination'."
+      }
+    },
+    {
+      "query_id": "temporal_05",
+      "category": "temporal",
+      "query": "evolution of word representation from word2vec to contextual embeddings",
+      "response_text": "The evolution of word representation from word2vec to contextual embeddings is a significant area of research in natural language processing. Recent work has focused on improving the representation of words in different contexts, and several papers have made notable contributions to this field.\n\n**Dynamic Contextualized Word Embeddings** [1] by Valentin Hofmann, Janet Pierrehumbert, and Hinrich Sch\u00fctze (2021) introduces a new approach to representing words as a function of both linguistic and extralinguistic context. This is achieved by using a pre-trained language model (PLM) to model time and social space jointly. The authors highlight the potential applications of this approach in various NLP tasks involving semantic variability.\n\nIn contrast, **Learning to Generate Word Representations using Subword Information** [3] by Yeachan Kim, Kang-Min Kim, and Ji-Min Lee (2018) focuses on learning word representations from characters. This approach is particularly useful for dealing with out-of-vocabulary (OOV) words and morphologically rich languages. The authors demonstrate the efficacy of their model through intrinsic and extrinsic tasks, achieving significant improvements over strong baseline models.\n\n**Deconstructing word embedding algorithms** [4] by Kian Kenyon-Dean, Edward Newell, and Jackie Chi Kit Cheung (2020) provides a retrospective analysis of well-known word embedding algorithms, including Word2vec and GloVe. The authors deconstruct these algorithms into a common form, unveiling common conditions required for making performant word embeddings. This work provides a basis for more informed development of future models.\n\n**Embeddings in Natural Language Processing** [5] by Jose Camacho-Collados and Mohammad Taher Pilehvar (2020) provides a high-level synthesis of main embedding techniques in NLP, covering conventional word embeddings, sense-specific and graph alternatives, and contextualized representations. This tutorial provides an overview of the trending contextualized representations, such as ELMo and BERT, and explains their potential and impact in NLP.\n\nMore recently, **A Comprehensive Survey of Sentence Representations: From the BERT Epoch to the CHATGPT Era and Beyond** [2] by Abhinav Ramesh Kashyap, Thanh-Tung Nguyen, and Viktor Schlegel (2024) provides an overview of the different methods for learning sentence representations, focusing on deep learning models. The authors highlight the key contributions and challenges in this area, providing a systematic organization of the literature.\n\nIn summary, these papers demonstrate the evolution of word representation from word2vec to contextual embeddings, highlighting the importance of context and subword information in improving word representations. The recent work on dynamic contextualized word embeddings and sentence representations showcases the progress made in this area, with a focus on deep learning models and contextualized representations.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "word representation, evolution, word2vec, contextual embeddings",
+        "word representation learning techniques",
+        "evolution of word embeddings in NLP",
+        "contextualized word embeddings vs static word embeddings",
+        "deep learning models for word representation",
+        "dynamic word representation methods in natural language processing"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2021.acl-long.542",
+        "2024.eacl-long.104",
+        "C18-1216",
+        "2020.emnlp-main.681",
+        "2020.coling-tutorials.2"
+      ],
+      "latency": {
+        "filter_parsing_ms": 495.3279495239258,
+        "query_reformulation_ms": 2453.6449909210205,
+        "vector_search_ms": 2965.9790992736816,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 5914.952039718628
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces many fabricated details, authors, years, and findings not present in the abstracts, such as specific paper titles, authors, and years, as well as detailed descriptions of the papers' contents."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the evolution of word representation from word2vec to contextual embeddings, providing relevant and useful information with a clear focus on the topic."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some unverified claims are present, such as specific author names and details not mentioned in the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.7,
+        "specificity": 0.9,
+        "domain_appropriateness": 0.9,
+        "overall": 0.8,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects, and use appropriate terminology, but some lack diversity and specificity."
+      }
+    },
+    {
+      "query_id": "temporal_06",
+      "category": "temporal",
+      "query": "progress in coreference resolution over the years",
+      "response_text": "**Progress in Coreference Resolution over the Years**\n\nRecent work on coreference resolution has shown significant advancements in the field. Let's take a look at some key papers that highlight the progress made over the years.\n\n**Early Work: Error Analysis and Latent Structures**\nIn 2008, Olga Uryupina's work, **Error Analysis for Learning-based Coreference Resolution** [1], presented a detailed error analysis to understand the issues raised by corpus-based approaches to coreference resolution. This work aimed to improve the performance of coreference resolution engines. Building on this, Sebastian Martschat and Michael Strube's 2015 paper, **Latent Structures for Coreference Resolution** [2], proposed a unified representation of different approaches to coreference resolution in terms of the structure they operate on. This framework evaluated the performance of various approaches and highlighted differences and similarities.\n\n**Recent Advances: End-to-end Multilingual Coreference Resolution**\nIn 2022, Ond\u0159ej Pra\u017e\u00e1k and Miloslav Konopik's work, **End-to-end Multilingual Coreference Resolution with Mention Head Prediction** [3], described an approach to the CRAC 2022 Shared Task on Multilingual Coreference Resolution. Their model achieved state-of-the-art results, particularly with mention head prediction and integration of dependency information.\n\n**State-of-the-Art Analysis and Entity Coreference Resolution**\nIn 2020, Jing Lu and Vincent Ng's paper, **Conundrums in Entity Coreference Resolution: Making Sense of the State of the Art** [4], presented an empirical analysis of state-of-the-art resolvers to provide a better understanding of the state of the art and directions for future research. This work aimed to address the lack of understanding of what has been improved in entity coreference resolution.\n\n**Language-Specific Coreference Resolution**\nLastly, Art\u016brs Znoti\u0146\u0161 and P\u0113teris Paikens' 2014 paper, **Coreference Resolution for Latvian** [5], described an implementation of coreference resolution tools for the Latvian language. This work provided a starting ground for further experiments and generated a reference baseline for future coreference resolvers.\n\nIn summary, these papers demonstrate the progress made in coreference resolution over the years, from early work on error analysis and latent structures to recent advances in end-to-end multilingual coreference resolution and state-of-the-art analysis.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "progress in coreference resolution over the years",
+        "Recent advancements in coreference resolution techniques",
+        "Coreference resolution performance evaluation and improvement over time",
+        "State-of-the-art methods for coreference resolution in natural language processing",
+        "Temporal analysis of coreference resolution systems and their accuracy",
+        "Evolution of coreference resolution algorithms and their impact on NLP applications"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "L08-1049",
+        "Q15-1029",
+        "2022.crac-mcr.3",
+        "2020.emnlp-main.536",
+        "L14-1570"
+      ],
+      "latency": {
+        "filter_parsing_ms": 572.141170501709,
+        "query_reformulation_ms": 2550.328016281128,
+        "vector_search_ms": 3915.40789604187,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 7037.877082824707
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, such as specific paper titles, authors, and years, which are not mentioned in the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic, providing a clear overview of progress in coreference resolution over the years, with relevant papers and key findings."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and additional information not present in the abstracts are included in the response."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.9,
+        "diversity": 0.8,
+        "specificity": 0.85,
+        "domain_appropriateness": 0.95,
+        "overall": 0.87,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects, and use appropriate terminology, but some may be slightly narrower or broader than ideal."
+      }
+    },
+    {
+      "query_id": "irrelevant_01",
+      "category": "irrelevant",
+      "query": "what is the weather today",
+      "response_text": "This system is designed to help you search academic papers. It can assist with finding research topics, methods, techniques, algorithms, models, and more. If you're looking for information on a specific topic or want to search academic papers, feel free to ask!",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "irrelevant_02",
+      "category": "irrelevant",
+      "query": "recipe for chocolate cake",
+      "response_text": "This system is designed to help you search for academic papers. It can assist with topics like research methods, techniques, and concepts. If you're looking for a recipe, you might want to try a cooking website or a search engine like Google.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "irrelevant_03",
+      "category": "irrelevant",
+      "query": "hi how are you doing",
+      "response_text": "This system is designed to help you search academic papers. Please ask a question or provide a topic related to research, and I'll do my best to assist you.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "irrelevant_04",
+      "category": "irrelevant",
+      "query": "who won the world cup in 2022",
+      "response_text": "This system is designed to help you search academic papers. It can assist with topics like research methods, author searches, and technical questions. Please try rephrasing your query to focus on academic papers.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "irrelevant_05",
+      "category": "irrelevant",
+      "query": "tell me a joke",
+      "response_text": "This system is designed to help you search for academic papers. It can assist with finding research topics, methods, techniques, algorithms, models, and more. Please try rephrasing your query to focus on a specific research area or question.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "irrelevant_06",
+      "category": "irrelevant",
+      "query": "what is the meaning of life",
+      "response_text": "This system is designed to help you search academic papers. It can assist with topics like research methods, techniques, and concepts in various fields. If you're looking for information on a specific topic, feel free to ask, and I'll do my best to help.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "irrelevant_07",
+      "category": "irrelevant",
+      "query": "best restaurants in San Francisco",
+      "response_text": "This system is designed to help you search academic papers. It can assist with topics like research methods, author searches, and technical questions. If you're looking for information on restaurants, you might want to try a different search engine or a review website.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "irrelevant_08",
+      "category": "irrelevant",
+      "query": "hello",
+      "response_text": "This system is designed to help you search academic papers. Please ask a question or provide a topic related to research, such as a research question, a specific technique, or a topic of interest.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "edge_01",
+      "category": "edge_case",
+      "query": "trasformers attenton",
+      "response_text": "**Transformers and Attention Mechanisms: Recent Advances**\n\nThe user's query on \"transformers attention\" has led to a collection of papers that explore various aspects of attention mechanisms in transformers. Here's a summary of the key findings from each paper:\n\n**Efficient Attention Mechanisms**\n\n* **Symmetric Dot-Product Attention for Efficient Training of BERT Language Models** [1] by Courtois et al. (2024) proposes an alternative compatibility function for the self-attention mechanism, leading to a symmetric dot-product attention. This approach achieves a score of 79.36 on the GLUE benchmark, reduces the number of trainable parameters by 6%, and halves the number of training steps required before convergence.\n* **Conv-Basis: A New Paradigm for Efficient Attention Inference and Gradient Computation in Transformers** [4] by Liang et al. (2025) develops an efficient approximation method for attention computation using convolution matrices, achieving nearly linear time complexity. This approach enables fast attention computation during inference and gradient computation during training.\n\n**Denoising Attention**\n\n* **Integral Transformer: Denoising Attention, Not Too Much Not Too Little** [2] by Kobyzev et al. (2025) proposes a novel self-attention mechanism that denoises attention by integrating signals sampled from the logit distribution. This approach outperforms vanilla, Cog, and Differential attention variants on rigorous knowledge and reasoning benchmarks.\n\n**Human Attention and Anaphora Resolution**\n\n* **Transformer Attention vs Human Attention in Anaphora Resolution** [3] by Kozlova et al. (2024) conducts a quantitative analysis of human attention compared to neural attention mechanisms in the context of anaphora resolution. The results reveal distinctions in anaphora resolution processing, offering promising prospects for improving the performance of neural networks.\n\n**Attention Pruning**\n\n* **Data-Informed Global Sparseness in Attention Mechanisms for Deep Neural Networks** [5] by Rugina et al. (2024) proposes Attention Pruning (AP), a framework that observes attention patterns in a fixed dataset and generates a global sparseness mask. AP saves 90% of attention computation for language modeling and about 50% for machine translation and GLUE tasks, maintaining result quality.\n\nThese papers demonstrate the ongoing efforts to improve and optimize attention mechanisms in transformers, with a focus on efficiency, denoising, and understanding human attention. The results from these papers can be used to enhance the performance of neural networks in various NLP tasks.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "transformers attention",
+        "self-attention mechanisms in deep learning",
+        "multi-head attention in transformer models",
+        "contextualized embeddings using attention-based architectures",
+        "transformer encoder-decoder attention patterns analysis",
+        "attention-weighted neural machine translation models"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2024.findings-acl.476",
+        "2025.emnlp-main.118",
+        "2024.cmcl-1.10",
+        "2025.findings-emnlp.363",
+        "2024.lrec-main.392"
+      ],
+      "latency": {
+        "filter_parsing_ms": 4467.962980270386,
+        "query_reformulation_ms": 2462.7339839935303,
+        "vector_search_ms": 3475.857973098755,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 10406.55493736267
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, and does not accurately represent the content of the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic of 'transformers attention' by providing a summary of recent advances in attention mechanisms in transformers, covering various aspects such as efficient attention, denoising attention, and human attention."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but some details like specific scores or results are not present in the provided abstracts, indicating minor attribution errors."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.9,
+        "diversity": 0.8,
+        "specificity": 0.85,
+        "domain_appropriateness": 0.95,
+        "overall": 0.87,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects of the topic, and use appropriate NLP terminology, but some may be slightly too specific or narrow."
+      }
+    },
+    {
+      "query_id": "edge_02",
+      "category": "edge_case",
+      "query": "NLP",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "NLP",
+        "Natural Language Processing",
+        "Computational Linguistics Techniques",
+        "Language Understanding Models",
+        "Text Analysis Methods in NLP",
+        "Human Language Technology Applications"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 495.6188201904297,
+        "query_reformulation_ms": 2368.3149814605713,
+        "vector_search_ms": 3556.2870502471924,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 6420.220851898193
+      }
+    },
+    {
+      "query_id": "edge_03",
+      "category": "edge_case",
+      "query": "a]@#$%^& neural",
+      "response_text": "Based on your query, it seems you're interested in neural networks and their applications in natural language processing (NLP). I've summarized the key findings from the relevant papers:\n\nRecent work on neural networks in NLP has led to impressive progress, as discussed in **Analysis Methods in Neural Language Processing: A Survey** [1] by Yonatan Belinkov and James Glass (2019). This survey paper reviews analysis methods in neural language processing, categorizing them according to prominent research trends and highlighting existing limitations. The authors point to potential directions for future work, emphasizing the need for more fine-grained analysis of neural networks.\n\nIn **Interpretable Textual Neuron Representations for NLP** [2] by Nina Poerner, Benjamin Roth, and Hinrich Sch\u00fctze (2018), the authors propose and evaluate ways of transferring input optimization methods from computer vision to NLP. They demonstrate that gradient ascent with a gumbel softmax layer produces n-gram representations that outperform naive corpus search in terms of target neuron activation.\n\n**Deep Learning in Lexical Analysis and Parsing** [3] by Wanxiang Che and Yue Zhang (2017) provides a review of deep learning models for lexical analysis and parsing. The authors contrast these models with traditional statistical methods and organize them in consistent orders, highlighting the potential of deep learning for overcoming the \"feature engineering\" problem.\n\n**Sequential Neural Networks as Automata** [4] by William Merrill (2019) attempts to explain the types of computation that neural networks can perform by relating them to automata. The author defines what it means for a real-time network with bounded precision to accept a language and characterizes the classes of languages acceptable by various recurrent networks, attention, and convolutional networks.\n\nLastly, **Neural Semantic Encoders** [5] by Tsendsuren Munkhdalai and Hong Yu (2017) presents a memory-augmented neural network for natural language understanding. The authors demonstrate the effectiveness and flexibility of their model on five different NLP tasks, achieving state-of-the-art performance on publically available benchmarks.\n\nThese papers collectively demonstrate the growing interest in neural networks and their applications in NLP. While they focus on different aspects of neural networks, they all contribute to our understanding of these models and their potential for improving NLP tasks.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "neural",
+        "neural networks",
+        "deep learning models",
+        "artificial neural systems",
+        "neural architecture search",
+        "neural language processing"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "Q19-1004",
+        "W18-5437",
+        "I17-5001",
+        "W19-3901",
+        "E17-1038"
+      ],
+      "latency": {
+        "filter_parsing_ms": 4557.944059371948,
+        "query_reformulation_ms": 2396.9202041625977,
+        "vector_search_ms": 2892.7087783813477,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 9847.573041915894
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces numerous fabricated details, authors, years, and findings not present in the abstracts, such as specific author names, years, and detailed descriptions of the papers' contents."
+        },
+        "answer_relevance": {
+          "score": 0.5,
+          "explanation": "The response provides relevant information about neural networks in NLP, but it doesn't directly address the user's query due to the query being incomplete and containing special characters, making it unclear what specific aspect of 'neural' the user is interested in."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and some claims are not directly supported by the paper abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.9,
+        "specificity": 0.8,
+        "domain_appropriateness": 0.9,
+        "overall": 0.85,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects of neural networks, and use appropriate terminology, but some may be slightly too broad or narrow."
+      }
+    },
+    {
+      "query_id": "edge_04",
+      "category": "edge_case",
+      "query": "papers",
+      "response_text": "**Exploring the Landscape of Natural Language Processing Research** [1] by Tim Schopf, Karim Arabi, and Florian Matthes (2023) presents a comprehensive study of the NLP research landscape, categorizing established topics, identifying trends, and outlining areas for future research. The authors systematically analyzed research papers in the ACL Anthology, providing a structured overview of the research landscape and a taxonomy of fields of study in NLP.\n\nIn contrast, **MT R&D in Asia** [2] by Hozumi Tanaka (1997) focuses on the shift in Machine Translation (MT) research and development in the Asian region, highlighting the increasing number of NLP-related researchers and research activities. The paper discusses the significance of the Multi-lingual Machine Translation (MMT) project and its impact on the development of MT systems.\n\n**Rapid development of translation tools** [3] by Jan Amtrup, Karine Megerdoomian, and Remi Zajac (1999) presents technologies for rapid deployment of automatic translation capabilities, particularly for low-density languages. The authors demonstrate the application of these technologies in the Shiraz project for Persian-English machine translation.\n\n**Sp\u00e9cification et implantation informatique d\u2019un langage de description des structures discursives** [4] by Gustavo Crispino, Agata Jackiewicz, and Jean-Luc Minel (2004) introduces the LangTex language for representing linguistic knowledge, enabling the specification of descriptions necessary for identifying textual objects that organize written texts.\n\nLastly, **We are Who We Cite: Bridges of Influence Between Natural Language Processing and Other Academic Fields** [5] by Jan Philip Wahle, Terry Ruas, Mohamed Abdalla et al. (2023) examines the degree of influence between NLP and other academic fields, analyzing ~77k NLP papers and ~3.1m citations. The authors find that NLP has grown more insular, citing increasingly more NLP papers and having fewer papers that act as bridges between fields.\n\nThese papers collectively provide insights into the evolution of NLP research, from the early days of MT R&D in Asia to the current state of NLP's engagement with other academic fields. The studies highlight the importance of understanding the research landscape, identifying trends, and outlining areas for future research in NLP.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "papers",
+        "Academic publications in natural language processing",
+        "Research papers on computational linguistics",
+        "NLP and linguistics scholarly articles",
+        "Language technology and machine learning research",
+        "Computational linguistics and NLP academic literature"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2023.ranlp-1.111",
+        "1997.mtsummit-papers.13",
+        "1999.mtsummit-1.56",
+        "2004.jeptalnrecital-poster.6",
+        "2023.emnlp-main.797"
+      ],
+      "latency": {
+        "filter_parsing_ms": 555.2237033843994,
+        "query_reformulation_ms": 2457.595109939575,
+        "vector_search_ms": 3144.8588371276855,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 6157.67765045166
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.0,
+          "explanation": "The response introduces a significant amount of information not present in the abstracts, including specific author names, years, and detailed summaries of the papers, which cannot be verified from the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 0.7,
+          "explanation": "The response provides relevant information about research papers, but it goes into detailed descriptions of specific papers, which might be considered tangential to the broad query 'papers'."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations are accurate, but minor attribution errors and unverified claims are present, such as specific author names and detailed findings not mentioned in the abstracts."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.9,
+        "specificity": 0.8,
+        "domain_appropriateness": 0.9,
+        "overall": 0.85,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects of NLP, and use appropriate terminology, but some may be slightly too specific or narrow."
+      }
+    },
+    {
+      "query_id": "edge_05",
+      "category": "edge_case",
+      "query": "the quick brown fox jumps over the lazy dog",
+      "response_text": "This system is designed to help you search academic papers. Please try rephrasing your query to include a research topic or question.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "edge_06",
+      "category": "edge_case",
+      "query": "aaaaaaaaaaaaaaaaaa",
+      "response_text": "This system is designed to help you search academic papers. Please try rephrasing your query to include a specific topic or question about research.",
+      "num_results": 0,
+      "is_relevant": false,
+      "reformulated_queries": [],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": true,
+        "field_level_accuracy": {}
+      },
+      "correctly_rejected": true
+    },
+    {
+      "query_id": "edge_07",
+      "category": "edge_case",
+      "query": "I want papers about BERT for NER in clinical notes from 2020 to 2023 by Stanford authors with best paper awards in English",
+      "response_text": "I couldn't find any papers matching your query. Try rephrasing or using different keywords.",
+      "num_results": 0,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "papers about BERT for NER in clinical notes",
+        "BERT applications in clinical natural language processing for named entity recognition",
+        "Fine-tuning BERT models for extracting medical entities from clinical text",
+        "Named entity recognition in clinical notes using contextualized embeddings like BERT",
+        "Clinical NLP with BERT: a review of recent advances in named entity recognition",
+        "Using pre-trained BERT models for improving entity recognition in clinical text analysis"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "field_level_accuracy": {
+          "year": true,
+          "has_awards": true,
+          "language": true
+        },
+        "filter_match": true
+      },
+      "retrieved_paper_ids": [],
+      "latency": {
+        "filter_parsing_ms": 12505.820035934448,
+        "query_reformulation_ms": 524.0738391876221,
+        "vector_search_ms": 4252.739191055298,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 17282.633066177368
+      }
+    },
+    {
+      "query_id": "edge_08",
+      "category": "edge_case",
+      "query": "transformer transformer transformer attention attention",
+      "response_text": "**Transformer Models and Attention Mechanisms: Recent Advancements**\n\nThe user's query focuses on transformer models and attention mechanisms. Recent work in this area includes **Layer Duplication in LLMs** [1] by Neo et al. (2025), which investigates the effect of duplicating multihead self-attention layers in large language models (LLMs) and demonstrates a significant performance boost. The authors provide attention analysis to uncover the underlying mechanisms driving the improvement.\n\nAnother relevant paper is **Training compute-optimal transformer encoder models** [3] by Dervishi et al. (2025), which presents a comprehensive empirical investigation of compute-optimal pretraining for encoder transformers using the Masked Language Modeling (MLM) objective. The authors find that the compute-optimal data-to-model ratio of Transformer encoder models is 10 to 100 times larger than the ratio of auto-regressive models.\n\nIn addition, **Data-Informed Global Sparseness in Attention Mechanisms for Deep Neural Networks** [4] by Rugina et al. (2024) proposes a framework that observes attention patterns in a fixed dataset and generates a global sparseness mask, saving up to 90% of attention computation for language modeling and about 50% for machine translation and GLUE tasks.\n\nFurthermore, **A Transformer with Stack Attention** [5] by Li et al. (2024) proposes augmenting transformers with a differentiable, stack-based attention mechanism, which can be incorporated into any transformer-based language model and adds a level of interpretability to the model.\n\nLastly, **A Family of Pretrained Transformer Language Models for Russian** [2] by Zmitrovich et al. (2024) introduces a collection of 13 Russian Transformer LMs, which spans encoder, decoder, and encoder-decoder architectures, and provides a report on the model architecture design and pretraining, as well as the results of evaluating their generalization abilities on Russian language understanding and generation datasets and benchmarks.\n\nThese papers demonstrate recent advancements in transformer models and attention mechanisms, including layer duplication, compute-optimal pretraining, data-informed global sparseness, and stack-based attention.",
+      "num_results": 5,
+      "is_relevant": true,
+      "reformulated_queries": [
+        "transformer transformer transformer attention attention",
+        "Transformer architecture in natural language processing",
+        "Self-attention mechanism in deep learning models",
+        "Pre-trained language models with multi-head attention",
+        "Sequence-to-sequence models using transformer encoder-decoder",
+        "Attention-based neural networks for text classification"
+      ],
+      "filter_eval": {
+        "relevance_correct": true,
+        "filter_match": false,
+        "field_level_accuracy": {}
+      },
+      "retrieved_paper_ids": [
+        "2025.findings-emnlp.967",
+        "2024.lrec-main.45",
+        "2025.emnlp-main.1804",
+        "2024.lrec-main.392",
+        "2024.findings-naacl.269"
+      ],
+      "latency": {
+        "filter_parsing_ms": 3770.885229110718,
+        "query_reformulation_ms": 2436.2637996673584,
+        "vector_search_ms": 2575.897216796875,
+        "response_synthesis_ms": 0.0,
+        "total_ms": 8783.046245574951
+      },
+      "generation_metrics": {
+        "faithfulness": {
+          "score": 0.7,
+          "explanation": "Most claims are supported by the abstracts, but minor details such as author names and years are introduced without verification from the provided abstracts."
+        },
+        "answer_relevance": {
+          "score": 1.0,
+          "explanation": "The response directly addresses the query topic of transformer models and attention mechanisms, providing relevant and useful information from recent research papers."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "explanation": "Most citations accurate, minor attribution errors, such as specific author names and details not present in the abstracts, but overall claims are grounded in the retrieved papers."
+        }
+      },
+      "reformulation_quality": {
+        "fidelity": 0.8,
+        "diversity": 0.9,
+        "specificity": 0.8,
+        "domain_appropriateness": 0.9,
+        "overall": 0.85,
+        "explanation": "Reformulations generally preserve the original query's intent, capture different aspects of the topic, and use appropriate terminology, but some may be slightly too specific or vague."
+      }
+    }
+  ]
+}
