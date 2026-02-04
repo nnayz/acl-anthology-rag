@@ -19,6 +19,7 @@ The ACL Anthology hosts tens of thousands of NLP research papers. Traditional ke
 - **Dual Query Modes**: Supports both natural language questions and "Paper as Query" (using a paper ID to find related work).
 - **Unified Pipeline**: A consistent architecture for handling different types of inputs.
 - **Modern Stack**: FastAPI, LangChain, Fireworks (embeddings), Groq (LLM), Qdrant, React.
+- **Interactive UI**: Clean, responsive interface with real-time streaming responses and inline citations.
 
 ## Architecture Overview
 
@@ -27,6 +28,16 @@ The system follows a Retrieval-Augmented Generation (RAG) pattern, though curren
 Note: Fireworks is used only for embedding generation. LLM-based query reformulation uses Groq.
 
 <img src="docs/diagrams/architecture.svg" alt="System Architecture" width="800" />
+
+## Demo
+
+![Demo Screenshot](assets/demo.png)
+
+The web interface provides:
+- **Real-time streaming** of search responses as they're generated
+- **Inline citations** with hover previews showing paper details, authors, and PDF links
+- **Monitoring panel** displaying query processing pipeline, filters, and timing information
+- **Clean, responsive design** optimized for research workflows
 
 ## Supported Query Modes
 
@@ -131,7 +142,7 @@ See [Installation Guide](docs/installation.md) for detailed setup.
 - Add hybrid retrieval (dense + BM25) and cross-encoder re-ranking.
 - Incorporate full-text indexing and PDF parsing.
 - Add user feedback loops and relevance learning.
-- Improve UI (filters, facets, citations, export options).
+- Enhance UI with advanced filters, export options, and saved searches.
 - Batch/streaming ingestion pipeline with resumability and monitoring.
 - Expand evaluation with curated benchmarks and inter-annotator agreement.
 
